@@ -760,3 +760,4 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .lg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 15%; box-sizing: border-box; }
 .lg.has { background: #fff !important; font-size: 0 !important; box-shadow: inset 0 0 0 1px #e6e5e0; }
 .gl__pl .lg.has { box-shadow: none; }
+.gl__pl .lg { width: 26px; height: 22px; font-size: 8px; letter-spacing: -0.04em; }
