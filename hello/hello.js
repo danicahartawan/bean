@@ -61,3 +61,5 @@ precision highp float; precision highp sampler2D; in vec2 vUv, vL, vR, vT, vB; o
   const frame = (now) => { const dt = Math.min((now - prev) / 1000, 0.016666); prev = now; step(dt); draw(); requestAnimationFrame(frame); };
   requestAnimationFrame(frame);
 })();
+
+document.querySelectorAll('a[href^="../new"]').forEach((a) => a.addEventListener("click", () => { try { sessionStorage.setItem("bean-hello", "1"); } catch (e) {} }));
