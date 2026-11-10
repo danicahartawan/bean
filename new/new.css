@@ -1033,3 +1033,7 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .ip__t strong { display: block; font-size: 14px; font-weight: 500; } .ip__t span { display: block; margin-top: 2px; font-size: 12px; color: #8a8984; }
 .ip__x { align-self: flex-start; width: 22px; height: 22px; margin: 6px 8px 0 -6px; border: 0; border-radius: 50%; background: transparent; color: #a9a8a2; font-size: 18px; line-height: 1; cursor: pointer; } .ip__x:hover { background: #f1f0ec; color: #26251e; }
 @media (max-width: 600px) { .ip { right: 12px; bottom: 12px; left: 12px; } .ip__go { flex: 1; } }
+/* glowing orange highlights */
+.lc__l mark, .lq__p.dn { color: #f54e00; text-shadow: 0 0 14px rgb(245 78 0 / 50%), 0 0 2px rgb(245 78 0 / 35%); animation: orange-glow 3.2s ease-in-out infinite; }
+@keyframes orange-glow { 0%, 100% { text-shadow: 0 0 10px rgb(245 78 0 / 38%), 0 0 2px rgb(245 78 0 / 28%); } 50% { text-shadow: 0 0 20px rgb(245 78 0 / 70%), 0 0 4px rgb(245 78 0 / 45%); } }
+@media (prefers-reduced-motion: reduce) { .lc__l mark, .lq__p.dn { animation: none; } }
