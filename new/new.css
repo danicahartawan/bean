@@ -470,3 +470,7 @@ button.ag__pill { cursor: pointer; } button.ag__pill:hover { border-color: #f54e
 .pl__notes h5 { margin: 0 0 12px; font-size: 20px; font-weight: 400; }
 .pl__notes ol { margin: 0; padding-left: 22px; color: #4a4944; font-size: 17px; line-height: 1.55; } .pl__notes li { margin-bottom: 8px; }
 .pl__t td.r, .pl__t th { white-space: nowrap; }
+
+/* artifacts pinned toward the bottom */
+.ag__arts { position: absolute; left: 50%; bottom: 36px; margin: 0; width: min(660px, calc(100% - 40px)); transform: translateX(-50%); }
+.ag__main.sugon:not(.chat) .ag__dock { top: 36%; }
