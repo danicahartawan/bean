@@ -1,3 +1,26 @@
+(() => {
+  const entry = document.querySelector("#bean-entry");
+  if (!entry) return;
+  const content = document.querySelector(".wrap");
+  const dock = document.querySelector(".dock");
+  const finish = () => {
+    content?.removeAttribute("inert");
+    dock?.removeAttribute("inert");
+    document.querySelector("#bean-brand")?.classList.add("is-visible");
+    entry.remove();
+  };
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    finish();
+    return;
+  }
+  content?.setAttribute("inert", "");
+  dock?.setAttribute("inert", "");
+  entry.querySelector("button").addEventListener("click", finish);
+  entry.addEventListener("animationend", event => {
+    if (event.target === entry) finish();
+  });
+  window.setTimeout(finish, 3800);
+})();
 document.querySelectorAll("[data-row]").forEach((row) => {
   const bars = row.parentElement.querySelectorAll("[data-bars] i");
   const cards = [...row.children];
