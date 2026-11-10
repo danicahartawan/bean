@@ -426,3 +426,11 @@ function beanCollapse(overlay, card, inners, done) {
   const anim = overlay.animate([{ clipPath: BEAN_FULL, backgroundColor: bg }, { clipPath: beanClip(card, overlay), backgroundColor: "#ffffff" }], { duration: 560, easing: BEAN_EASE, fill: "both", delay: 120 });
   anim.onfinish = finish;
 }
+
+// ===== Gumloop-style home =====
+(() => {
+  const hi = document.getElementById("gl-hi"); if (hi) { const h = new Date().getHours(); hi.textContent = `Good ${h < 12 ? "morning" : h < 18 ? "afternoon" : "evening"}, Danica`; }
+  const x = document.getElementById("gl-conn-x"); if (x) x.addEventListener("click", () => { const c = document.getElementById("gl-conn"); c.style.maxHeight = c.offsetHeight + "px"; requestAnimationFrame(() => { c.style.transition = "all .3s"; c.style.maxHeight = "0"; c.style.opacity = "0"; c.style.margin = "0"; c.style.overflow = "hidden"; }); });
+  const heat = document.getElementById("gl-heat"); if (heat) { let h = ""; for (let i = 0; i < 20 * 7; i++) h += `<i${[3, 17, 18, 40, 62, 63, 64, 90, 91, 118].includes(i) ? ' class="on"' : ""}></i>`; heat.innerHTML = h; }
+  const box = document.querySelector(".gl__box"); if (box) box.addEventListener("keydown", (e) => { if (e.key === "Enter") box.click(); });
+})();

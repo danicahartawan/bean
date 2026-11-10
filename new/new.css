@@ -661,3 +661,32 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .qa__c i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; } .qa__c i svg { width: 18px; height: 18px; }
 .qa__c i.g { background: #cfe8c8; } .qa__c i.b { background: #d3e4f8; } .qa__c i.y { background: #fbe9a8; }
 @media (max-width: 560px) { .qa__g { grid-template-columns: repeat(2, 1fr); } .hey h1 { font-size: 30px; } }
+
+/* Gumloop-style home layout */
+.hey { display: none; }
+.wrap.gl { width: min(1280px, calc(100vw - 64px)); display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 64px; align-items: start; padding-top: 70px; }
+.gl__l { min-width: 0; }
+.gl__hi { margin: 0 0 26px; font-size: 40px; font-weight: 400; letter-spacing: -0.03em; color: #8a8984; }
+.gl__box { padding: 22px 24px 16px; border-radius: 24px; background: #fff; box-shadow: 0 0 0 1px #e9e8e3, 0 6px 20px rgb(38 37 30 / 5%); cursor: text; }
+.gl__box p { margin: 0 0 26px; font-size: 18px; color: #8a8984; }
+.gl__row { display: flex; align-items: center; gap: 14px; color: #55544f; font-size: 15px; }
+.gl__sp { flex: 1; } .gl__plus { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #f1f0ec; } .gl__plus svg, .gl__mic svg { width: 20px; height: 20px; }
+.gl__go { position: relative; display: grid; grid-auto-flow: column; gap: 2px; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #f7a35c, #e65a8a 55%, #7aa7ff); }
+.gl__go i { width: 2px; border-radius: 2px; background: #fff; height: 10px; } .gl__go i:nth-child(2) { height: 18px; } .gl__go i:nth-child(3) { height: 14px; } .gl__go i:nth-child(4) { height: 7px; }
+.gl__conn { display: flex; align-items: center; gap: 12px; padding: 12px 8px 0 14px; font-size: 16px; color: #26251e; max-height: 80px; }
+.gl__conn button { margin-left: auto; width: 32px; height: 32px; border: 0; background: transparent; color: #26251e; cursor: pointer; } .gl__conn button svg { width: 20px; height: 20px; }
+.gl__ics { display: inline-flex; padding: 3px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px #e9e8e3; } .gl__ics b { width: 22px; height: 22px; margin-left: -4px; border-radius: 50%; border: 2px solid #fff; } .gl__ics b:first-child { margin-left: 0; }
+.gl__ics--s { padding: 2px 8px 2px 3px; align-items: center; gap: 0; font-size: 13px; color: #7a7974; } .gl__ics--s em { font-style: normal; margin-left: 6px; } .gl__ics--s b { width: 18px; height: 18px; }
+.gl__panel { margin-top: 30px; padding: 18px 26px 14px; border-radius: 26px; background: #f1f0ec; }
+.gl__panel .work { padding-top: 6px !important; margin: 0; } .gl__panel .proj { margin-bottom: 0; } .gl__panel .proj h3 { font-size: 17px; }
+.gl__r { padding-top: 6px; color: #26251e; }
+.gl__agent { display: flex; align-items: center; gap: 14px; }
+.gl__av .orb { width: 78px; height: 78px; border-radius: 22px; } .gl__who { flex: 1; } .gl__who strong { display: block; font-size: 24px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 6px; }
+.gl__n { text-align: right; } .gl__n strong { display: block; font-size: 26px; font-weight: 500; } .gl__n span { font-size: 15px; color: #7a7974; }
+.gl__heat { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; margin: 28px 0 30px; padding-bottom: 28px; border-bottom: 1px dashed #dcdad3; } .gl__heat i { aspect-ratio: 1; border-radius: 3px; background: #eceae5; } .gl__heat i.on { background: #9bbfa4; }
+.gl__sec { padding: 0 0 26px; margin-bottom: 26px; border-bottom: 1px dashed #dcdad3; } .gl__sec--t { border: 0; }
+.gl__sec h4 { display: flex; align-items: center; justify-content: space-between; margin: 0 0 18px; font-size: 18px; font-weight: 500; } .gl__sec h4 svg { width: 18px; height: 18px; color: #a9a8a2; } .gl__sec--t h4 svg { color: #26251e; }
+.gl__sec h4:has(svg[fill]) { justify-content: flex-start; gap: 8px; }
+.gl__sec dl { margin: 0; } .gl__sec dl > div { display: grid; grid-template-columns: 120px 1fr 22px; align-items: center; padding: 11px 0; font-size: 17px; }
+.gl__sec dt { color: #7a7974; } .gl__sec dd { margin: 0; } .gl__sec dl svg { width: 18px; height: 18px; color: #7a7974; }
+@media (max-width: 1000px) { .wrap.gl { grid-template-columns: 1fr; gap: 40px; } .gl__hi { font-size: 32px; } }
