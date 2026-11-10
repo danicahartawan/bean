@@ -716,3 +716,8 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 
 .gl__pl b { display: inline-grid; place-items: center; width: 20px !important; height: 20px !important; color: #26251e; font-size: 10px; font-weight: 500; font-style: normal; }
 .gl__pl svg { width: 12px; height: 12px; margin-left: 6px; color: #7a7974; }
+
+.gl__cx > div { grid-template-columns: minmax(0, 1fr) auto !important; gap: 10px; }
+.gl__cx dt { display: flex; align-items: center; gap: 10px; color: #26251e; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gl__cx .lg { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 8px; font-size: 10px; font-weight: 600; letter-spacing: -0.02em; font-style: normal; }
+.gl__cx dd { color: #7a7974; font-size: 12px; }
