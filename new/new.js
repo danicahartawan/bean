@@ -86,7 +86,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   };
   const close = () => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const done = () => { ag.hidden = true; if (srcCard) srcCard.style.visibility = ""; anim = null; };
+    const done = () => { ag.hidden = true; if (srcCard) srcCard.style.visibility = ""; anim = null; if (location.hash === "#agent") history.replaceState(null, "", location.pathname + location.search); };
     if (!srcCard || reduce) return done();
     if (anim) anim.cancel();
     const t = { duration: 560, easing: "cubic-bezier(.32,.72,0,1)", fill: "both" };
@@ -100,6 +100,9 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   });
   ag.querySelector("[data-close]").addEventListener("click", close);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+  const openFromHash = () => { if (location.hash === "#agent" && ag.hidden) open(document.querySelector("[data-agent]")); };
+  addEventListener("hashchange", openFromHash);
+  queueMicrotask(openFromHash); // after the rest of this setup has run
   const input = document.getElementById("ag-input"), log = document.getElementById("ag-log"), main = document.getElementById("ag-main"), form = document.getElementById("ag-form");
   const MEN = [{ n: "Laundry Log", s: "Notebook \u00b7 Nov 9", i: "\u270e" }, { n: "Profit & Loss", s: "Sheet \u00b7 Mon 9/11", i: "$" }, { n: "Cash Reconciliation", s: "Sheet \u00b7 Mon 9/11", i: "\u2713" }, { n: "Revenue Analysis", s: "bean model", i: "\u25d4" }];
   const men = document.getElementById("ag-men"), mir = document.getElementById("ag-mir");

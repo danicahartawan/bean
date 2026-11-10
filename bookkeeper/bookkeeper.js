@@ -229,7 +229,7 @@ $("#export-csv").addEventListener("click", () => download(ORDER, "bean-bookkeepe
 $("#sheet-csv").addEventListener("click", () => current && download([current], `${SHEETS[current].title}.csv`));
 $("#export-pdf").addEventListener("click", () => window.print());
 $("#sheet-pdf").addEventListener("click", () => window.print());
-$("#send-bookkeeper").addEventListener("click", (e) => {
+$("#send-bookkeeper")?.addEventListener("click", (e) => {
   e.target.textContent = "Sent ✓";
 });
 
