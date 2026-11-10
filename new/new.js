@@ -136,7 +136,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const clearEntries = () => entries.forEach((li) => { li.querySelector(".tx").textContent = ""; const b = li.querySelector("b"); if (b) b.textContent = ""; li.querySelectorAll(".caret").forEach((c) => c.classList.remove("caret")); });
   const pLabel = (p) => p.querySelector("span").textContent;
   const fmt = (n) => (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
-  let nbTimers = [], nbDone = false;
+  let nbTimers = [], nbDone = false, nbRes = null;
   const later = (fn, ms) => nbTimers.push(setTimeout(fn, ms));
   const calc = () => {
     const cost = Math.max(0, +L("nb-cost").value || 0), res = +L("nb-res").value;
@@ -150,7 +150,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     for (let k = 0; k <= 3; k++) { const v = ymin + ((ymax - ymin) * k) / 3; g += `<line class="gl" x1="34" x2="354" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}"/><text x="30" y="${(Y(v) + 3).toFixed(1)}" text-anchor="end">${fmt(Math.round(v / 100) * 100).replace(/,000$/, "K")}</text>`; }
     ["Now", "Week 1", "Week 2", "Week 3", "Week 4"].forEach((w, i) => (g += `<text x="${X(i)}" y="142" text-anchor="middle">${w}</text>`));
     L("fx-chart").innerHTML = g + `<line class="lr" x1="34" x2="354" y1="${Y(res).toFixed(1)}" y2="${Y(res).toFixed(1)}"/><path class="la" d="${pts(a)}"/><path class="lb" d="${pts(b)}"/>`;
-    const gap = b[4] - res;
+    const gap = b[4] - res; nbRes = { cost, res, end: b[4], lo, lw, gap };
     L("fx-t").textContent = `Under this scenario, replacing Washer #6 would leave approximately ${fmt(b[4])} at the end of the month, ${gap >= 0 ? fmt(gap) + " above" : fmt(-gap) + " below"} your ${fmt(res)} reserve. The lowest point is ${fmt(lo)} in ${lw ? "week " + lw : "week 0"}${lo < res ? ", under your reserve" : ""}. Confirm upcoming bills before deciding.`;
   };
   L("nb-cost").addEventListener("input", calc); L("nb-res").addEventListener("input", calc);
@@ -163,6 +163,30 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     const grid = c.parentElement, last = [...grid.querySelectorAll(".art:not([data-nb-art])")].filter((x) => !x.hidden).pop();
     if (last) last.hidden = true; c.hidden = false;
   };
+  const finalText = () => { const r = nbRes; return `${r.gap >= 0 ? "Yes, you can afford it." : "Not yet."} Replacing Washer #6 for ${fmt(r.cost)} leaves about ${fmt(r.end)} at month end, ${r.gap >= 0 ? fmt(r.gap) + " above" : fmt(-r.gap) + " below"} your ${fmt(r.res)} reserve. The lowest point is ${fmt(r.lo)} ${r.lw ? "in week " + r.lw : "right now"}. I saved the forecast to Citing your books.`; };
+  const typeReply = (text) => { const b = document.createElement("div"); b.className = "ag__bean"; b.innerHTML = '<i class="ag__mark"></i><div></div>'; log.append(b); const out = b.lastElementChild, words = text.split(" "); let n = 0; const tick = () => { out.textContent += (n ? " " : "") + words[n++]; log.scrollTop = log.scrollHeight; if (n < words.length) setTimeout(tick, 40); }; tick(); };
+  const I = { s: '<svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6"/><path d="M10.5 10.5 14 14"/></svg>', g: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2"/><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4"/></svg>', c: '<svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg>' };
+  const research = (host, steps, ms) => new Promise((res) => {
+    host.innerHTML = `<div class="rs"><button type="button" class="rs__h">${I.c}<span>Researching</span></button><div class="rs__b"></div></div>`;
+    const rs = host.firstChild, body = rs.querySelector(".rs__b"), head = rs.querySelector(".rs__h");
+    head.addEventListener("click", () => rs.classList.toggle("closed"));
+    const scroll = () => (log.scrollTop = log.scrollHeight);
+    let i = 0;
+    const next = () => {
+      if (i >= steps.length) { head.querySelector("span").textContent = "Researched"; setTimeout(() => { rs.classList.add("closed"); res(); }, 500); return; }
+      const st = steps[i++], line = document.createElement("div"); line.className = "rs__l act"; line.innerHTML = `${I.s}<span>${st[0]}</span>`; body.append(line); scroll();
+      setTimeout(() => {
+        line.classList.remove("act");
+        const src = st[1] || [];
+        if (!src.length) return setTimeout(next, ms / 2);
+        const sw = document.createElement("div"); sw.className = "rs__sw"; sw.innerHTML = `<button type="button">${I.c}<span>${src.length} sources found and more</span></button>`; body.append(sw);
+        sw.firstChild.addEventListener("click", () => sw.classList.toggle("closed"));
+        src.forEach((x, k) => setTimeout(() => { const r = document.createElement("div"); r.className = "rs__src" + (k === src.length - 1 && src.length > 2 ? " fade" : ""); r.innerHTML = `${I.g}<span>${x[0]}</span><em>${x[1]}</em>`; sw.append(r); scroll(); }, 220 * (k + 1)));
+        setTimeout(next, 220 * src.length + 500);
+      }, ms);
+    };
+    next();
+  });
   const openNb = (final) => {
     calc(); resetNb(); main.classList.add("chat"); nb.classList.add("nb--inline"); log.append(nb); nb.hidden = false; setTimeout(() => nb.scrollIntoView({ block: "nearest", behavior: "smooth" }), 50);
     if (final) { showFinal(); return; }
@@ -177,7 +201,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     const S = F + 2400;
     [0, 1, 2, 3].forEach((k) => later(() => { procs.forEach((p, n) => (p.className = n < k ? "done" : n === k ? "act" : "")); setState(pLabel(procs[k]).toLowerCase()); }, S + k * 1200));
     later(() => { procs.forEach((p) => (p.className = "done")); flip(leaf[1], true); nbDone = true; setState("done"); }, S + 4 * 1200);
-    later(() => { addArtifact(); const b = document.createElement("div"); b.className = "ag__bean"; b.innerHTML = '<i class="ag__mark"></i><div>Done. Saved \u201cCan I afford a new washer?\u201d to your artifacts.</div>'; log.append(b); }, S + 4 * 1200 + 1300);
+    later(() => { addArtifact(); typeReply(finalText()); }, S + 4 * 1200 + 1300);
   };
   const closeNb = () => { nb.hidden = true; resetNb(); };
   nb.querySelector("[data-nb-close]").addEventListener("click", closeNb);
@@ -193,15 +217,10 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     log.append(me, b); input.value = ""; grow();
     log.scrollTop = log.scrollHeight;
     const host = b.lastElementChild;
-    const think = (steps, ms) => new Promise((res) => {
-      host.innerHTML = '<ol class="tl tl--c"></ol>'; const ol = host.firstChild; let i = 0;
-      const step = () => { if (ol.lastElementChild) ol.lastElementChild.className = "done"; if (i >= steps.length) return res(); const li = document.createElement("li"); li.className = "act"; li.innerHTML = `<span>${steps[i][0]}</span><em>${steps[i][1] || ""}</em>`; ol.append(li); i++; log.scrollTop = log.scrollHeight; setTimeout(step, ms); };
-      step();
-    });
-    if (/forecast|afford|replace.*washer|@Laundry Log|@Profit &amp; Loss|@Profit & Loss/i.test(t)) { think([["Reading Laundry Log", "6 entries"], ["Reading Profit & Loss", "Nov 9"]], 800).then(() => openNb(false)); return; }
-    const steps = /analy[sz]e/i.test(t) ? [["Running the bean model", "7 days"], ["Comparing to budget", ""]] : [["Reading your notes", ""], ["Updating totals", ""]];
-    think(steps, 700).then(() => {
-      const out = document.createElement("div"); host.append(out); const words = reply(t).split(" ");
+    if (/forecast|afford|replace.*washer|@Laundry Log|@Profit &amp; Loss|@Profit & Loss/i.test(t)) { research(host, [["Reading @Laundry Log", [["Laundry Log, Mon 9/11", "notebook"], ["Washers, dryers, soap machine", "$1,200"], ["Washer 6 repair", "$85"]]], ["Reading @Profit & Loss", [["Profit & Loss, November", "books"], ["Revenue and expenses", "$1,115 net"]]], ["Estimating the next 30 days", []]], 700).then(() => openNb(false)); return; }
+    const steps = /analy[sz]e/i.test(t) ? [["Running the bean model on this week", [["Profit & Loss, this week", "books"], ["Budget vs actual", "bean model"]]], ["Comparing to budget", []]] : [["Reading your notes", [["Laundry Log, Mon 9/11", "notebook"], ["Profit & Loss", "books"]]], ["Updating totals", []]];
+    research(host, steps, 700).then(() => {
+      const out = document.createElement("div"); out.style.marginTop = "8px"; host.append(out); const words = reply(t).split(" ");
       let n = 0;
       const tick = () => { out.textContent += (n ? " " : "") + words[n++]; log.scrollTop = log.scrollHeight; if (n < words.length) setTimeout(tick, 45); };
       tick();

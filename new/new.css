@@ -400,3 +400,22 @@ button.ag__pill { cursor: pointer; } button.ag__pill:hover { border-color: #f54e
 .ag__main.sugon:not(.chat) .ag__sug { max-height: 220px; opacity: 1; margin: 0 -20px 14px; padding: 4px 20px; overflow-x: auto; }
 .ag__sug { transition: max-height .4s cubic-bezier(.32,.72,0,1), opacity .3s, margin .4s, padding .4s; }
 .ag__brand { font-size: 28px; flex-wrap: wrap; text-align: center; }
+
+/* research log (chat) */
+.ag__bean:has(.rs) > div { flex: 1; min-width: 0; }
+.rs { width: min(560px, 100%); font-size: 14.5px; color: #4a4944; }
+.rs svg { width: 16px !important; height: 16px !important; flex: none; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.rs__h { display: flex; align-items: center; gap: 8px; padding: 0; border: 0; background: none; font: inherit; color: #26251e; cursor: pointer; }
+.rs__h svg { transition: transform .2s; } .rs.closed .rs__h svg { transform: rotate(-90deg); }
+.rs__b { margin: 8px 0 4px 7px; padding-left: 14px; box-shadow: inset 2px 0 #efeee9; }
+.rs.closed .rs__b { display: none; }
+.rs__l, .rs__sw > button { display: flex; align-items: center; gap: 10px; padding: 5px 0; animation: ag-up .25s ease; }
+.rs__l { color: #4a4944; } .rs__l svg { color: #7a7974; }
+.rs__l.act span { background: linear-gradient(90deg, #7a7974 35%, #26251e 50%, #7a7974 65%) 0 0 / 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: tl-sh 1.5s linear infinite; }
+.rs__sw > button { border: 0; background: none; padding: 5px 0; font: inherit; color: #26251e; cursor: pointer; }
+.rs__sw > button svg { transition: transform .2s; } .rs__sw.closed > button svg { transform: rotate(-90deg); }
+.rs__sw.closed .rs__src { display: none; }
+.rs__src { display: flex; align-items: center; gap: 10px; padding: 5px 0 5px 0; color: #4a4944; animation: ag-up .25s ease; }
+.rs__src svg { color: #7a7974; } .rs__src em { margin-left: auto; padding-left: 16px; font-style: normal; color: #7a7974; }
+.rs__src.fade { opacity: .45; }
+.ag__go { margin-left: auto; }
