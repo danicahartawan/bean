@@ -480,7 +480,8 @@ function beanCollapse(overlay, card, inners, done) {
     queued = false;
     const vh = innerHeight, r = row.getBoundingClientRect();
     // 0 while the row is still low in the viewport, 1 once it has climbed to the upper-middle
-    const p = ease(Math.min(1, Math.max(0, (vh * 0.98 - r.top) / (vh * 0.62))));
+    const room = Math.max(120, Math.min(320, document.documentElement.scrollHeight - vh - 20));
+    const p = ease(Math.min(1, Math.max(0, scrollY / room)));
     const mid = row.offsetWidth / 2;
     cards.forEach((c, i) => {
       const dx = mid - (c.offsetLeft + c.offsetWidth / 2);
