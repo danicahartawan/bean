@@ -125,7 +125,7 @@ export function App() {
   }
   return <div className="screen" data-dashboard-view={view} data-metric={metric}>
     <main className="workspace">
-      <header className="page-heading"><div><h1>Sales Forecast</h1><p>Your machines, at a glance.</p></div><span {...explainData('Forecast dates', 'The daily forecast covers Monday, Nov 9 through Sunday, Nov 15. The week view extends through the week of Dec 28.')}>{mode === 'month' ? MONTHS[month].range : mode === 'week' ? DATA.weeks.starts[week] + ' – ' + new Date(Date.UTC(2026, 10, 15 + week * 7)).toLocaleDateString('en-US', {month:'short',day:'numeric',timeZone:'UTC'}) : 'Nov 9 – 15'}</span></header>
+      <header className="page-heading"><div><h1>Forecast Model</h1><p>Your machines, at a glance.</p></div><span {...explainData('Forecast dates', 'The daily forecast covers Monday, Nov 9 through Sunday, Nov 15. The week view extends through the week of Dec 28.')}>{mode === 'month' ? MONTHS[month].range : mode === 'week' ? DATA.weeks.starts[week] + ' – ' + new Date(Date.UTC(2026, 10, 15 + week * 7)).toLocaleDateString('en-US', {month:'short',day:'numeric',timeZone:'UTC'}) : 'Nov 9 – 15'}</span></header>
       <div className="controls">
         <div className="view-switch" role="group" aria-label="Dashboard view">
           <button aria-pressed={view === 'overview'} onClick={() => setView('overview')}>Overview</button>

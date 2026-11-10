@@ -51,7 +51,7 @@ describe('sales forecast', () => {
 
   it('offers calendar months, hot drink values, and machine comparison', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: 'Sales Forecast' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Forecast Model' })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Month', exact: true }));
     const picker = screen.getByRole('combobox', { name: 'Select month' });
     expect(picker.options.length).toBe(3);
