@@ -713,3 +713,6 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__sec h4 { margin-bottom: 8px; font-size: 14px; } .gl__sec h4 svg { width: 14px; height: 14px; }
 .gl__sec dl > div { grid-template-columns: 100px 1fr 18px; padding: 8px 0; font-size: 14px; } .gl__cx > div { grid-template-columns: 100px 1fr !important; } .gl__sec dl svg { width: 15px; height: 15px; }
 .gl__hi { color: #7a7974; }
+
+.gl__pl b { display: inline-grid; place-items: center; width: 20px !important; height: 20px !important; color: #26251e; font-size: 10px; font-weight: 500; font-style: normal; }
+.gl__pl svg { width: 12px; height: 12px; margin-left: 6px; color: #7a7974; }
