@@ -1,7 +1,7 @@
 // Paradigm-style home for the bookkeeper package: three sheets, each opens as a grid.
 const SHEETS = {
   pnl: {
-    title: "Profit & Loss — Budget vs Actual",
+    title: "Profit & Loss: Budget vs Actual",
     cols: ["Line item", "Category", "Daily budget", "Notebook (AM)", "Mon 9/11 slip (PM)", "Actual", "Variance", "% of budget", "Status"],
     types: ["text", "cat", "num", "num", "num", "num", "num", "num", "cat"],
     newCol: 4,
@@ -12,7 +12,7 @@ const SHEETS = {
       ["Dryer collections", "Revenue", "$250", "$240", "+$25", "$265", "+$15", "106%", "Ahead"],
       ["Soap machine collections", "Revenue", "$20", "$0", "+$15", "$15", "−$5", "75%", "Behind"],
       ["Total revenue", "Total", "$1,070", "$920", "+$220", "$1,140", "+$70", "107%", "Ahead", "total"],
-      ["Repairs — washer 6", "Expense", "$50", "$85", "$0", "$85", "−$35", "170%", "Over budget"],
+      ["Repairs, washer 6", "Expense", "$50", "$85", "$0", "$85", "−$35", "170%", "Over budget"],
       ["Detergent & supplies", "Expense", "$50", "$45", "$0", "$45", "+$5", "90%", "On budget"],
       ["Total expenses", "Total", "$100", "$130", "$0", "$130", "−$30", "130%", "Over budget", "total"],
       ["Net profit", "Profit", "$970", "$790", "+$220", "$1,010", "+$40", "104%", "Ahead", "total"],
@@ -48,11 +48,11 @@ const SHEETS = {
     attach: true,
     rows: [
       ["Cash", "$1,140", "", "Collections, notebook + slip"],
-      ["  Laundry revenue — washers", "", "$860", "Notebook + slip"],
-      ["  Laundry revenue — dryers", "", "$265", "Notebook + slip"],
-      ["  Laundry revenue — soap machine", "", "$15", "Evening slip", "new"],
+      ["  Laundry revenue, washers", "", "$860", "Notebook + slip"],
+      ["  Laundry revenue, dryers", "", "$265", "Notebook + slip"],
+      ["  Laundry revenue, soap machine", "", "$15", "Evening slip", "new"],
       ["Repairs & maintenance", "$85", "", "Notebook"],
-      ["Supplies — detergent", "$45", "", "Notebook"],
+      ["Supplies, detergent", "$45", "", "Notebook"],
       ["  Cash", "", "$130", "Expenses paid in cash"],
       ["Bank account", "$690", "", "Notebook"],
       ["  Cash", "", "$690", "Deposit"],
@@ -64,7 +64,7 @@ const SHEETS = {
 
 const ORDER = ["pnl", "recon", "ledger", "journal"];
 SHEETS.report = {
-  title: "Daily Performance Report — Sample",
+  title: "Daily Performance Report: Sample",
   cols: ["Metric", "Actual", "Daily budget", "Summary"],
   types: ["text", "num", "num", "text"],
   rows: [
@@ -187,7 +187,7 @@ function route() {
   const landing = !location.hash || location.hash === "#";
   document.body.classList.toggle("is-landing", landing);
   if (landing) {
-    document.title = "Bean — Books, kept for you";
+    document.title = "Bean, Books, kept for you";
     return;
   }
   const m = location.hash.match(/^#sheet=(\w+)/);
