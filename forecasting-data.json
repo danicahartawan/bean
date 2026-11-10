@@ -1,0 +1,2580 @@
+{
+  "startDate": "2026-11-09",
+  "temperatures": [
+    14,
+    12,
+    9,
+    8,
+    7,
+    9,
+    10
+  ],
+  "rules": {
+    "baseline": 15,
+    "sensitivity": 0.05,
+    "minFactor": 0.2,
+    "switchBelow": 12,
+    "switchColumns": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "alertDays": 3,
+    "loadDays": 3,
+    "runMs": 1500,
+    "revealMs": 200,
+    "sliderMin": 0,
+    "sliderMax": 30,
+    "coinBring": 5000,
+    "slowSales": [
+      3,
+      3,
+      3,
+      3
+    ]
+  },
+  "machines": [
+    {
+      "name": "Station",
+      "expected": 42000,
+      "actual": 41300,
+      "columns": [
+        {
+          "number": 1,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 20,
+          "price": 120,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 2,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 27,
+          "price": 130,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 3,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 34,
+          "price": 140,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 4,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 41,
+          "price": 150,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 5,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 23,
+          "price": 160,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 6,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 30,
+          "price": 170,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 7,
+          "product": "energy drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 37,
+          "price": 180,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 8,
+          "product": "corn soup",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 24,
+          "price": 120,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 9,
+          "product": "hot cocoa",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 26,
+          "price": 130,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 10,
+          "product": "milk tea",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 33,
+          "price": 140,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 11,
+          "product": "limited-edition matcha latte",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 40,
+          "price": 150,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 12,
+          "product": "grape soda",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 22,
+          "price": 160,
+          "p50": [
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43
+          ],
+          "p90": [
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        {
+          "number": 13,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 29,
+          "price": 170,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 14,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 36,
+          "price": 180,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 15,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 43,
+          "price": 120,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 16,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 25,
+          "price": 130,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 17,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 32,
+          "price": 140,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 18,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 39,
+          "price": 150,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 19,
+          "product": "energy drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 21,
+          "price": 160,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 20,
+          "product": "corn soup",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 24,
+          "price": 170,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 21,
+          "product": "hot cocoa",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 35,
+          "price": 180,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 22,
+          "product": "milk tea",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 42,
+          "price": 120,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 23,
+          "product": "limited-edition matcha latte",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 24,
+          "price": 130,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 24,
+          "product": "grape soda",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 31,
+          "price": 140,
+          "p50": [
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43
+          ],
+          "p90": [
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        {
+          "number": 25,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 38,
+          "price": 150,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 26,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 20,
+          "price": 160,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 27,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 27,
+          "price": 170,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 28,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 34,
+          "price": 180,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 29,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 41,
+          "price": 120,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 30,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 23,
+          "price": 130,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        }
+      ],
+      "coins": [
+        {
+          "yen": 10,
+          "count": 120,
+          "days": 6
+        },
+        {
+          "yen": 50,
+          "count": 45,
+          "days": 5
+        },
+        {
+          "yen": 100,
+          "count": 18,
+          "days": 2
+        },
+        {
+          "yen": 500,
+          "count": 12,
+          "days": 7
+        }
+      ],
+      "dailySales": [
+        17200,
+        16100,
+        14300,
+        13700,
+        13100,
+        14300,
+        14900
+      ],
+      "hotShare": 0.55,
+      "weeklySales": [
+        103600,
+        99800,
+        96500,
+        94200,
+        92800,
+        95600,
+        101300,
+        88400
+      ]
+    },
+    {
+      "name": "Office",
+      "expected": 28500,
+      "actual": 29100,
+      "columns": [
+        {
+          "number": 1,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 23,
+          "price": 120,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 2,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 30,
+          "price": 130,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 3,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 37,
+          "price": 140,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 4,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 44,
+          "price": 150,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 5,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 26,
+          "price": 160,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 6,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 33,
+          "price": 170,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 7,
+          "product": "energy drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 40,
+          "price": 180,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 8,
+          "product": "corn soup",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 22,
+          "price": 120,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 9,
+          "product": "hot cocoa",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 29,
+          "price": 130,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 10,
+          "product": "milk tea",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 36,
+          "price": 140,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 11,
+          "product": "limited-edition matcha latte",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 43,
+          "price": 150,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 12,
+          "product": "grape soda",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 25,
+          "price": 160,
+          "p50": [
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43
+          ],
+          "p90": [
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        {
+          "number": 13,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 32,
+          "price": 170,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 14,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 39,
+          "price": 180,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 15,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 21,
+          "price": 120,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 16,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 28,
+          "price": 130,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 17,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 35,
+          "price": 140,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 18,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 42,
+          "price": 150,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 19,
+          "product": "energy drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 24,
+          "price": 160,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 20,
+          "product": "corn soup",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 31,
+          "price": 170,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 21,
+          "product": "hot cocoa",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 38,
+          "price": 180,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 22,
+          "product": "milk tea",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 20,
+          "price": 120,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 23,
+          "product": "limited-edition matcha latte",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 27,
+          "price": 130,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 24,
+          "product": "grape soda",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 34,
+          "price": 140,
+          "p50": [
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43
+          ],
+          "p90": [
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        {
+          "number": 25,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 41,
+          "price": 150,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 26,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 23,
+          "price": 160,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 27,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 30,
+          "price": 170,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 28,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 37,
+          "price": 180,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 29,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 44,
+          "price": 120,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 30,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 26,
+          "price": 130,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        }
+      ],
+      "coins": [
+        {
+          "yen": 10,
+          "count": 120,
+          "days": 6
+        },
+        {
+          "yen": 50,
+          "count": 45,
+          "days": 5
+        },
+        {
+          "yen": 100,
+          "count": 85,
+          "days": 6
+        },
+        {
+          "yen": 500,
+          "count": 12,
+          "days": 7
+        }
+      ],
+      "dailySales": [
+        6100,
+        5900,
+        5600,
+        5500,
+        5300,
+        1200,
+        1100
+      ],
+      "hotShare": 0.65,
+      "weeklySales": [
+        30700,
+        30200,
+        29800,
+        29500,
+        29100,
+        28700,
+        26400,
+        9800
+      ]
+    },
+    {
+      "name": "Park",
+      "expected": 19800,
+      "actual": 12900,
+      "columns": [
+        {
+          "number": 1,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 26,
+          "price": 120,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 2,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 33,
+          "price": 130,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 3,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 40,
+          "price": 140,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 4,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 22,
+          "price": 150,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 5,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 29,
+          "price": 160,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 6,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 36,
+          "price": 170,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 7,
+          "product": "energy drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 43,
+          "price": 180,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 8,
+          "product": "corn soup",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 25,
+          "price": 120,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 9,
+          "product": "hot cocoa",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 32,
+          "price": 130,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 10,
+          "product": "milk tea",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 39,
+          "price": 140,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 11,
+          "product": "limited-edition matcha latte",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 21,
+          "price": 150,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 12,
+          "product": "grape soda",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 28,
+          "price": 160,
+          "p50": [
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43
+          ],
+          "p90": [
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        {
+          "number": 13,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 35,
+          "price": 170,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 14,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 42,
+          "price": 180,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 15,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 24,
+          "price": 120,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 16,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 31,
+          "price": 130,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 17,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 38,
+          "price": 140,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 18,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 20,
+          "price": 150,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 19,
+          "product": "energy drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 27,
+          "price": 160,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 20,
+          "product": "corn soup",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 34,
+          "price": 170,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 21,
+          "product": "hot cocoa",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 41,
+          "price": 180,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 22,
+          "product": "milk tea",
+          "temperature": "hot",
+          "capacity": 50,
+          "left": 23,
+          "price": 120,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 23,
+          "product": "limited-edition matcha latte",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 30,
+          "price": 130,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 24,
+          "product": "grape soda",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 37,
+          "price": 140,
+          "p50": [
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43,
+            0.43
+          ],
+          "p90": [
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56,
+            0.56
+          ]
+        },
+        {
+          "number": 25,
+          "product": "canned coffee",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 44,
+          "price": 150,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 26,
+          "product": "green tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 26,
+          "price": 160,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        },
+        {
+          "number": 27,
+          "product": "barley tea",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 33,
+          "price": 170,
+          "p50": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "p90": [
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5,
+            6.5
+          ]
+        },
+        {
+          "number": 28,
+          "product": "water",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 40,
+          "price": 180,
+          "p50": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
+          ],
+          "p90": [
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8,
+            7.8
+          ]
+        },
+        {
+          "number": 29,
+          "product": "sports drink",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 22,
+          "price": 120,
+          "p50": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "p90": [
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9,
+            3.9
+          ]
+        },
+        {
+          "number": 30,
+          "product": "cola",
+          "temperature": "cold",
+          "capacity": 50,
+          "left": 29,
+          "price": 130,
+          "p50": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "p90": [
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2,
+            5.2
+          ]
+        }
+      ],
+      "coins": [
+        {
+          "yen": 10,
+          "count": 120,
+          "days": 6
+        },
+        {
+          "yen": 50,
+          "count": 45,
+          "days": 5
+        },
+        {
+          "yen": 100,
+          "count": 85,
+          "days": 6
+        },
+        {
+          "yen": 500,
+          "count": 12,
+          "days": 7
+        }
+      ],
+      "dailySales": [
+        3400,
+        3200,
+        2800,
+        2700,
+        2600,
+        2900,
+        3000
+      ],
+      "hotShare": 0.3,
+      "weeklySales": [
+        20600,
+        19400,
+        18100,
+        17200,
+        16500,
+        16000,
+        15800,
+        17900
+      ]
+    }
+  ],
+  "visitLoad": [
+    [
+      "Hot coffee",
+      24
+    ],
+    [
+      "Green tea",
+      18
+    ],
+    [
+      "Corn soup",
+      12
+    ],
+    [
+      "Milk tea",
+      10
+    ],
+    [
+      "Water",
+      8
+    ]
+  ],
+  "weeks": {
+    "starts": [
+      "Nov 9",
+      "Nov 16",
+      "Nov 23",
+      "Nov 30",
+      "Dec 7",
+      "Dec 14",
+      "Dec 21",
+      "Dec 28"
+    ],
+    "lows": [
+      10,
+      8,
+      7,
+      5,
+      4,
+      3,
+      2,
+      2
+    ],
+    "hotShares": [
+      45,
+      52,
+      58,
+      63,
+      66,
+      68,
+      70,
+      70
+    ]
+  }
+}

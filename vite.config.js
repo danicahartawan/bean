@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         new: resolve(__dirname, "new/index.html"),
+        forecasting: resolve(__dirname, "forecasting.html"),
         bookkeeper: resolve(__dirname, "bookkeeper/index.html"),
       },
     },
