@@ -474,3 +474,10 @@ button.ag__pill { cursor: pointer; } button.ag__pill:hover { border-color: #f54e
 /* artifacts pinned toward the bottom */
 .ag__arts { position: absolute; left: 50%; bottom: 36px; margin: 0; width: min(660px, calc(100% - 40px)); transform: translateX(-50%); }
 .ag__main.sugon:not(.chat) .ag__dock { top: 36%; }
+
+/* simpler, white notebook; no chip, no log under it */
+.nb .nb__chip, .nb .tl { display: none !important; }
+.nb.nb--inline .pg, .nb.nb--inline .face { background: #fff !important; }
+.nb.nb--inline .pg--l, .nb.nb--inline .face.back { background: linear-gradient(90deg, #f3f2ee, #fff 6%) !important; }
+.nb.nb--inline .pg--r, .nb.nb--inline .face:not(.back) { background: linear-gradient(270deg, #fff 94%, #f3f2ee) !important; }
+.nb .fa { margin-top: 12px; font-size: 14px; }

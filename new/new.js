@@ -151,7 +151,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     ["Now", "Week 1", "Week 2", "Week 3", "Week 4"].forEach((w, i) => (g += `<text x="${X(i)}" y="142" text-anchor="middle">${w}</text>`));
     L("fx-chart").innerHTML = g + `<line class="lr" x1="34" x2="354" y1="${Y(res).toFixed(1)}" y2="${Y(res).toFixed(1)}"/><path class="la" d="${pts(a)}"/><path class="lb" d="${pts(b)}"/>`;
     const gap = b[4] - res; nbRes = { cost, res, end: b[4], lo, lw, gap };
-    L("fx-t").textContent = `Under this scenario, replacing Washer #6 would leave approximately ${fmt(b[4])} at the end of the month, ${gap >= 0 ? fmt(gap) + " above" : fmt(-gap) + " below"} your ${fmt(res)} reserve. The lowest point is ${fmt(lo)} in ${lw ? "week " + lw : "week 0"}${lo < res ? ", under your reserve" : ""}. Confirm upcoming bills before deciding.`;
+    L("fx-t").textContent = gap >= 0 ? `Yes. You\u2019d still have ${fmt(b[4])} at month end, ${fmt(gap)} above your reserve.` : `Not yet. You\u2019d end the month ${fmt(-gap)} below your reserve.`;
   };
   L("nb-cost").addEventListener("input", calc); L("nb-res").addEventListener("input", calc);
   const swapThink = (box, label, done) => {
