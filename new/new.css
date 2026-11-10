@@ -743,3 +743,12 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .lc__f { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 4px; }
 .lc__f button { display: flex; align-items: center; justify-content: space-between; padding: 12px 6px; border: 0; background: transparent; font: inherit; font-size: 14px; color: #7a7974; cursor: pointer; text-align: left; } .lc__f button:hover { color: #26251e; } .lc__f svg { width: 16px; height: 16px; }
 @media (max-width: 760px) { .lc__b, .lc__f { grid-template-columns: 1fr; gap: 14px; } }
+/* laundries card: respond to its own width, not the viewport */
+.lc { container-type: inline-size; }
+.lq__s { flex-wrap: wrap; gap: 6px 18px; } .lq__s span { white-space: nowrap; }
+@container (max-width: 620px) {
+  .lc__b, .lc__f { grid-template-columns: 1fr; gap: 12px; }
+  .lc__l p { font-size: 17px; }
+  .lc__list { height: 220px; padding-right: 0; }
+  .lc__f { gap: 0; }
+}
