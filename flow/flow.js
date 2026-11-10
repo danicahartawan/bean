@@ -51,6 +51,7 @@ const ICON = {
   chart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"/><path d="M5 15l4-4 3 3 6-7"/></svg>',
 };
 
+const BASE = (import.meta.env?.BASE_URL || '/').replace(/\/$/, ''); // '/' locally, '/bean/' on GitHub Pages
 const $ = selector => document.querySelector(selector);
 const yen = value => '¥' + value.toLocaleString('en-US');
 const state = { sent: false, reading: false, checked: false, sawBooks: false, done: false, sheet: 'pnl', sentTo: false, detail: false };
@@ -216,9 +217,9 @@ function render() {
   // stage
   if (step === 'send') { frameFor('note', './note.html', 'Your notebook page'); showOnly('note'); }
   if (step === 'check') { frameFor('check', './check.html', 'What Bean read'); showOnly('check'); }
-  if (step === 'books') { frameFor('books', `/bookkeeper-v2/?embed#sheet=${state.sheet}`, 'Your books'); showOnly('books'); }
+  if (step === 'books') { frameFor('books', `${BASE}/bookkeeper-v2/?embed#sheet=${state.sheet}`, 'Your books'); showOnly('books'); }
   if (step === 'ahead') {
-    if (state.detail) { frameFor('forecast', '/forecasting.html', 'Full forecast'); showOnly('forecast'); }
+    if (state.detail) { frameFor('forecast', `${BASE}/forecasting.html`, 'Full forecast'); showOnly('forecast'); }
     else showOnly('ahead-summary');
   }
 }

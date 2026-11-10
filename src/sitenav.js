@@ -46,8 +46,12 @@ const TABS = [
   ] },
 ];
 
+// Site base: '/' locally, '/bean/' on GitHub Pages. Links above are written from the site root.
+const BASE = (import.meta.env?.BASE_URL || '/').replace(/\/$/, '');
+const at = path => BASE + path;
+
 // Pages that only read their hash on load need a reload to switch views.
-const RELOAD_ON_HASH = ['/forecasting.html'];
+const RELOAD_ON_HASH = [at('/forecasting.html')];
 const STORE_KEY = 'bean.vtabs.expanded';
 
 function normalPath(path) { return path.replace(/\/index\.html$/, '/') || '/'; }
@@ -55,8 +59,8 @@ function isCurrent(href) {
   const url = new URL(href, location.origin);
   if (normalPath(url.pathname) !== normalPath(location.pathname)) return false;
   const here = location.hash === '#' ? '' : location.hash;
-  if (url.pathname === '/forecasting.html' && !url.hash) return !here || here === '#sales';
-  if (url.pathname === '/flow/' && !url.hash) return true; // the flow's steps live in its hash
+  if (url.pathname === at('/forecasting.html') && !url.hash) return !here || here === '#sales';
+  if (url.pathname === at('/flow/') && !url.hash) return true; // the flow's steps live in its hash
   return url.hash === here;
 }
 const remember = value => { try { localStorage.setItem(STORE_KEY, value ? '1' : '0'); } catch {} };
@@ -69,7 +73,7 @@ function mount() {
   rail.setAttribute('aria-label', 'Bean');
   rail.innerHTML = `
     <div class="vtabs__head">
-      <span class="vtabs__brand"><img src="/assets/bean-avatar.png" alt="" /><span>bean</span></span>
+      <span class="vtabs__brand"><img src="${at('/assets/bean-avatar.png')}" alt="" /><span>bean</span></span>
       <button class="vtabs__toggle" type="button" aria-label="Expand menu" aria-expanded="false">${icon('collapse', 18)}</button>
     </div>
     <ul class="vtabs__list">
@@ -78,12 +82,12 @@ function mount() {
           ${tab.children
             ? `<button class="vtab__row" type="button" aria-expanded="false" data-label="${tab.label}">${icon(tab.icon)}<span class="vtab__label">${tab.label}</span><i class="vtab__sign" aria-hidden="true"></i></button>
                <ul class="vtab__children">${tab.children.map(child => `
-                 <li><a class="vtab__child" href="${child.href}">${icon(child.icon, 18)}<span>${child.label}</span></a></li>`).join('')}
+                 <li><a class="vtab__child" href="${at(child.href)}">${icon(child.icon, 18)}<span>${child.label}</span></a></li>`).join('')}
                </ul>
-               <div class="vtab__dots" aria-hidden="true">${tab.children.map(child => `<a href="${child.href}" tabindex="-1" data-label="${child.label}"><i></i></a>`).join('')}</div>`
+               <div class="vtab__dots" aria-hidden="true">${tab.children.map(child => `<a href="${at(child.href)}" tabindex="-1" data-label="${child.label}"><i></i></a>`).join('')}</div>`
             : tab.soon
               ? `<span class="vtab__row" aria-disabled="true" data-label="${tab.label} · soon">${icon(tab.icon)}<span class="vtab__label">${tab.label}</span><em class="vtab__badge">soon</em></span>`
-              : `<a class="vtab__row" href="${tab.href}" data-label="${tab.label}">${icon(tab.icon)}<span class="vtab__label">${tab.label}</span></a>`}
+              : `<a class="vtab__row" href="${at(tab.href)}" data-label="${tab.label}">${icon(tab.icon)}<span class="vtab__label">${tab.label}</span></a>`}
         </li>`).join('')}
     </ul>
     <p class="vtabs__hint"><kbd>\\</kbd><span>to keep it open</span></p>`;
