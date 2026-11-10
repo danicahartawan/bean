@@ -419,3 +419,22 @@ button.ag__pill { cursor: pointer; } button.ag__pill:hover { border-color: #f54e
 .rs__src svg { color: #7a7974; } .rs__src em { margin-left: auto; padding-left: 16px; font-style: normal; color: #7a7974; }
 .rs__src.fade { opacity: .45; }
 .ag__go { margin-left: auto; }
+
+/* glow instead of highlight */
+.hl, .hl--o { padding: 0; background: none !important; transition: color .7s ease, text-shadow .7s ease; }
+.nb .on .hl, .hl.on { color: #f54e00; text-shadow: 0 0 14px rgb(245 78 0 / 55%), 0 0 2px rgb(245 78 0 / 35%); animation: hl-glow 1.6s ease-out; }
+@keyframes hl-glow { 0% { text-shadow: 0 0 0 rgb(245 78 0 / 0%); } 35% { text-shadow: 0 0 26px rgb(245 78 0 / 95%), 0 0 6px rgb(245 78 0 / 70%); } 100% { text-shadow: 0 0 14px rgb(245 78 0 / 55%), 0 0 2px rgb(245 78 0 / 35%); } }
+.mir-m, .ag__me .mir-m { color: #f54e00; background: none; box-shadow: none; text-shadow: 0 0 14px rgb(245 78 0 / 50%), 0 0 2px rgb(245 78 0 / 30%); }
+
+/* thinking states (from styles.css, scoped to the agent) */
+.ag { --think-hold: 2000ms; --think-swap: 150ms; --think-gap: 50ms; --think-distance: 8px; --think-blur: 2px; --think-shimmer: 2000ms; --think-base: #7a7974; --think-highlight: #26251e; --think-ease: ease-in-out; }
+.t-think { position: relative; display: inline-block; text-align: left; }
+.t-think-sizer { display: block; visibility: hidden; white-space: nowrap; }
+.t-think-text { position: absolute; top: 0; left: 0; right: 0; display: block; color: var(--think-base); white-space: nowrap; transform: translateY(0); filter: blur(0); opacity: 1; transition: transform var(--think-swap) var(--think-ease), filter var(--think-swap) var(--think-ease), opacity var(--think-swap) var(--think-ease); will-change: transform, filter, opacity; }
+.t-think-text::before { content: attr(data-text); position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(90deg, transparent 0%, transparent 40%, var(--think-highlight) 50%, transparent 60%, transparent 100%); background-size: 400% 100%; background-repeat: no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; animation: t-think-shimmer var(--think-shimmer) linear infinite; }
+@keyframes t-think-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0% 0; } }
+.t-think-text.is-exit { transform: translateY(calc(var(--think-distance) * -1)); filter: blur(var(--think-blur)); opacity: 0; }
+.t-think-text.is-enter-start { transition: none; transform: translateY(var(--think-distance)); filter: blur(var(--think-blur)); opacity: 0; }
+.t-think.done .t-think-text::before { display: none; }
+.rs__h .t-think { color: #26251e; } .rs__h { --think-base: #26251e; }
+.nb__chip em { font-style: normal; }

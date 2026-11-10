@@ -154,7 +154,17 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     L("fx-t").textContent = `Under this scenario, replacing Washer #6 would leave approximately ${fmt(b[4])} at the end of the month, ${gap >= 0 ? fmt(gap) + " above" : fmt(-gap) + " below"} your ${fmt(res)} reserve. The lowest point is ${fmt(lo)} in ${lw ? "week " + lw : "week 0"}${lo < res ? ", under your reserve" : ""}. Confirm upcoming bills before deciding.`;
   };
   L("nb-cost").addEventListener("input", calc); L("nb-res").addEventListener("input", calc);
-  const setState = (t) => (L("nb-chip-s").textContent = t);
+  const swapThink = (box, label, done) => {
+    box.classList.toggle("done", !!done);
+    const live = box.querySelector(".t-think-text:not(.is-exit)");
+    if (live && live.textContent === label) return;
+    const leaving = live, next = document.createElement("span");
+    next.className = "t-think-text is-enter-start"; next.textContent = label; next.setAttribute("data-text", label); box.appendChild(next);
+    leaving && leaving.classList.add("is-exit");
+    setTimeout(() => { void next.offsetWidth; next.classList.remove("is-enter-start"); }, 50);
+    if (leaving) setTimeout(() => leaving.remove(), 200);
+  };
+  const setState = (t) => swapThink(L("nb-chip-s"), t, /^(idle|done)$/.test(t));
   const flip = (el, on, inst) => { el.classList.toggle("instant", !!inst); el.classList.toggle("flip", on); if (on) el.style.zIndex = el === leaf[0] ? 10 : 20; else el.style.zIndex = ""; if (inst) void el.offsetWidth; };
   const resetNb = () => { nbTimers.forEach(clearTimeout); nbTimers = []; nb.classList.remove("linked"); leaf.forEach((l) => flip(l, false, true)); procs.forEach((p) => (p.className = "")); clearEntries(); document.querySelectorAll(".nb .hl").forEach((h) => h.classList.remove("on")); setState("idle"); };
   const showFinal = () => { nbDone = true; fillEntries(); document.querySelectorAll(".nb .hl").forEach((h) => h.classList.add("on")); nb.classList.add("linked"); procs.forEach((p) => (p.className = "done")); leaf.forEach((l) => flip(l, true, true)); setState("done"); };
@@ -167,14 +177,14 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const typeReply = (text) => { const b = document.createElement("div"); b.className = "ag__bean"; b.innerHTML = '<i class="ag__mark"></i><div></div>'; log.append(b); const out = b.lastElementChild, words = text.split(" "); let n = 0; const tick = () => { out.textContent += (n ? " " : "") + words[n++]; log.scrollTop = log.scrollHeight; if (n < words.length) setTimeout(tick, 40); }; tick(); };
   const I = { s: '<svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6"/><path d="M10.5 10.5 14 14"/></svg>', g: '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2"/><path d="M1.8 8h12.4M8 1.8c2 2 2 10.4 0 12.4M8 1.8c-2 2-2 10.4 0 12.4"/></svg>', c: '<svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg>' };
   const research = (host, steps, ms) => new Promise((res) => {
-    host.innerHTML = `<div class="rs"><button type="button" class="rs__h">${I.c}<span>Researching</span></button><div class="rs__b"></div></div>`;
+    host.innerHTML = `<div class="rs"><button type="button" class="rs__h">${I.c}<span class="t-think" id="rs-think"><span class="t-think-sizer" aria-hidden="true">Estimating the next 30 days</span></span></button><div class="rs__b"></div></div>`;
     const rs = host.firstChild, body = rs.querySelector(".rs__b"), head = rs.querySelector(".rs__h");
     head.addEventListener("click", () => rs.classList.toggle("closed"));
     const scroll = () => (log.scrollTop = log.scrollHeight);
     let i = 0;
     const next = () => {
-      if (i >= steps.length) { head.querySelector("span").textContent = "Researched"; setTimeout(() => { rs.classList.add("closed"); res(); }, 500); return; }
-      const st = steps[i++], line = document.createElement("div"); line.className = "rs__l act"; line.innerHTML = `${I.s}<span>${st[0]}</span>`; body.append(line); scroll();
+      if (i >= steps.length) { swapThink(head.querySelector(".t-think"), "Researched", true); setTimeout(() => { rs.classList.add("closed"); res(); }, 500); return; }
+      const st = steps[i++]; swapThink(head.querySelector(".t-think"), st[0]); const line = document.createElement("div"); line.className = "rs__l act"; line.innerHTML = `${I.s}<span>${st[0]}</span>`; body.append(line); scroll();
       setTimeout(() => {
         line.classList.remove("act");
         const src = st[1] || [];
@@ -185,7 +195,8 @@ document.querySelectorAll("[data-row]").forEach((row) => {
         setTimeout(next, 220 * src.length + 500);
       }, ms);
     };
-    next();
+    swapThink(head.querySelector(".t-think"), "Researching");
+    setTimeout(next, 500);
   });
   const openNb = (final) => {
     calc(); resetNb(); main.classList.add("chat"); nb.classList.add("nb--inline"); log.append(nb); nb.hidden = false; setTimeout(() => nb.scrollIntoView({ block: "nearest", behavior: "smooth" }), 50);
