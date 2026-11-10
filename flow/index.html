@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Today's books — Bean</title>
+    <script type="module" crossorigin src="/bean/assets/flow-CD3UnhvU.js"></script>
+    <link rel="modulepreload" crossorigin href="/bean/assets/sitenav-DKZROfpA.js">
+    <link rel="stylesheet" crossorigin href="/bean/assets/sitenav-DPCUVwa5.css">
+    <link rel="stylesheet" crossorigin href="/bean/assets/flow-BQMLKDfj.css">
+  </head>
+  <body class="flow-page">
+    <div class="flow">
+      <header class="flow__top">
+        <div class="flow__brand">
+          <img src="/bean/assets/bean-avatar-BMPmi9zJ.png" alt="" />
+          <div>
+            <h1>Today's books</h1>
+            <p>Monday, November 9</p>
+          </div>
+        </div>
+        <ol class="steps" aria-label="Steps">
+          <li><a href="#send" data-step="send"><b>1</b><span>Send your page</span></a></li>
+          <li><a href="#check" data-step="check"><b>2</b><span>Check what Bean read</span></a></li>
+          <li><a href="#books" data-step="books"><b>3</b><span>Your books</span></a></li>
+          <li><a href="#ahead" data-step="ahead"><b>4</b><span>Look ahead</span></a></li>
+        </ol>
+      </header>
+
+      <main class="flow__main">
+        <section class="guide" aria-live="polite">
+          <p class="guide__step" id="guide-step">Step 1 of 4</p>
+          <h2 id="guide-title">Send today's page</h2>
+          <p class="guide__text" id="guide-text"></p>
+          <div class="guide__actions" id="guide-actions"></div>
+          <p class="guide__done" id="guide-done" hidden></p>
+          <nav class="guide__nav" aria-label="Move between steps">
+            <button class="btn btn--quiet" id="prev" type="button">← Back</button>
+            <button class="btn btn--primary" id="next" type="button">Next →</button>
+          </nav>
+        </section>
+
+        <section class="stage" id="stage" aria-label="Preview">
+          <div class="ahead" id="ahead" hidden>
+            <p class="ahead__eyebrow">This month · Nov 9–30</p>
+            <p class="ahead__big">About <strong id="ahead-total"></strong> expected across your 3 machines.</p>
+            <ul class="ahead__bars" id="ahead-bars"></ul>
+            <div class="ahead__note">
+              <b>Worth a check: Park</b>
+              <span id="ahead-check"></span>
+            </div>
+            <p class="ahead__foot">Sample forecast for three vending machines, in yen.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

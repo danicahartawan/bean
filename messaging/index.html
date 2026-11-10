@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f7f4" />
+    <title>Messages — Bean</title>
+    <script type="module" crossorigin src="/bean/assets/messaging-CGoTSJvt.js"></script>
+    <link rel="modulepreload" crossorigin href="/bean/assets/sitenav-DKZROfpA.js">
+    <link rel="stylesheet" crossorigin href="/bean/assets/sitenav-DPCUVwa5.css">
+    <link rel="stylesheet" crossorigin href="/bean/assets/messaging-Bdp_gcxp.css">
+  </head>
+  <body>
+    <main class="stage">
+      <div class="device-fit" id="device-fit">
+        <div class="device" id="device">
+          <div class="screen">
+            <div class="island" aria-hidden="true"></div>
+
+            <div class="status" aria-hidden="true">
+              <span class="status__time">12:41</span>
+              <span class="status__icons">
+                <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5C5.1.5 2.5 1.6.6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2Zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9A7 7 0 0 0 8 3.9a7 7 0 0 0-5 2l1.2 1.2c1-.9 2.3-1.5 3.8-1.5Zm0 3.3c.6 0 1.1.2 1.5.6L8 11 6.5 9.5c.4-.4.9-.6 1.5-.6Z"/></svg>
+                <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="9" rx="2"/><path d="M24.5 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" opacity=".45"/></svg>
+              </span>
+            </div>
+
+            <header class="head">
+              <button class="head__back" type="button" aria-label="Back to conversations">
+                <svg width="13" height="21" viewBox="0 0 13 21" aria-hidden="true"><path d="M11 2 2.5 10.5 11 19" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="head__count">3</span>
+              </button>
+              <div class="head__who">
+                <span class="head__avatar"><img src="/bean/assets/bean-avatar-BMPmi9zJ.png" alt="" /></span>
+                <span class="head__name">Bean <svg width="6" height="10" viewBox="0 0 6 10" aria-hidden="true"><path d="m1 1 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              </div>
+              <button class="head__video" type="button" aria-label="Video call">
+                <svg width="26" height="18" viewBox="0 0 26 18" aria-hidden="true"><rect x="1.2" y="2.2" width="16" height="13.6" rx="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="m18.6 7 5.2-3.3c.6-.4 1.2 0 1.2.7v9.2c0 .7-.6 1.1-1.2.7L18.6 11Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </button>
+            </header>
+
+            <section class="thread" id="thread" aria-live="polite" aria-label="Conversation with Bean">
+              <div class="thread__spacer"></div>
+              <p class="stamp"><b>Yesterday</b> 6:02 PM</p>
+              <div class="msg msg--in tail"><p class="bubble">Visit Station Tuesday, Nov 10, before change runs out Wednesday.</p></div>
+              <div class="msg msg--out tail"><p class="bubble">On it, thanks!</p></div>
+            </section>
+
+            <footer class="compose">
+              <button class="compose__plus" type="button" aria-label="More apps">
+                <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v13M1.5 8h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+              <div class="field" id="field">
+                <span class="field__ph" id="placeholder">Message</span>
+                <span class="field__text" id="field-text"></span><span class="caret" aria-hidden="true"></span>
+                <svg class="field__mic" width="14" height="20" viewBox="0 0 14 20" aria-hidden="true"><rect x="3.5" y="1" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M1 9.5a6 6 0 0 0 12 0M7 15.5V19" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                <button class="field__send" id="send" type="button" aria-label="Send">
+                  <svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M7 14.5V2M1.5 7.2 7 1.6l5.5 5.6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </footer>
+
+            <div class="kb" id="kb" aria-hidden="true">
+              <div class="kb__inner">
+                <div class="qt" id="quicktype">
+                  <span class="qt__cell">I</span><span class="qt__cell">The</span><span class="qt__cell">I’m</span>
+                </div>
+                <div class="kb__keys" id="keys"></div>
+                <span class="kb__pop" id="key-pop"></span>
+              </div>
+            </div>
+
+            <div class="homebar" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="controls">
+        <button class="controls__btn" id="replay" type="button">Replay</button>
+        <a class="controls__link" href="../forecasting.html#sales">Open forecast ↗</a>
+      </nav>
+    </main>
+  </body>
+</html>
