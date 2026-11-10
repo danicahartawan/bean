@@ -1,7 +1,7 @@
 import { ReadableChart } from './forecasting-chart.jsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { market, productChange, productUnits, bookValue, periodExpense, endOfLife, forecastDates, DEPRECIATION_SOURCES, validAsset } from './forecasting-models.js';
-const yen = value => '¥' + Math.round(value).toLocaleString('en-US');
+const yen = value => '$' + Math.round(value).toLocaleString('en-US');
 const pct = value => value === null ? '—' : value.toFixed(1) + '%';
 const points = value => value === null ? '—' : (value > 0 ? '+' : '') + value.toFixed(1) + ' pp';
 
@@ -167,10 +167,10 @@ export function AssetEditor({ asset, onClose, onSave }) {
   }
   return <dialog ref={ref} className="asset-editor" onCancel={onClose} onClose={onClose}>
     <div className="load-heading"><h2>{asset?.name} · asset assumptions</h2><button aria-label="Close asset editor" onClick={onClose}>×</button></div>
-    {draft && <form onSubmit={submit}><label>Purchase cost (¥)<input required type="number" min="1" step="1" value={draft.cost} onChange={event=>setDraft({...draft,cost:Number(event.target.value)})} /></label>
+    {draft && <form onSubmit={submit}><label>Purchase cost ($)<input required type="number" min="1" step="1" value={draft.cost} onChange={event=>setDraft({...draft,cost:Number(event.target.value)})} /></label>
       <label>Acquisition date<input required type="date" value={draft.acquired} onChange={event=>setDraft({...draft,acquired:event.target.value})} /></label>
       <label>Useful life (years)<input required type="number" min="1" max="20" step="1" value={draft.lifeYears} onChange={event=>setDraft({...draft,lifeYears:Number(event.target.value)})} /></label>
-      <label>Residual value (¥)<input required type="number" min="0" max={draft.cost-1} step="1" value={draft.residual} onChange={event=>setDraft({...draft,residual:Number(event.target.value)})} /></label>
+      <label>Residual value ($)<input required type="number" min="0" max={draft.cost-1} step="1" value={draft.residual} onChange={event=>setDraft({...draft,residual:Number(event.target.value)})} /></label>
       <p className="source-scope-note">Saved in this browser. Sample records until you enter your own figures.</p>{error&&<p role="alert">{error}</p>}<button type="submit" className="print-load">Save assumptions</button>
     </form>}
   </dialog>;

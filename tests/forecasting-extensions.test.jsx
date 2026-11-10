@@ -48,15 +48,15 @@ describe('forecast page extensions', () => {
     const before = document.querySelector('.primary-insight .insight-stat').textContent;
     fireEvent.click(screen.getByRole('button',{name:'See how it’s calculated'}));
     const editor = screen.getByRole('dialog');
-    fireEvent.change(within(editor).getByLabelText('Purchase cost (¥)'),{target:{value:'1200000'}});
+    fireEvent.change(within(editor).getByLabelText('Purchase cost ($)'),{target:{value:'1200000'}});
     fireEvent.click(within(editor).getByRole('button',{name:'Save assumptions'}));
     expect(JSON.parse(localStorage.getItem('bean-forecast-assets'))[0].cost).toBe(1200000);
     expect(document.querySelector('.primary-insight .insight-stat').textContent).not.toBe(before);
     fireEvent.change(screen.getByRole('textbox',{name:'Ask about your forecast'}),{target:{value:'How is depreciation calculated?'}});
     fireEvent.click(screen.getByRole('button',{name:'Send message',exact:true}));
-    expect(screen.getByRole('log',{name:'Conversation'}).textContent).toContain('¥1,200,000');
+    expect(screen.getByRole('log',{name:'Conversation'}).textContent).toContain('$1,200,000');
     choosePage('Product Trends');
-    expect(screen.getByRole('log',{name:'Conversation'}).textContent).toContain('¥1,200,000');
+    expect(screen.getByRole('log',{name:'Conversation'}).textContent).toContain('$1,200,000');
   });
 });
 

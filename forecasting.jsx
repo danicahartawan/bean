@@ -9,7 +9,7 @@ import './forecasting.css';
 import { market, readAssets, secondaryReply } from './forecasting-models.js';
 import { ProductPanel, DepreciationPanel, ResearchDialog, AssetEditor, LedgerIcon } from './forecasting-panels.jsx';
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const yen = value => '¥' + Math.round(value).toLocaleString('en-US');
+const yen = value => '$' + Math.round(value).toLocaleString('en-US');
 const rounded = value => Math.round(value / 100) * 100;
 
 // Calendar totals use only dates covered by the eight sample weeks.
@@ -73,7 +73,7 @@ function summaryItems(temperature) {
     return stock <= 0.00001;
   });
   return [
-    { id: 'coins', machine: 'Station', text: 'Bring ¥5,000 in 100-yen coins to Station by Wednesday, Nov 11.', why: "Change runs out Wednesday; the machine can't take bills without it." },
+    { id: 'coins', machine: 'Station', text: 'Bring $5,000 in $1 coins to Station by Wednesday, Nov 11.', why: "Change runs out Wednesday; the machine can't take bills without it." },
     { id: 'hot', machine: 'Station', text: switchDay < 0
       ? 'Keep columns 5–8 at Station cold for Nov 9–15.'
       : `Switch columns 5–8 at Station to hot by ${temperature === null ? 'Wednesday' : DAYS[switchDay]} (coffee, cocoa, milk tea, corn soup).`,
@@ -228,7 +228,7 @@ view === 'overview' ? <OverviewCards machine={machine} mode={mode} week={week} d
     <ExplainLayer onAsk={question => setAskRequest({ question, id: Date.now() })} />
     <dialog ref={dialog} onCancel={() => setShowLoad(false)} onClose={() => setShowLoad(false)}>
       <div className="load-heading"><h2>Station · Tuesday, Nov 10</h2><button onClick={() => setShowLoad(false)} aria-label="Close load list">×</button></div>
-      <p>Bring ¥5,000 in 100-yen coins.</p>
+      <p>Bring $5,000 in $1 coins.</p>
       <table><thead><tr><th>Product</th><th>Units to load</th></tr></thead><tbody>
         {DATA.visitLoad.map(([name, units]) => <tr key={name}><td>{name}</td><td {...explainData('Units to load', `Bring ${units} units of ${name.toLowerCase()} to Station on Tuesday.`)}>{units}</td></tr>)}
       </tbody></table><button className="print-load" onClick={() => window.print()}>Print visit list</button>
@@ -403,7 +403,7 @@ function OverviewCards({ machine, mode, week, day, month, metric, temperature, s
     </section>
     <section className="insight-card ledger-card check-card">
       <div className="insight-title"><LedgerIcon kind="book" />Needs a check <span>Park</span></div>
-      <p className="ledger-sentence" {...explainData('Park’s sales gap', 'Park earned ¥6,900 less than expected last week. Sales stopped on Wednesday afternoon, which looks like a jam.')} aria-label={gap + '% below expected'}>Park earned <strong>{gap}% less</strong> than expected last week.</p>
+      <p className="ledger-sentence" {...explainData('Park’s sales gap', 'Park earned $6,900 less than expected last week. Sales stopped on Wednesday afternoon, which looks like a jam.')} aria-label={gap + '% below expected'}>Park earned <strong>{gap}% less</strong> than expected last week.</p>
       <span className="ledger-term">Check for a jam</span>
       <div className="last-week-pair"><span>Expected <b>{yen(park.expected)}</b></span><span>Actual <b>{yen(park.actual)}</b></span></div>
       <button className="card-action" onClick={() => showTrends('Park')}>Look at Park</button>
@@ -473,7 +473,7 @@ function ForecastChat({ page, pageChips, topicContext, machine, day, temperature
       const next = Math.max(0, Math.min(30, degrees ? Number(degrees[1]) : (temperature ?? 14) + (query.includes('colder') ? -5 : 5)));
       setTemperature(next); reply = `Every day is now set to ${next}°C.`;
     } else if (/load|pack/.test(query)) {
-      if (target.name === 'Station') { openLoad(); reply = 'Station’s Tuesday load list is open. Bring ¥5,000 in 100-yen coins too.'; }
+      if (target.name === 'Station') { openLoad(); reply = 'Station’s Tuesday load list is open. Bring $5,000 in $1 coins too.'; }
       else reply = `Review ${target.name} stock on your next visit. ${target.name === 'Office' ? summaryItems(temperature).find(item => item.id === 'swap').text : summaryItems(temperature).find(item => item.id === 'park').why}`;
     } else if (/below|above|expected|jam|sales gap/.test(query)) {
       const gap = Math.round((target.actual / target.expected - 1) * 100);
@@ -508,7 +508,7 @@ function ForecastChat({ page, pageChips, topicContext, machine, day, temperature
 
     <div className="chat-body" ref={log}>
 
-      <div role="log" aria-label="Conversation">{messages.map((message, index) => <div key={index} className={'message ' + (message.user ? 'user-message' : 'response-message')}><div>{!message.user ? message.text.split(/(¥[\d,]+(?:\.\d+)?|\d+(?:\.\d+)?%)/g).map((part,i)=>/^(¥|\d.*%$)/.test(part)?<strong key={i}>{part}</strong>:part) : message.text}</div></div>)}</div>
+      <div role="log" aria-label="Conversation">{messages.map((message, index) => <div key={index} className={'message ' + (message.user ? 'user-message' : 'response-message')}><div>{!message.user ? message.text.split(/($[\d,]+(?:\.\d+)?|\d+(?:\.\d+)?%)/g).map((part,i)=>/^($|\d.*%$)/.test(part)?<strong key={i}>{part}</strong>:part) : message.text}</div></div>)}</div>
     </div>
     {<div className="ledger-starters">{(page === 'sales' ? [`I want to see ${machine.name} sales over time`, `I want to know when to visit ${machine.name} next`, `I want to know what sells best at ${machine.name} when it’s cold`] : chips).map(chip=><button key={chip} onClick={()=>{setDraft(chip);input.current?.focus();}}>{chip}</button>)}</div>}
     <form className="composer" onSubmit={event => { event.preventDefault(); answer(draft); }}>

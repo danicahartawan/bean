@@ -21,7 +21,7 @@ describe('sales forecast', () => {
     const view = render(<App />);
     fireEvent.click(screen.getByRole('button', { name: 'Week', exact: true }));
     fireEvent.click(screen.getByRole('button', { name: 'Next day' }));
-    expect(document.querySelector('.revenue').textContent).toContain('¥99,800');
+    expect(document.querySelector('.revenue').textContent).toContain('$99,800');
     expect(document.querySelector('.metric-content').textContent).toContain('Week of Nov 16');
     expect(document.querySelector('.compact-summary')).toBeNull();
     expect(document.querySelectorAll('.insight-card').length).toBe(8);
@@ -57,10 +57,10 @@ describe('sales forecast', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Week', exact: true }));
     fireEvent.click(screen.getByRole('combobox', { name: 'Select week' }));
     fireEvent.click(screen.getByRole('option', { name: 'Week of Dec 28' }));
-    expect(document.querySelector('.revenue').textContent).toContain('¥88,400');
+    expect(document.querySelector('.revenue').textContent).toContain('$88,400');
     const machineCards = [...document.querySelectorAll('.machine-insight')];
-    expect(machineCards[1].textContent).toContain('¥9,800');
-    expect(machineCards[2].textContent).toContain('¥17,900');
+    expect(machineCards[1].textContent).toContain('$9,800');
+    expect(machineCards[2].textContent).toContain('$17,900');
     expect(screen.getByRole('button', { name: 'Next day' }).disabled).toBe(true);
     fireEvent.click(machineCards[1].querySelector('.card-action'));
     expect(screen.getByRole('combobox', { name: 'Machine' }).value).toBe('Office');
@@ -75,13 +75,13 @@ describe('sales forecast', () => {
     fireEvent.click(picker);
     expect(screen.getAllByRole('option').length).toBe(3);
     expect(screen.getAllByRole('option')[0].textContent).toContain('Nov 9–30');
-    expect(document.querySelector('.revenue').textContent).toContain('¥313,400');
+    expect(document.querySelector('.revenue').textContent).toContain('$313,400');
     fireEvent.click(screen.getByRole('option', { name: 'Jan 1–3' }));
-    expect(document.querySelector('.revenue').textContent).toContain('¥37,900');
+    expect(document.querySelector('.revenue').textContent).toContain('$37,900');
     fireEvent.click(screen.getByRole('combobox',{name:'Forecast data'}));
     fireEvent.click(screen.getByRole('option',{name:'Hot drinks',exact:true}));
     expect(document.querySelector('.primary-insight .insight-title').textContent).toContain('Hot drink sales');
-    expect(document.querySelector('.revenue').textContent).not.toContain('¥37,900');
+    expect(document.querySelector('.revenue').textContent).not.toContain('$37,900');
     fireEvent.click(screen.getByRole('combobox',{name:'Forecast data'}));
     fireEvent.click(screen.getByRole('option',{name:'Compare',exact:true}));
     fireEvent.click(screen.getByRole('button', { name: 'Trends', exact: true }));
@@ -115,8 +115,8 @@ describe('sales forecast', () => {
   it('offers the delayed icon and keeps a touch explanation open after its generated click', () => {
     vi.useFakeTimers();
     const details = JSON.stringify({ title: 'Test sales', body: 'Sales from the sample data.', question: 'Why?' });
-    render(<><span data-explain={details} tabIndex={0}>¥2,900</span><ExplainLayer onAsk={() => {}} /></>);
-    const target = screen.getByText('¥2,900');
+    render(<><span data-explain={details} tabIndex={0}>$2,900</span><ExplainLayer onAsk={() => {}} /></>);
+    const target = screen.getByText('$2,900');
     const move = new Event('pointermove', { bubbles: true });
     Object.assign(move, { clientX: 100, clientY: 100, pointerType: 'mouse' });
     fireEvent(target, move);

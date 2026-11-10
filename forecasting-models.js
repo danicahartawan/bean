@@ -81,7 +81,7 @@ export function secondaryReply(topic, prompt, context) {
   const asset = context.assets.find(item => query.includes(item.name.toLowerCase())) ?? context.asset;
   const period = forecastDates(context.mode)[context.index];
   const dateLabel = date => new Date(date+'T00:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
-  const yen = value => '¥' + Math.round(value).toLocaleString('en-US');
+  const yen = value => '$' + Math.round(value).toLocaleString('en-US');
   if (/each machine|paid off/.test(query)) return context.assets.map(item=>`${item.name} reaches its residual book value on ${dateLabel(endOfLife(item))}.`).join(' ') + ' These are accounting dates; they do not tell us whether a loan is paid off.';
   if (/all machines/.test(query)) return context.assets.map(item=>`${item.name}: ${yen(periodExpense(item,period.start,period.end))} depreciation for the selected ${context.mode}.`).join(' ') + ' This is cost allocated on the books, not cash leaving your account.';
   if (/replace/.test(query)) return 'Being fully written off does not mean a machine needs replacing. Compare its condition, repair costs and downtime before planning a replacement. The sample asset records do not include those details.';

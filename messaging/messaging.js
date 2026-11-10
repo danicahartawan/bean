@@ -11,7 +11,7 @@ const FORECAST = {
   ],
   check: { machine: 'Park', gap: 35, expected: 19800, actual: 12900 },
 };
-const MONTH_TOTAL = FORECAST.machines.reduce((sum, m) => sum + m.month, 0); // ¥468,900
+const MONTH_TOTAL = FORECAST.machines.reduce((sum, m) => sum + m.month, 0); // $468,900
 
 const SPARK = {
   day: 'M0 9 C10 8 18 11 30 10 S50 7 62 9 S84 13 100 12',
@@ -22,7 +22,7 @@ const QUESTION = 'what is the expected sales this month';
 const NOW = '12:41 AM';
 
 const $ = (selector, root = document) => root.querySelector(selector);
-const yen = value => '¥' + Math.round(value).toLocaleString('en-US');
+const yen = value => '$' + Math.round(value).toLocaleString('en-US');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const thread = $('#thread');

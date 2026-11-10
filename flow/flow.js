@@ -36,11 +36,11 @@ const SHEETS = [
 // Month view of the sales forecast (forecasting.html#sales), sample data.
 const FORECAST = {
   machines: [
-    { name: 'Station', value: 313400, note: 'up to ¥391,800 if it’s busy' },
+    { name: 'Station', value: 313400, note: 'up to $391,800 if it’s busy' },
     { name: 'Office', value: 94900 },
     { name: 'Park', value: 60600 },
   ],
-  check: 'Park came in 35% under last week (¥12,900 vs ¥19,800 expected). It may be jammed.',
+  check: 'Park came in 35% under last week ($12,900 vs $19,800 expected). It may be jammed.',
 };
 
 const ICON = {
@@ -53,7 +53,7 @@ const ICON = {
 
 const BASE = (import.meta.env?.BASE_URL || '/').replace(/\/$/, ''); // '/' locally, '/bean/' on GitHub Pages
 const $ = selector => document.querySelector(selector);
-const yen = value => '¥' + value.toLocaleString('en-US');
+const yen = value => '$' + value.toLocaleString('en-US');
 const state = { sent: false, reading: false, checked: false, sawBooks: false, done: false, sheet: 'pnl', sentTo: false, detail: false };
 const stage = $('#stage');
 const frames = {};
