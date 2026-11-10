@@ -63,9 +63,9 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     bars.forEach((bar, i) => bar.classList.toggle("on", i === index));
   };
   const previews = [
-    ["Agent", "Ask about your business", [["Uses", "Laundry Log, P&L and cash records"], ["Helps with", "Revenue questions and purchase forecasts"]]],
-    ["Forecast", "Plan before you spend", [["Compare", "Cash with and without a purchase"], ["Review", "30-day outlook and washer replacement"]]],
-    ["Profit & Loss", "See how the day went", [["Recorded sales", "$1,140"], ["Recorded costs", "$130"], ["Profit so far", "$1,010"], ["Also includes", "Cash reconciliation and ledger"]]],
+    ["Repair Request Agent", "Ask about your business", [["Uses", "Laundry Log, P&L and cash records"], ["Helps with", "Revenue questions and purchase forecasts"]]],
+    ["Forecast Custom Model", "Plan before you spend", [["Compare", "Cash with and without a purchase"], ["Review", "30-day outlook and washer replacement"]]],
+    ["Profit and Loss Center Street", "See how the day went", [["Recorded sales", "$1,140"], ["Recorded costs", "$130"], ["Profit so far", "$1,010"], ["Also includes", "Cash reconciliation and ledger"]]],
     ["Laundry Log", "Your original daily records", [["Review", "Collections, expenses and source notes"], ["Follow through", "Updated books and bookkeeper package"]]],
   ];
   cards.forEach((card, index) => {
