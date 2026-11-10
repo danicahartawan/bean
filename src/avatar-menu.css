@@ -1,0 +1,200 @@
+:root {
+  --avatar-menu-green: #ffffff;
+  --avatar-menu-ink: #123f2d;
+  --avatar-menu-duration: 240ms;
+  --avatar-menu-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.avatar-gooey-menu {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  isolation: isolate;
+}
+
+.avatar-gooey-menu__liquid {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  overflow: visible;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.avatar-gooey-menu__liquid-action,
+.avatar-gooey-menu__liquid-center {
+  fill: var(--avatar-menu-green);
+}
+
+.avatar-gooey-menu__liquid-action {
+  transform: translate(0, 0) scale(0.42);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--avatar-menu-duration) var(--avatar-menu-ease);
+}
+
+.avatar-gooey-menu.is-open .avatar-gooey-menu__liquid-action {
+  transform: translate(var(--action-x), var(--action-y)) scale(1);
+  transition-delay: calc(var(--action-index) * 16ms);
+}
+
+.avatar-gooey-menu__actions {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.avatar-gooey-menu__action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--avatar-menu-green);
+  box-shadow: none;
+  color: var(--avatar-menu-ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(0, 0) scale(0.42);
+  transition:
+    transform var(--avatar-menu-duration) var(--avatar-menu-ease),
+    opacity 120ms ease-in,
+    visibility 0s linear var(--avatar-menu-duration);
+  visibility: hidden;
+}
+
+.avatar-gooey-menu.is-open .avatar-gooey-menu__actions {
+  pointer-events: auto;
+}
+
+.avatar-gooey-menu.is-open .avatar-gooey-menu__action {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(var(--action-x), var(--action-y)) scale(1);
+  transition:
+    transform var(--avatar-menu-duration) var(--avatar-menu-ease) calc(var(--action-index) * 16ms),
+    opacity 140ms ease-out calc(var(--action-index) * 16ms),
+    visibility 0s linear 0s;
+  visibility: visible;
+}
+
+.avatar-gooey-menu__action svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.65;
+}
+
+.avatar-gooey-menu__action:hover {
+  color: #0a2a1d;
+}
+
+.avatar-gooey-menu__action:active {
+  transform: translate(var(--action-x), var(--action-y)) scale(0.94);
+}
+
+.avatar-gooey-menu__action:focus-visible,
+.avatar-gooey-menu__trigger:focus-visible {
+  outline: 3px solid #f5e875;
+  outline-offset: 3px;
+}
+
+.avatar-gooey-menu__trigger {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  transition: transform 120ms ease-out;
+}
+
+.avatar-gooey-menu__trigger:active {
+  transform: scale(0.97);
+}
+
+.avatar-gooey-menu__avatar {
+  display: block;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+}
+
+.avatar-gooey-menu__state-icon {
+  position: absolute;
+  right: 1px;
+  bottom: 5px;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 2px solid #f2f2ef;
+  border-radius: 50%;
+  background: var(--avatar-menu-green);
+  box-shadow: 0 4px 12px rgb(7 28 19 / 24%);
+  color: var(--avatar-menu-ink);
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  transform: rotate(0deg);
+  transition: transform 180ms var(--avatar-menu-ease);
+}
+
+.avatar-gooey-menu.is-open .avatar-gooey-menu__state-icon {
+  transform: rotate(45deg);
+}
+
+.avatar-gooey-menu__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-gooey-menu__liquid-action,
+  .avatar-gooey-menu__action,
+  .avatar-gooey-menu__trigger,
+  .avatar-gooey-menu__state-icon {
+    transition-duration: 0.01ms;
+    transition-delay: 0ms;
+  }
+}
+
+/* No disc behind the avatar: the centre blob only shows while the menu is open (for the gooey merge). */
+.avatar-gooey-menu__liquid-center {
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.avatar-gooey-menu.is-open .avatar-gooey-menu__liquid-center {
+  opacity: 0;
+}
+
+.avatar-gooey-menu.is-open .avatar-gooey-menu__state-icon {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.avatar-gooey-menu__trigger:focus-visible {
+  outline: none;
+}

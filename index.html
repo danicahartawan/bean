@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#eee477" />
+    <meta name="description" content="A faithful iPhone note screen recreation featuring the green bean logo." />
+    <title>Mon 9/11 Laundry Log — Bean</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="iPhone note screen preview">
+      <div class="stage__glow stage__glow--left" aria-hidden="true"></div>
+      <div class="stage__glow stage__glow--right" aria-hidden="true"></div>
+
+      <article class="phone" aria-label="iPhone showing the Laundry Log note">
+        <span class="phone__button phone__button--action" aria-hidden="true"></span>
+        <span class="phone__button phone__button--volume-up" aria-hidden="true"></span>
+        <span class="phone__button phone__button--volume-down" aria-hidden="true"></span>
+        <span class="phone__button phone__button--power" aria-hidden="true"></span>
+
+        <div class="phone__screen">
+          <header class="status-bar" aria-label="Phone status">
+            <div class="status-bar__icons" aria-hidden="true">
+              <svg class="status-icon status-icon--signal" viewBox="0 0 18 13">
+                <rect x="0" y="8" width="3" height="5" rx="1"></rect>
+                <rect x="5" y="5" width="3" height="8" rx="1"></rect>
+                <rect x="10" y="2" width="3" height="11" rx="1"></rect>
+                <rect x="15" y="0" width="3" height="13" rx="1"></rect>
+              </svg>
+              <svg class="status-icon status-icon--wifi" viewBox="0 0 18 14">
+                <path d="M1 4.2C5.6.5 12.4.5 17 4.2"></path>
+                <path d="M4 7.5c3-2.3 7-2.3 10 0"></path>
+                <path d="M7 10.7c1.2-.9 2.8-.9 4 0"></path>
+                <circle cx="9" cy="13" r="1"></circle>
+              </svg>
+              <span class="battery"><span class="battery__fill"></span></span>
+            </div>
+          </header>
+
+          <div class="phone__island" aria-hidden="true"></div>
+
+          <nav class="toolbar" aria-label="Note controls">
+            <button class="icon-button icon-button--back" type="button" aria-label="Go back">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m15 5-7 7 7 7"></path>
+              </svg>
+            </button>
+
+            <div class="toolbar__actions">
+              <button class="icon-button icon-button--share" type="button" aria-label="Share note">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 15V3"></path>
+                  <path d="m8 7 4-4 4 4"></path>
+                  <path d="M7 10H5.8A1.8 1.8 0 0 0 4 11.8v7.4A1.8 1.8 0 0 0 5.8 21h12.4a1.8 1.8 0 0 0 1.8-1.8v-7.4a1.8 1.8 0 0 0-1.8-1.8H17"></path>
+                </svg>
+              </button>
+              <button class="icon-button icon-button--more" type="button" aria-label="More options">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="5" cy="12" r="1.4"></circle>
+                  <circle cx="12" cy="12" r="1.4"></circle>
+                  <circle cx="19" cy="12" r="1.4"></circle>
+                </svg>
+              </button>
+            </div>
+          </nav>
+
+          <div class="note-scroll">
+            <div class="note">
+              <h1 class="type-title"><span class="type-title__sizer">Mon 9/11 Laundry Log</span><span class="type-title__live" id="type-title-live" aria-hidden="true"></span></h1>
+
+              <div class="metadata" aria-label="Meeting details">
+                <span class="metadata-pill metadata-pill--person">
+                  <span>Danica Hartawan</span>
+                </span>
+                <div id="bot-avatar-menu-root"></div>
+              </div>
+
+              <div class="note-photos" id="note-photos"></div>
+
+              <div class="note-entries" id="note-entries">
+                <div class="entry">
+                  <p class="entry__text">collected $680 from washers<br>$240 dryers</p>
+                  <span class="entry__status entry__status--result"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>+$920</span>
+                </div>
+                <div class="entry">
+                  <p class="entry__text">washer 6 broke again<br>paid $85 to fix it</p>
+                  <span class="entry__status entry__status--thinking">Thinking</span>
+                </div>
+                <div class="entry">
+                  <p class="entry__text">bought detergent $45<br>kept $100 for change</p>
+                  <span class="entry__status entry__status--sources"><span class="entry__dots" aria-hidden="true"><i></i><i></i><i></i></span>3 sources</span>
+                </div>
+                <div class="entry">
+                  <p class="entry__text">deposited $690 at bank</p>
+                  <span class="entry__status entry__status--result"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>$690</span>
+                </div>
+              </div>
+
+              <form class="live-note" id="live-note-form" novalidate>
+                <label class="sr-only" for="live-note-input">Add a note</label>
+                <textarea
+                  id="live-note-input"
+                  name="live-note"
+                  rows="12"
+                  autocomplete="off"
+                  placeholder="Start writing…"
+                  aria-describedby="live-note-help"
+                ></textarea>
+
+                <span class="live-note__status" id="live-note-status" data-phase="idle">
+                  <span class="live-note__shimmer t-shimmer" data-text="Thinking…" aria-hidden="true">
+                    Thinking…
+                  </span>
+                  <span class="t-think" role="status" aria-live="polite" aria-atomic="true">
+                    <span class="t-think-sizer" aria-hidden="true">Finding context</span>
+                    <span class="t-think-text" data-text=""></span>
+                  </span>
+                </span>
+
+                <span class="sr-only" id="live-note-help">AI status appears on the right as you type.</span>
+              </form>
+            </div>
+          </div>
+
+
+          <div class="tear-calendar" id="tear-calendar" role="button" tabindex="0" aria-label="Tear off the calendar page: 9 November, Laundry at Container">
+            <div class="tear-calendar__remnant" aria-hidden="true"></div>
+            <div class="tear-calendar__sheet">
+              <div class="tear-calendar__body">
+                <img class="tear-calendar__bean" src="./assets/bean-cream.png" alt="" aria-hidden="true" />
+                <span class="tear-calendar__day">9</span>
+                <span class="tear-calendar__month">November</span>
+                <span class="tear-calendar__label">Laundry @ Container</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="screen-photo" id="screen-photo" aria-hidden="true"></div>
+          <div class="screen-beam" id="screen-beam" aria-hidden="true"></div>
+          <div class="camera" id="camera" aria-hidden="true">
+            <div class="camera__viewfinder"></div>
+            <button class="camera__close" id="camera-close" type="button" aria-label="Close camera">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+            </button>
+            <button class="camera__shutter" id="camera-shutter" type="button" aria-label="Take photo"><span></span></button>
+            <div class="camera__flash"></div>
+          </div>
+
+          <div class="totals" aria-label="Totals">
+            <span class="totals__item"><svg class="totals__icon totals__icon--p" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 11.5L12 5.5l6 6"/></svg><span class="sr-only">Profit</span>790</span>
+            <span class="totals__dot" aria-hidden="true"></span>
+            <span class="totals__item"><svg class="totals__icon totals__icon--l" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M6 12.5l6 6 6-6"/></svg><span class="sr-only">Loss</span>130</span>
+          </div>
+          <div class="home-indicator" aria-hidden="true"></div>
+        </div>
+      </article>
+    </main>
+    <script type="module" src="./src/main.jsx"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
