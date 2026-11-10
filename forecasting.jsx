@@ -159,7 +159,7 @@ export function App() {
             <small>Sets every day to this temperature.</small>
             {temperature !== null && <button className="reset-temperature" onClick={() => setTemperature(null)}>Back to forecast</button>}
           </div>
-      <footer>Prototype · sample data</footer>
+      <footer>Imported data · forecasting-data.json</footer>
       </div>
     </main>
     <ForecastChat machine={machine} day={day} temperature={temperature} setTemperature={setTemperature}
