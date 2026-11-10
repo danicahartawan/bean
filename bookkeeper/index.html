@@ -106,7 +106,7 @@
 
         <div class="group">
           <span class="pill">Reports<svg class="chev" viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg></span>
-          <p class="empty">No reports yet</p>
+          <a class="nav__item sheet-link" href="#sheet=report" data-sheet="report"><svg viewBox="0 0 16 16"><rect x="3" y="2.5" width="10" height="11" rx="1.5"/><path d="M6 6h4M6 9h4"/></svg><span>Daily performance report</span></a>
         </div>
 
         <div class="group">
@@ -163,6 +163,13 @@
               <button class="btn" type="button"><svg viewBox="0 0 16 16"><rect x="2.5" y="3" width="11" height="8" rx="1.5"/><path d="M5 14l1.5-3"/></svg>Chat</button>
             </div>
           </header>
+          <section id="pnl-summary" class="pnl-summary" aria-label="Profit and cash summary" hidden>
+              <h2>Your day</h2>
+              <p>Sample figures</p>
+              <div id="pnl-overview"></div>
+              <p class="review-note">Repair $35 over plan · Costs still being confirmed.</p>
+
+          </section>
           <div class="fbar" id="fbar">Select cell</div>
           <div class="tbar">
             <span class="tbar__run">Run order: <b>Sequential</b><svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg></span>
