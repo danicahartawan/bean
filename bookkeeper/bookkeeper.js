@@ -63,6 +63,22 @@ const SHEETS = {
 };
 
 const ORDER = ["pnl", "recon", "ledger", "journal"];
+SHEETS.report = {
+  title: "Daily Performance Report — Sample",
+  cols: ["Metric", "Actual", "Daily budget", "Summary"],
+  types: ["text", "num", "num", "text"],
+  rows: [
+    ["Total revenue", SHEETS.pnl.rows[3][5], SHEETS.pnl.rows[3][2], "$70 above budget", "total"],
+    ["Total expenses", SHEETS.pnl.rows[6][5], SHEETS.pnl.rows[6][2], "$30 above budget", "total"],
+    ["Net profit", SHEETS.pnl.rows[7][5], SHEETS.pnl.rows[7][2], "$40 above budget", "total"],
+    ["Washer collections", SHEETS.pnl.rows[0][5], SHEETS.pnl.rows[0][2], "108% of budget"],
+    ["Dryer collections", SHEETS.pnl.rows[1][5], SHEETS.pnl.rows[1][2], "106% of budget"],
+    ["Soap machine collections", SHEETS.pnl.rows[2][5], SHEETS.pnl.rows[2][2], "$5 below budget"],
+    ["Cash remaining in safe", SHEETS.recon.rows[6][1], "", "Includes $220 evening collections"],
+    ["Review item", "$85", "$50", "Washer 6 repair exceeded budget by $35"],
+    ["Source", "", "", "Sample notebook and evening slip figures"],
+  ],
+};
 const $ = (sel) => document.querySelector(sel);
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 const isNum = (s) => /^[+−-]?\$?[\d,]+$/.test(s.trim());
@@ -100,9 +116,24 @@ const ICONS = {
 function openSheet(key) {
   const s = SHEETS[key];
   if (!s) return;
+  $("#pnl-summary").hidden = key !== "pnl";
+  $("#view-sheet").classList.toggle("pnl-page", key === "pnl");
+  const pnl = SHEETS.pnl.rows;
+  $("#pnl-overview").innerHTML = `
+    <div class="money-overview">
+      <div><span>Money earned</span><strong>${pnl[3][5]}</strong></div>
+      <div><span>Money spent</span><strong>${pnl[6][5]}</strong></div>
+      <div class="profit-total"><span>Profit so far</span><strong>${pnl[7][5]}</strong></div><div class="coin-total"><span>Coin shrinkage</span><strong id="coin-summary">$20</strong></div>
+    </div>
+    `;
+  const shownColumns = key === "pnl" ? [0, 2, 5, 6, 8] : s.cols.map((_, i) => i);
+  const displaySheet = key === "pnl" ? { ...s, cols: ["Income & expenses", "Planned", "Actual", "Difference", "Status"], types: ["text", "num", "num", "num", "cat"], signed: [3], newCol: undefined, rows: s.rows.map(row => [...shownColumns.map(i => row[i]), row[s.cols.length]]) } : s;
+  renderSheet(displaySheet, key);
+}
+function renderSheet(s, key) {
   const types = s.types || s.cols.map((_, i) => (i === 0 ? "text" : "num"));
   const head =
-    `<tr><th class="rn"><i class="cb"></i></th>` +
+    `<tr><th class="rn"></th>` +
     s.cols
       .map(
         (c, i) =>
@@ -123,7 +154,7 @@ function openSheet(key) {
           return `<td class="${cls}"${pad}>${inner}</td>`;
         })
         .join("");
-      return `<tr class="${flag}"><td class="rn"><b>${n + 1}</b><i class="cb"></i></td>${cells}<td class="plus-col"></td></tr>`;
+      return `<tr class="${flag}"><td class="rn"><b>${n + 1}</b></td>${cells}<td class="plus-col"></td></tr>`;
     })
     .join("");
   const grid = $("#grid");
