@@ -1041,3 +1041,12 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .ip__phone::before { display: none !important; }
 /* card screenshots */
 .work .row .card .shot { position: absolute; left: 50%; top: 46%; width: 88%; height: auto; max-height: 78%; transform: translate(-50%, -50%); object-fit: contain; border-radius: 10px; background: #fff; box-shadow: 0 6px 22px rgb(38 37 30 / 18%), 0 0 0 1px rgb(38 37 30 / 8%); pointer-events: none; }
+
+/* recent scanned documents */
+.gl__scans { display: grid; gap: 4px; }
+.gl__scans .sd { display: flex; align-items: center; gap: 12px; padding: 6px; margin: 0 -6px; border-radius: 12px; text-decoration: none; color: inherit; transition: background .15s; }
+.gl__scans .sd:hover { background: rgba(38,37,30,.05); }
+.gl__scans .sd img { width: 52px; height: 52px; flex: none; object-fit: cover; border-radius: 9px; border: 1px solid rgba(38,37,30,.1); background: #efeee8; }
+.gl__scans .sd span { display: grid; gap: 3px; min-width: 0; }
+.gl__scans .sd strong { font-size: 14px; font-weight: 500; color: #26251e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gl__scans .sd em { font-style: normal; font-size: 12px; color: #7a7974; }
