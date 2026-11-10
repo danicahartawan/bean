@@ -1037,3 +1037,5 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .lc__l mark, .lq__p.dn { color: #f54e00; text-shadow: 0 0 14px rgb(245 78 0 / 50%), 0 0 2px rgb(245 78 0 / 35%); animation: orange-glow 3.2s ease-in-out infinite; }
 @keyframes orange-glow { 0%, 100% { text-shadow: 0 0 10px rgb(245 78 0 / 38%), 0 0 2px rgb(245 78 0 / 28%); } 50% { text-shadow: 0 0 20px rgb(245 78 0 / 70%), 0 0 4px rgb(245 78 0 / 45%); } }
 @media (prefers-reduced-motion: reduce) { .lc__l mark, .lq__p.dn { animation: none; } }
+.ip__phone { width: auto !important; height: 60px !important; border: 0 !important; background: none !important; border-radius: 0 !important; filter: drop-shadow(0 4px 8px rgb(38 37 30 / 22%)); display: block; }
+.ip__phone::before { display: none !important; }
