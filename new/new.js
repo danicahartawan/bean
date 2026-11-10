@@ -431,7 +431,7 @@ function beanCollapse(overlay, card, inners, done) {
 (() => {
   const hi = document.getElementById("gl-hi"); if (hi) { const h = new Date().getHours(); hi.textContent = `Good ${h < 12 ? "morning" : h < 18 ? "afternoon" : "evening"}, Danica`; }
   const x = document.getElementById("gl-conn-x"); if (x) x.addEventListener("click", () => { const c = document.getElementById("gl-conn"); c.style.maxHeight = c.offsetHeight + "px"; requestAnimationFrame(() => { c.style.transition = "all .3s"; c.style.maxHeight = "0"; c.style.opacity = "0"; c.style.margin = "0"; c.style.overflow = "hidden"; }); });
-  const heat = document.getElementById("gl-heat"); if (heat) { let h = ""; for (let i = 0; i < 20 * 7; i++) h += `<i${[3, 17, 18, 40, 62, 63, 64, 90, 91, 118].includes(i) ? ' class="on"' : ""}></i>`; heat.innerHTML = h; }
+  const heat = document.getElementById("gl-heat"); if (heat) { let h = ""; for (let i = 0; i < 20 * 7; i++) h += `<i${{3: "on", 17: "on o2", 18: "on g", 40: "on o3", 62: "on o2", 63: "on", 64: "on g", 90: "on o3", 91: "on", 118: "on g", 33: "on o3", 47: "on o2", 105: "on"}[i] ? ' class="' + {3: "on", 17: "on o2", 18: "on g", 40: "on o3", 62: "on o2", 63: "on", 64: "on g", 90: "on o3", 91: "on", 118: "on g", 33: "on o3", 47: "on o2", 105: "on"}[i] + '"' : ""}></i>`; heat.innerHTML = h; }
   const box = document.querySelector(".gl__box"); if (box) box.addEventListener("keydown", (e) => { if (e.key === "Enter") box.click(); });
 })();
 
