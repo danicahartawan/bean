@@ -789,3 +789,4 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .work .row .card:hover { box-shadow: 0 6px 22px rgb(38 37 30 / 10%); }
 .work .carousel-controls, .work .bars { display: none !important; }
 @media (max-width: 600px) { .work .row { flex-direction: column; } .work .row .card { flex: none !important; width: 100% !important; height: 210px !important; } }
+.work .row { padding-bottom: 76px !important; } .work .row .card::after { bottom: -34px !important; }

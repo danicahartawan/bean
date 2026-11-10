@@ -473,7 +473,7 @@ function beanCollapse(overlay, card, inners, done) {
   const row = document.querySelector(".work .row");
   if (!row || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const cards = [...row.querySelectorAll(".card")];
-  const drop = [30, 96, 8, 66, 40];
+  const drop = [22, 68, 6, 46, 30];
   const ease = (t) => 1 - Math.pow(1 - t, 3);
   let queued = false;
   const run = () => {
