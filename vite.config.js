@@ -26,6 +26,7 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         new: resolve(__dirname, "new/index.html"),
         hello: resolve(__dirname, "hello/index.html"),
+        artifacts: resolve(__dirname, "artifacts/index.html"),
         forecasting: resolve(__dirname, "forecasting.html"),
         bookkeeper: resolve(__dirname, "bookkeeper/index.html"),
         bookkeeperV2: resolve(__dirname, "bookkeeper-v2/index.html"),

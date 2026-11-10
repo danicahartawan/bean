@@ -1021,3 +1021,4 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__alert { display: flex; gap: 12px; align-items: flex-start; margin-top: 16px; padding: 12px 14px; border-radius: 14px; background: #fdeee5; color: #26251e; }
 .gl__alert-dot { flex: none; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: #e8622a; box-shadow: 0 0 0 4px rgb(232 98 42 / 18%); }
 .gl__alert strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.35; } .gl__alert span:not(.gl__alert-dot) { display: block; margin-top: 3px; font-size: 13px; color: #8a5b43; }
+.work .proj h3 .more { display: inline-flex; align-items: center; gap: 2px; margin-left: 14px; font-size: 13px; font-weight: 400; color: #8a8984; text-decoration: none; } .work .proj h3 .more:hover { color: #26251e; } .work .proj h3 .more svg { width: 14px; height: 14px; }
