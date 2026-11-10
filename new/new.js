@@ -29,6 +29,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
       c.style.transformOrigin = "left center";
       c.style.transform = t;
     });
+    if (sl >= row.scrollWidth - row.clientWidth - 2) active = cards.length - 1;
     bars.forEach((b, n) => b.classList.toggle("on", n === active));
     const lb = row.parentElement.querySelector(".agent"); const t = cards[active] && cards[active].dataset.label; if (lb && t && lb.textContent !== t) lb.textContent = t;
   };
