@@ -1135,3 +1135,17 @@ dialog th:last-child {
 
 /* The composer border indicates focus for its textarea. */
 .composer textarea:focus, .composer textarea:focus-visible { outline: none; box-shadow: none; }
+
+/* Ask Bean: white, same look as the /new agent chat, blur-fade at the top */
+.assistant { background: #fff !important; border: 0 !important; }
+.assistant-head { background: #fff; position: relative; z-index: 3; }
+.assistant-head strong { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+.chat-body { position: relative; overflow-y: auto; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 44px); mask-image: linear-gradient(to bottom, transparent 0, #000 44px); }
+.chat-body::before { content: ""; position: sticky; top: 0; display: block; height: 44px; margin-bottom: -44px; z-index: 2; pointer-events: none; backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); -webkit-mask-image: linear-gradient(to bottom, #000, transparent); mask-image: linear-gradient(to bottom, #000, transparent); }
+.user-message > div { background: #efede8 !important; color: #26251e; border-radius: 20px; padding: 10px 16px; }
+.response-message > div { background: transparent !important; color: #26251e; font-size: 17px; line-height: 1.5; padding: 0 4px; }
+.composer { background: #efede8 !important; border: 0 !important; border-radius: 28px !important; box-shadow: none !important; }
+.composer:focus-within { background: #e9e7e1 !important; }
+.composer textarea { caret-color: #f54e00; background: transparent; }
+.composer .send-button { background: #26251e !important; color: #fff !important; }
+.question-chips button { background: #efede8 !important; border: 0 !important; color: #26251e; border-radius: 999px; }
