@@ -130,7 +130,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const ag = document.getElementById("agent");
   if (!ag) return;
   let srcCard = null, anim = null;
-  const clipFor = (c) => { const r = c.getBoundingClientRect(), W = innerWidth, H = innerHeight; return `inset(${Math.max(0, r.top)}px ${Math.max(0, W - r.right)}px ${Math.max(0, H - r.bottom)}px ${Math.max(0, r.left)}px round 28px)`; };
+  const clipFor = (c) => beanClip(c, ag);
   const FULL = "inset(0px 0px 0px 0px round 0px)";
   const frame = ag.querySelector(".ag__frame");
   const open = (card) => {
@@ -377,9 +377,10 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const esc = (x) => x.replace(/&/g, "&amp;");
   const cell = (v) => (/^[A-Z]/.test(v) ? `<span class="soft">${v}</span>` : v);
   tb.innerHTML = rows.map((r) => r[0] === "s" ? `<tr class="sec"><td colspan="4">${r[1]}</td></tr>` : `<tr class="${r[0] === "t" ? "tot" : ""}"><td>${esc(r[1])}</td><td class="r">${r[2]}</td><td class="r">${cell(r[3])}</td><td class="r d ${r[4][0] === "+" ? "up" : r[4][0] === M ? "dn" : ""}">${r[4]}</td></tr>`).join("");
-  const open = () => { pl.hidden = false; pl.animate([{ opacity: 0, transform: "scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.32,.72,0,1)" }); };
-  const close = () => { if (pl.hidden) return; const a = pl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 }); a.onfinish = () => (pl.hidden = true); };
-  document.querySelectorAll("[data-pnl]").forEach((c) => { c.addEventListener("click", open); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } }); });
+  let src = null;
+  const open = (card) => { src = card; beanExpand(pl, card, [...pl.children]); };
+  const close = () => { if (pl.hidden) return; beanCollapse(pl, src, [...pl.children]); };
+  document.querySelectorAll("[data-pnl]").forEach((c) => { c.addEventListener("click", () => open(c)); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c); } }); });
   pl.querySelector("[data-pl-close]").addEventListener("click", close);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pl.hidden) { e.stopImmediatePropagation(); close(); } }, true);
 })();
@@ -388,9 +389,40 @@ document.querySelectorAll("[data-row]").forEach((row) => {
 (() => {
   const fr = document.getElementById("frame"); if (!fr) return;
   const f = fr.querySelector("iframe");
-  const open = (u) => { f.src = u; fr.hidden = false; fr.animate([{ opacity: 0, transform: "scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.32,.72,0,1)" }); };
-  const close = () => { if (fr.hidden) return; const a = fr.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 }); a.onfinish = () => { fr.hidden = true; f.src = "about:blank"; }; };
-  document.querySelectorAll("[data-frame]").forEach((c) => { c.addEventListener("click", () => open(c.dataset.frame)); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c.dataset.frame); } }); });
+  let src = null;
+  const open = (u, card) => { src = card; f.src = u; beanExpand(fr, card, [f]); };
+  const close = () => { if (fr.hidden) return; beanCollapse(fr, src, [f], () => { f.src = "about:blank"; }); };
+  document.querySelectorAll("[data-frame]").forEach((c) => { c.addEventListener("click", () => open(c.dataset.frame, c)); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c.dataset.frame, c); } }); });
   fr.querySelector(".fr__x").addEventListener("click", close);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !fr.hidden) { e.stopImmediatePropagation(); close(); } }, true);
 })();
+
+// ===== Shared open / close for full-screen views (agent, framed pages, P&L) =====
+// A view grows out of the card that opened it and shrinks back into it on close.
+const BEAN_FULL = "inset(0px 0px 0px 0px round 0px)";
+const BEAN_EASE = "cubic-bezier(.32,.72,0,1)";
+function beanReduced() { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
+function beanClip(card, overlay) {
+  const r = card.getBoundingClientRect(), o = overlay.getBoundingClientRect();
+  return `inset(${Math.max(0, r.top - o.top)}px ${Math.max(0, o.right - r.right)}px ${Math.max(0, o.bottom - r.bottom)}px ${Math.max(0, r.left - o.left)}px round 28px)`;
+}
+function beanExpand(overlay, card, inners) {
+  overlay.getAnimations().forEach((a) => a.cancel());
+  overlay.hidden = false;
+  if (!card || beanReduced()) return;
+  const bg = getComputedStyle(overlay).backgroundColor;
+  const t = { duration: 680, easing: BEAN_EASE, fill: "both" };
+  const anim = overlay.animate([{ clipPath: beanClip(card, overlay), backgroundColor: "#ffffff" }, { clipPath: BEAN_FULL, backgroundColor: bg }], t);
+  inners.forEach((el) => el.animate([{ opacity: 0, transform: "scale(.94)", filter: "blur(6px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { ...t, duration: 520, delay: 240 }));
+  card.style.visibility = "hidden";
+  anim.onfinish = () => { anim.cancel(); inners.forEach((el) => el.getAnimations().forEach((a) => a.cancel())); };
+}
+function beanCollapse(overlay, card, inners, done) {
+  const finish = () => { overlay.hidden = true; overlay.getAnimations().forEach((a) => a.cancel()); inners.forEach((el) => el.getAnimations().forEach((a) => a.cancel())); if (card) card.style.visibility = ""; if (done) done(); };
+  if (!card || beanReduced() || !card.isConnected) return finish();
+  overlay.getAnimations().forEach((a) => a.cancel());
+  const bg = getComputedStyle(overlay).backgroundColor;
+  inners.forEach((el) => el.animate([{ opacity: 1, transform: "none", filter: "blur(0)" }, { opacity: 0, transform: "scale(.94)", filter: "blur(6px)" }], { duration: 260, easing: "ease-in", fill: "both" }));
+  const anim = overlay.animate([{ clipPath: BEAN_FULL, backgroundColor: bg }, { clipPath: beanClip(card, overlay), backgroundColor: "#ffffff" }], { duration: 560, easing: BEAN_EASE, fill: "both", delay: 120 });
+  anim.onfinish = finish;
+}

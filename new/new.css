@@ -629,3 +629,15 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .artifact-back { transform: rotateY(180deg) translateZ(.6px); }
 .artifact-front, .artifact-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; border: 1px solid rgb(79 88 67 / 12%); }
 @media (prefers-reduced-motion: reduce) { .work .row .artifact-flip { transition: none; } }
+
+/* One close button for every full-screen view: a dark × in the top-right corner. */
+.ag__x, .fr__x, .pl__back {
+  position: fixed; z-index: 3; top: 14px; right: 16px; left: auto; /* same corner of the screen on every view */
+  width: 34px; height: 34px; padding: 0; display: grid; place-items: center;
+  border: 0 !important; border-radius: 50%; background: transparent; color: #26251e;
+  font: 300 28px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; cursor: pointer;
+}
+.ag__x:hover, .fr__x:hover, .pl__back:hover { background: #e6e5e0; color: #26251e; }
+.ag__x:focus-visible, .fr__x:focus-visible, .pl__back:focus-visible { outline: 2px solid #2f6f52 !important; outline-offset: 2px; }
+.fr__x { background: rgb(251 251 249 / 85%); }
+.pl__bar { position: sticky; }

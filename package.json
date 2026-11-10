@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "test": "npm run test:static && npm run test:unit",
-    "test:static": "node --test tests/page.test.mjs tests/status.test.mjs tests/messaging.test.mjs tests/sitenav.test.mjs",
+    "test:static": "node --test tests/page.test.mjs tests/status.test.mjs tests/messaging.test.mjs tests/sitenav.test.mjs tests/flow.test.mjs",
     "test:unit": "vitest run",
     "forecast:refresh": "node scripts/refresh-product-trends.mjs"
   },

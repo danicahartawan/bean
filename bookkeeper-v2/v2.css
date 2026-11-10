@@ -1,0 +1,109 @@
+/* Bookkeeper v2: same sheets, restyled to match the forecasting page.
+   Loaded after bookkeeper.css, so everything here overrides the copy. */
+
+/* palette + type from forecasting.html */
+:root, body {
+  --ink: #26251e;
+  --mute: #7a7974;
+  --soft: #898983;
+  --line: #ecebe6;
+  --hair: #e5e5e1;
+  --paper: #ffffff;
+  --putty: #ffffff;
+  --green: #2f6f52;
+}
+body {
+  background: #fff;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* page heading: plain 20px title, no bar */
+.sheetview { padding: 0 28px 28px; }
+.sbar {
+  height: auto; min-height: 64px; padding: 18px 0 8px; margin: 0;
+  background: transparent; border-bottom: 0;
+}
+.sbar h1, #sheet-title {
+  font-family: inherit; font-size: 20px; font-weight: 400; letter-spacing: -.02em; color: var(--ink);
+}
+.sbar .ghost { color: var(--mute); }
+.sbar .ghost:hover { background: #f4f4f1; color: var(--ink); }
+
+/* P&L summary: heading + a row of forecast-style cards */
+.pnl-summary, .pnl-page .pnl-summary, .sheetview.pnl-page .pnl-summary {
+  margin: 8px 0 18px; padding: 0; width: auto; max-width: none;
+  background: transparent; border: 0; border-radius: 0; box-shadow: none;
+}
+.pnl-summary > h2, .pnl-page .pnl-summary > h2 {
+  margin: 0; font-family: inherit; font-size: 13px; font-weight: 400; letter-spacing: 0; color: var(--mute);
+}
+.pnl-summary > p { margin: 2px 0 12px; font-size: 11px; color: var(--soft); }
+.money-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; border: 0; }
+.money-overview > div {
+  display: flex; flex-direction: column; justify-content: space-between; min-height: 108px;
+  padding: 16px; border: 0; border-radius: 6px; background: #fff;
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+.money-overview > div + div { border-left: 0; }
+.money-overview span { font-size: 12px; color: var(--mute); letter-spacing: 0; }
+.money-overview strong {
+  font-family: inherit; font-size: 28px; font-weight: 400; letter-spacing: -.045em; line-height: 1.2; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.money-overview .profit-total strong { color: var(--green); }
+.pnl-summary .review-note, .pnl-summary > p.review-note { margin: 12px 0 0; font-size: 12px; color: var(--soft); }
+
+/* sheet table inside a forecast-style card */
+.gscroll { border-radius: 6px; box-shadow: inset 0 0 0 1px var(--hair); background: #fff; }
+.sheetview .grid { font-size: 14px; }
+.sheetview .grid th, .sheetview .grid td {
+  height: 40px; padding: 0 12px; background: #fff; color: var(--ink);
+  border-right: 0; border-bottom: 1px solid var(--line);
+}
+.sheetview .grid th { height: 38px; font-size: 12px; font-weight: 400; color: var(--mute); background: #fff; }
+.sheetview .grid th svg { color: #b3b2ac; }
+.sheetview .grid th.rn, .sheetview .grid td.rn { color: #b3b2ac; background: #fff; }
+.sheetview .grid tr:last-child td { border-bottom: 0; }
+.sheetview .grid tr:hover td:not(.rn) { background: #fafaf8; }
+.sheetview .grid tr.total td:not(.rn), .sheetview .grid tr.head td:not(.rn) { font-weight: 500; background: #fafaf8; }
+.sheetview .grid td.pos { color: var(--green); }
+.sheetview .grid td.neg { color: #a3412c; }
+.grid th, .grid th.rn, .grid td.rn { background: #fff; }
+
+/* status tags: small, flat */
+.tag { border-radius: 3px; padding: 2px 7px; font-size: 11px; font-weight: 400; letter-spacing: 0; border: 0; }
+.tag--green { background: #e8f0ea; color: var(--green); }
+.tag--orange { background: #f6ecdf; color: #8a5a10; }
+.tag--yellow { background: #f5f0dc; color: #6f5a12; }
+.tag--blue { background: #e9eef6; color: #3a5a86; }
+.tag--purple { background: #efeaf5; color: #5c4683; }
+
+/* line the table up with the cards above it */
+.sheetview > .gscroll, .pnl-page:not(.show-pnl-details) > .gscroll, .pnl-page > .gscroll { margin: 0 0 16px; }
+
+/* P&L stat cards: compact forecast-style tiles (beats the .pnl-page rules in bookkeeper.css) */
+.pnl-page .money-overview { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0; border: 0; }
+.pnl-page .money-overview > div,
+.pnl-page .money-overview > div:first-child,
+.pnl-page .money-overview > div:nth-child(odd) {
+  min-height: 0; gap: 10px; justify-content: flex-start;
+  padding: 14px 16px 16px; border: 0; border-radius: 6px; background: #fff;
+  box-shadow: inset 0 0 0 1px var(--hair);
+}
+.pnl-page .money-overview span { font-size: 12px; line-height: 1.3; color: var(--mute); }
+.pnl-page .money-overview strong,
+.pnl-page .money-overview #coin-summary {
+  font-size: 26px; font-weight: 400; line-height: 1.15; letter-spacing: -.04em; color: var(--ink);
+}
+.pnl-page .money-overview .profit-total strong { color: var(--green); }
+@media (max-width: 760px) {
+  .pnl-page .money-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* everything in the sheets lines up on the left */
+.grid td.num, .sheetview .grid td.num, .sheetview .grid th { text-align: left; }
+.tbar { justify-content: flex-start; gap: 16px; padding-left: 12px; }
+.tbar .tbar__run { margin: 0; }
+.tbar .tbar__icons { margin-left: auto; }

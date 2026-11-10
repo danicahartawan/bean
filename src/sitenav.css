@@ -4,6 +4,8 @@
 /* reserve room for the collapsed rail; the expanded rail floats over the page */
 html.has-vtabs body { margin-left: var(--vtabs-space); }
 html.has-vtabs .ag { left: var(--vtabs-space); } /* portfolio agent overlay */
+html.has-vtabs .fr, html.has-vtabs .pl { left: var(--vtabs-space); } /* portfolio framed pages + P&L */
+html.is-embedded .case-study-back { display: none; } /* the frame around it has its own × */
 
 .vtabs {
   --ink: #26251e; --muted: #7a7974; --line: #e6e5e0; --hover: #efefea; --green: #2f6f52;
@@ -38,7 +40,8 @@ html.has-vtabs .ag { left: var(--vtabs-space); } /* portfolio agent overlay */
 }
 .vtabs__toggle .vtab__icon { width: 28px; height: 28px; padding: 5px; border-radius: 50%; opacity: 0; transform: rotate(180deg); transition: opacity .2s ease, transform .3s ease, background .15s ease; }
 .vtabs.is-expanded .vtabs__toggle { left: auto; width: 34px; }
-.vtabs.is-expanded .vtabs__toggle .vtab__icon { opacity: 1; transform: none; }
+.vtabs.is-expanded .vtabs__toggle .vtab__icon { opacity: 1; transform: rotate(180deg); }
+.vtabs.is-expanded.is-pinned .vtabs__toggle .vtab__icon { transform: none; }
 .vtabs__toggle:hover .vtab__icon { background: var(--hover); color: var(--ink); }
 .vtabs__toggle:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
 
@@ -118,6 +121,7 @@ html.has-vtabs .ag { left: var(--vtabs-space); } /* portfolio agent overlay */
 @media (max-width: 640px) {
   html.has-vtabs body { margin-left: 0; }
   html.has-vtabs .ag { left: 0; }
+  html.has-vtabs .fr, html.has-vtabs .pl { left: 0; }
   .vtabs:not(.is-expanded) { top: auto; bottom: 14px; width: 56px; height: 56px; padding: 10px; border-radius: 50%; }
   .vtabs:not(.is-expanded) .vtabs__head { margin: 0; border: 0; height: 34px; }
   .vtabs:not(.is-expanded) .vtabs__toggle { inset: 0; }

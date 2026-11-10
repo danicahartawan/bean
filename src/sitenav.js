@@ -1,6 +1,6 @@
 // Vertical tab bar shown on every page.
 // Collapsed it is an icon rail; expanded it shows labels, and groups list their
-// pages on a connecting line. Press "\" (when not typing) to expand/collapse.
+// pages on a connecting line. It opens on hover; press "\" or click the logo to keep it open.
 import './sitenav.css';
 
 const ICONS = {
@@ -14,11 +14,13 @@ const ICONS = {
   chart: '<path d="M4.5 16V9M8.5 16V5M12.5 16v-5M16 16H3.5"/>',
   phone: '<rect x="6.5" y="3.5" width="7" height="13" rx="1.8"/>',
   collapse: '<path d="M12.5 5.5 8 10l4.5 4.5"/>',
+  flow: '<path d="M4 5.5h1.5M4 10h1.5M4 14.5h1.5"/><path d="M8.5 5.5H16M8.5 10H16M8.5 14.5H13"/>',
 };
 const icon = (name, size = 20) => `<svg class="vtab__icon" width="${size}" height="${size}" viewBox="0 0 20 20" aria-hidden="true">${ICONS[name]}</svg>`;
 
 const TABS = [
   { id: 'home', label: 'Home', icon: 'home', href: '/new/' },
+  { id: 'flow', label: "Today's books", icon: 'flow', href: '/flow/' },
   { id: 'agent', label: 'Agent', icon: 'agent', href: '/new/#agent' },
   { id: 'artifacts', label: 'Artifacts', icon: 'artifacts', children: [
     { label: 'Profit & Loss', icon: 'sheet', href: '/bookkeeper/#sheet=pnl' },
@@ -26,12 +28,18 @@ const TABS = [
     { label: 'Income & Expense Ledger', icon: 'sheet', href: '/bookkeeper/#sheet=ledger' },
     { label: 'Bookkeeper Package', icon: 'sheet', href: '/bookkeeper/#sheet=journal' },
   ] },
+  { id: 'artifacts-v2', label: 'Artifacts v2', icon: 'artifacts', children: [
+    { label: 'Profit & Loss', icon: 'sheet', href: '/bookkeeper-v2/#sheet=pnl' },
+    { label: 'Cash Reconciliation', icon: 'sheet', href: '/bookkeeper-v2/#sheet=recon' },
+    { label: 'Income & Expense Ledger', icon: 'sheet', href: '/bookkeeper-v2/#sheet=ledger' },
+    { label: 'Bookkeeper Package', icon: 'sheet', href: '/bookkeeper-v2/#sheet=journal' },
+  ] },
   { id: 'forecasting', label: 'Forecasting', icon: 'forecasting', children: [
     { label: 'Sales', icon: 'chart', href: '/forecasting.html' },
     { label: 'Product Trends', icon: 'chart', href: '/forecasting.html#products' },
     { label: 'Depreciation', icon: 'chart', href: '/forecasting.html#depreciation' },
   ] },
-  { id: 'import', label: 'Import', icon: 'import', soon: true },
+  { id: 'import', label: 'Import', icon: 'import', href: '/#import' },
   { id: 'mobile', label: 'Mobile', icon: 'mobile', children: [
     { label: 'Laundry Log', icon: 'phone', href: '/' },
     { label: 'Messaging', icon: 'phone', href: '/messaging/' },
@@ -48,6 +56,7 @@ function isCurrent(href) {
   if (normalPath(url.pathname) !== normalPath(location.pathname)) return false;
   const here = location.hash === '#' ? '' : location.hash;
   if (url.pathname === '/forecasting.html' && !url.hash) return !here || here === '#sales';
+  if (url.pathname === '/flow/' && !url.hash) return true; // the flow's steps live in its hash
   return url.hash === here;
 }
 const remember = value => { try { localStorage.setItem(STORE_KEY, value ? '1' : '0'); } catch {} };
@@ -77,7 +86,7 @@ function mount() {
               : `<a class="vtab__row" href="${tab.href}" data-label="${tab.label}">${icon(tab.icon)}<span class="vtab__label">${tab.label}</span></a>`}
         </li>`).join('')}
     </ul>
-    <p class="vtabs__hint"><kbd>\\</kbd><span>to expand or collapse</span></p>`;
+    <p class="vtabs__hint"><kbd>\\</kbd><span>to keep it open</span></p>`;
   document.body.append(rail);
 
   const toggle = rail.querySelector('.vtabs__toggle');
@@ -86,7 +95,6 @@ function mount() {
     rail.classList.toggle('is-expanded', open);
     document.documentElement.classList.toggle('vtabs-expanded', open);
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Collapse menu' : 'Expand menu');
     if (save) remember(open);
   };
   const setGroupOpen = (li, open) => {
@@ -115,13 +123,37 @@ function mount() {
     rail.style.setProperty('--tip-y', r.top + r.height / 2 + 'px');
   });
 
-  setExpanded(recall(), false);
+  // "Pinned" = kept open by the logo button or "\". Otherwise the rail opens
+  // while the pointer (or keyboard focus) is on it and closes when it leaves.
+  let pinned = recall();
+  const pin = value => {
+    pinned = value;
+    rail.classList.toggle('is-pinned', pinned);
+    setExpanded(pinned || rail.matches(':hover'), false);
+    remember(pinned);
+    toggle.setAttribute('aria-label', pinned ? 'Unpin menu' : 'Keep menu open');
+  };
+  setExpanded(pinned, false);
+  rail.classList.toggle('is-pinned', pinned);
+  toggle.setAttribute('aria-label', pinned ? 'Unpin menu' : 'Keep menu open');
   markCurrent();
 
-  toggle.addEventListener('click', () => setExpanded(!expanded()));
+  const canHover = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 641px)');
+  let hoverTimer = 0;
+  const hoverTo = (open, delay) => {
+    clearTimeout(hoverTimer);
+    if (pinned) return;
+    hoverTimer = setTimeout(() => { if (!pinned) setExpanded(open, false); }, delay);
+  };
+  rail.addEventListener('pointerenter', () => { if (canHover.matches) hoverTo(true, 90); });
+  rail.addEventListener('pointerleave', () => { if (canHover.matches) hoverTo(false, 220); });
+  rail.addEventListener('focusin', () => hoverTo(true, 0));
+  rail.addEventListener('focusout', event => { if (!rail.contains(event.relatedTarget)) hoverTo(false, 0); });
+
+  toggle.addEventListener('click', () => pin(!pinned));
   rail.querySelectorAll('.vtab--group > .vtab__row').forEach(row => row.addEventListener('click', () => {
     const li = row.parentElement;
-    if (!expanded()) { setExpanded(true); setGroupOpen(li, true); return; }
+    if (!expanded()) { setExpanded(true, false); setGroupOpen(li, true); return; }
     setGroupOpen(li, !li.classList.contains('is-open'));
   }));
 
@@ -129,7 +161,7 @@ function mount() {
     const typing = event.target.closest?.('input, textarea, select, [contenteditable=""], [contenteditable="true"]');
     if (event.key === '\\' && !typing && !event.metaKey && !event.ctrlKey && !event.altKey) {
       event.preventDefault();
-      setExpanded(!expanded());
+      pin(!pinned);
     }
   });
 
@@ -160,4 +192,5 @@ function mount() {
 
 // Not inside embedded frames (the bookkeeper is shown in iframes on other pages).
 const embedded = window.self !== window.top || document.documentElement.classList.contains('embed') || /[?&]embed/.test(location.search);
-if (!embedded) mount();
+if (embedded) document.documentElement.classList.add('is-embedded');
+else mount();

@@ -5,7 +5,7 @@ import test from "node:test";
 
 const root = path.resolve(import.meta.dirname, "..");
 const read = file => readFile(path.join(root, file), "utf8");
-const PAGES = ["index.html", "new/index.html", "forecasting.html", "bookkeeper/index.html", "messaging/index.html"];
+const PAGES = ["index.html", "new/index.html", "forecasting.html", "bookkeeper/index.html", "bookkeeper-v2/index.html", "messaging/index.html"];
 
 test("every page loads the tab bar", async () => {
   for (const page of PAGES) {
@@ -21,7 +21,7 @@ test("tab bar has Home, Agent, Artifacts, Forecasting, Import and Mobile with th
     assert.ok(js.includes(`label: '${label}'`), label);
   }
   for (const href of ["'/new/'", "'/new/#agent'", "'/bookkeeper/#sheet=pnl'", "'/bookkeeper/#sheet=recon'", "'/bookkeeper/#sheet=ledger'",
-    "'/bookkeeper/#sheet=journal'", "'/forecasting.html'", "'/forecasting.html#products'", "'/forecasting.html#depreciation'", "'/'", "'/messaging/'"]) {
+    "'/bookkeeper/#sheet=journal'", "'/forecasting.html'", "'/forecasting.html#products'", "'/forecasting.html#depreciation'", "'/#import'", "'/'", "'/messaging/'"]) {
     assert.ok(js.includes(`href: ${href}`), href);
   }
 });

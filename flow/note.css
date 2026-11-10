@@ -1,0 +1,2 @@
+/* Flow copy of the phone note: just the phone, centred (the QR panel is gone). */
+.stage { grid-template-columns: var(--device-width) !important; column-gap: 0 !important; justify-content: center; }

@@ -1978,3 +1978,12 @@ a:focus-visible {
 .case-study-back { position: fixed; top: 20px; left: 24px; z-index: 10; display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid #deded7; border-radius: 6px; background: #f7f7f4; color: #44382f; font-size: 14px; text-decoration: none; }
 .case-study-back:hover { background: #eaece3; }
 @media (max-width: 760px) { .stage { padding-top: 84px; } .case-study-back { top: 12px; left: 16px; } }
+
+/* Case study close: the same dark × in the top-right corner as the other views. */
+.case-study-back {
+  top: 14px; right: 16px; left: auto; width: 34px; height: 34px; min-height: 0; padding: 0;
+  display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent;
+  color: #26251e; font: 300 28px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+.case-study-back:hover { background: #e6e5e0; }
+@media (max-width: 760px) { .case-study-back { top: 12px; right: 12px; left: auto; } }
