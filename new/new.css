@@ -752,3 +752,11 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
   .lc__list { height: 220px; padding-right: 0; }
   .lc__f { gap: 0; }
 }
+/* connection logos: kill stray list margin, support real logo files in new/logos/ */
+.gl__cx .lg, .gl__pl .lg { margin: 0; padding: 0; overflow: hidden; position: relative; }
+.gl__cx dt { align-items: center; line-height: 1; }
+.gl__pl .lg { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; font-size: 9px; font-weight: 600; border: 2px solid #fff; margin-left: -6px; box-sizing: content-box; }
+.gl__pl .lg:first-child { margin-left: 0; }
+.lg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 15%; box-sizing: border-box; }
+.lg.has { background: #fff !important; font-size: 0 !important; box-shadow: inset 0 0 0 1px #e6e5e0; }
+.gl__pl .lg.has { box-shadow: none; }
