@@ -1039,3 +1039,5 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 @media (prefers-reduced-motion: reduce) { .lc__l mark, .lq__p.dn { animation: none; } }
 .ip__phone { width: auto !important; height: 60px !important; border: 0 !important; background: none !important; border-radius: 0 !important; filter: drop-shadow(0 4px 8px rgb(38 37 30 / 22%)); display: block; }
 .ip__phone::before { display: none !important; }
+/* card screenshots */
+.work .row .card .shot { position: absolute; left: 50%; top: 46%; width: 88%; height: auto; max-height: 78%; transform: translate(-50%, -50%); object-fit: contain; border-radius: 10px; background: #fff; box-shadow: 0 6px 22px rgb(38 37 30 / 18%), 0 0 0 1px rgb(38 37 30 / 8%); pointer-events: none; }
