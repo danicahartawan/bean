@@ -267,13 +267,24 @@ document.querySelectorAll("[data-row]").forEach((row) => {
 (() => {
   const pl = document.getElementById("pnl"), tb = document.getElementById("pl-rows");
   if (!pl) return;
+  const M = "\u2212";
   const rows = [
-    ["Washer collections", "$800", "$860", "+$60", "Ahead"], ["Dryer collections", "$250", "$265", "+$15", "Ahead"], ["Soap machine collections", "$20", "$15", "\u2212$5", "Behind"],
-    ["Total revenue", "$1,070", "$1,140", "+$70", "Ahead", 1], ["Repairs \u2014 washer 6", "$50", "$85", "\u2212$35", "Over budget"], ["Detergent & supplies", "$50", "$45", "+$5", "On budget"],
-    ["Total expenses", "$100", "$130", "\u2212$30", "Over budget", 1], ["Net profit", "$970", "$1,010", "+$40", "Ahead", 1],
+    ["s", "Revenue"],
+    ["r", "Washer collections", "$800", "$860", "+$60"], ["r", "Dryer collections", "$250", "$265", "+$15"], ["r", "Soap vending", "$20", "$15", M + "$5"],
+    ["t", "Total recorded collections", "$1,070", "$1,140", "+$70"],
+    ["s", "Cost of goods sold"],
+    ["r", "Soap inventory cost", "\u2014", "Pending", "\u2014"], ["t", "Gross profit", "\u2014", "Pending", "\u2014"],
+    ["s", "Operating expenses"],
+    ["r", "Repairs & maintenance", "$50", "$85", M + "$35"], ["r", "Detergent & supplies", "$50", "$45", "+$5"],
+    ["r", "Rent", "\u2014", "Not recorded", "\u2014"], ["r", "Water, gas & electricity", "\u2014", "Not recorded", "\u2014"], ["r", "Payroll", "\u2014", "Not recorded", "\u2014"],
+    ["r", "Insurance", "\u2014", "Not recorded", "\u2014"], ["r", "Other operating expenses", "\u2014", "Not recorded", "\u2014"],
+    ["t", "Recorded operating expenses", "$100", "$130", M + "$30"],
+    ["t", "Preliminary collections less recorded costs", "$970", "$1,010", "+$40"],
+    ["t", "Net income", "\u2014", "Not finalized", "\u2014"],
   ];
-  const cls = (st) => (st === "Behind" || st === "Over budget" ? "bad" : "ok");
-  tb.innerHTML = rows.map((r, i) => `<tr class="${r[5] ? "tot" : ""}"><td class="n">${i + 1}</td><td>${r[0].replace("&", "&amp;")}</td><td class="r">${r[1]}</td><td class="r">${r[2]}</td><td class="r d ${r[3][0] === "+" ? "up" : "dn"}">${r[3]}</td><td><span class="pill2 ${cls(r[4])}">${r[4]}</span></td></tr>`).join("");
+  const esc = (x) => x.replace(/&/g, "&amp;");
+  const cell = (v) => (/^[A-Z]/.test(v) ? `<span class="soft">${v}</span>` : v);
+  tb.innerHTML = rows.map((r) => r[0] === "s" ? `<tr class="sec"><td colspan="4">${r[1]}</td></tr>` : `<tr class="${r[0] === "t" ? "tot" : ""}"><td>${esc(r[1])}</td><td class="r">${r[2]}</td><td class="r">${cell(r[3])}</td><td class="r d ${r[4][0] === "+" ? "up" : r[4][0] === M ? "dn" : ""}">${r[4]}</td></tr>`).join("");
   const open = () => { pl.hidden = false; pl.animate([{ opacity: 0, transform: "scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.32,.72,0,1)" }); };
   const close = () => { if (pl.hidden) return; const a = pl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 }); a.onfinish = () => (pl.hidden = true); };
   document.querySelectorAll("[data-pnl]").forEach((c) => { c.addEventListener("click", open); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } }); });
