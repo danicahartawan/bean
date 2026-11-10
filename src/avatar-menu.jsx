@@ -4,18 +4,17 @@ import { BotAvatar } from "bot-avatars";
 import "./avatar-menu.css";
 
 const actions = [
-  { name: "Camera", x: "-50px", y: "62px", icon: "camera" },
-  { name: "Add image", x: "0px", y: "88px", icon: "image" },
-  { name: "New folder", x: "50px", y: "62px", icon: "folder" },
+  { name: "Camera", x: "44px", y: "0px", icon: "camera" },
+  { name: "Deposit", x: "86px", y: "0px", icon: "calculator" },
+  { name: "New folder", x: "128px", y: "0px", icon: "folder" },
 ];
 
 function ActionIcon({ icon }) {
-  if (icon === "image") {
+  if (icon === "calculator") {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3" y="3" width="18" height="18" rx="3" />
-        <circle cx="8.2" cy="8.2" r="1.7" />
-        <path d="m4 18 5.2-5.2 3.4 3.4 2.2-2.2 5.2 5.2" />
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M14.6 9.4c-.5-.8-1.4-1.2-2.6-1.2-1.5 0-2.5.7-2.5 1.8 0 2.6 5.2 1.2 5.2 3.9 0 1.1-1.1 1.9-2.7 1.9-1.2 0-2.2-.5-2.8-1.4M12 6.5v1.7M12 15.8v1.7" />
       </svg>
     );
   }
@@ -74,7 +73,7 @@ export function AvatarGooeyMenu() {
             filterUnits="userSpaceOnUse"
             colorInterpolationFilters="sRGB"
           >
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
             <feColorMatrix
               in="blur"
               type="matrix"
@@ -99,7 +98,7 @@ export function AvatarGooeyMenu() {
               className="avatar-gooey-menu__liquid-action"
               cx="0"
               cy="0"
-              r="24"
+              r="18"
               key={action.name}
               style={{
                 "--action-index": index,
@@ -124,6 +123,10 @@ export function AvatarGooeyMenu() {
               if (action.icon === "camera") {
                 setIsOpen(false);
                 window.dispatchEvent(new Event("open-camera"));
+              }
+              if (action.icon === "calculator") {
+                setIsOpen(false);
+                window.dispatchEvent(new Event("open-calculator"));
               }
             }}
             style={{
@@ -151,7 +154,7 @@ export function AvatarGooeyMenu() {
           className="avatar-gooey-menu__avatar"
           type="circle"
           size={36}
-          color="#123f2d"
+          color="#2f6f52"
           state={isOpen ? "working" : "default"}
           aria-hidden="true"
         />

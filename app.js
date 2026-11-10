@@ -314,59 +314,141 @@ function createPhoto() {
 
 function attachFakeCamera() {
   const camera = document.querySelector("#camera");
-  const shutter = document.querySelector("#camera-shutter");
-  const close = document.querySelector("#camera-close");
-  const photos = document.querySelector("#note-photos");
+  const video = document.querySelector("#camera-video");
+  const shot = document.querySelector("#screen-photo");
+  const beam = document.querySelector("#screen-beam");
+  const status = document.querySelector("#bean-status");
+  const collect = document.querySelector("#entry-collect");
+  const collectText = document.querySelector("#entry-collect-text");
+  const collectTotal = document.querySelector("#entry-collect-total");
+  const safe = document.querySelector("#entry-safe");
+  const toast = document.querySelector("#artifacts-toast");
+  const sheet = document.querySelector("#artifacts");
+  const sheetClose = document.querySelector("#artifacts-close");
+  const totalP = document.querySelector("#total-p");
 
-  if (!camera || !shutter || !close || !photos) {
+  if (!camera || !video || !shot || !beam || !status || !collect || !collectText || !collectTotal || !safe || !toast || !sheet) {
     return;
   }
 
-  const setOpen = (open) => {
+  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+  let running = false;
+
+  const setCamera = (open) => {
     camera.classList.toggle("is-open", open);
     camera.setAttribute("aria-hidden", String(!open));
   };
 
-  window.addEventListener("open-camera", () => setOpen(true));
-  close.addEventListener("click", () => setOpen(false));
+  const setStatus = (text) => {
+    status.textContent = text;
+    status.classList.toggle("is-on", Boolean(text));
+  };
 
-  shutter.addEventListener("click", () => {
-    camera.classList.remove("is-flashing");
-    void camera.offsetWidth;
-    camera.classList.add("is-flashing");
+  const openSheet = (open) => {
+    sheet.classList.toggle("is-open", open);
+    sheet.setAttribute("aria-hidden", String(!open));
+  };
 
-    window.setTimeout(() => {
-      const shot = document.querySelector("#screen-photo");
-      const beam = document.querySelector("#screen-beam");
-      const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      const addThumb = () => photos.appendChild(createPhoto());
+  const countUp = (el, from, to, ms) => {
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / ms);
+      el.textContent = String(Math.round(from + (to - from) * t));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
 
-      setOpen(false);
-
-      if (!shot || !beam || reduced) {
-        addThumb();
-        return;
-      }
-
-      // The photo fills the whole screen, then dissolves into the note; the beam then rides the screen edge.
-      shot.classList.remove("is-fading");
-      beam.classList.remove("is-on");
-      void shot.offsetWidth;
-      shot.classList.add("is-showing");
-
+  // Same colour-flash typing as the title, settling to green.
+  const typeInto = (el, text) => {
+    el.textContent = "";
+    el.hidden = false;
+    [...text].forEach((ch, i) => {
       window.setTimeout(() => {
-        shot.classList.add("is-fading");
-        addThumb();
-      }, 900);
+        const span = document.createElement("span");
+        span.className = "tt-char tt-char--link";
+        span.textContent = ch;
+        span.style.setProperty("--tt-color", TITLE_COLORS[Math.floor(Math.random() * TITLE_COLORS.length)]);
+        el.appendChild(span);
+      }, reduced ? 0 : i * 45);
+    });
+  };
 
-      window.setTimeout(() => {
-        shot.classList.remove("is-showing", "is-fading");
-        beam.classList.add("is-on");
-      }, 900 + 1100);
+  const run = async () => {
+    if (running) return;
+    running = true;
 
-      window.setTimeout(() => beam.classList.remove("is-on"), 900 + 1100 + 3700);
-    }, 220);
+    // 1. The recorded camera clip plays full screen.
+    safe.hidden = true;
+    safe.classList.remove("is-updated");
+    collect.classList.remove("is-updated");
+    collectText.innerHTML = "collected 680 dollars from washers<br>240 dollars dryers";
+    collectTotal.textContent = "+920";
+    toast.hidden = true;
+    toast.textContent = "";
+    setStatus("");
+    video.currentTime = 0;
+    setCamera(true);
+    try {
+      await video.play();
+      await new Promise((resolve) => {
+        video.addEventListener("ended", resolve, { once: true });
+        window.setTimeout(resolve, 4500);
+      });
+    } catch {
+      await wait(1500);
+    }
+
+    // 2. The last frame fades back into the note; the beam rides the screen edge while Bean works.
+    shot.classList.remove("is-fading");
+    void shot.offsetWidth;
+    shot.classList.add("is-showing");
+    setCamera(false);
+    await wait(500);
+    shot.classList.add("is-fading");
+    beam.classList.remove("is-on");
+    void beam.offsetWidth;
+    if (!reduced) beam.classList.add("is-on");
+
+    // 3. Hardcoded thinking states beside the bean.
+    await wait(900);
+    shot.classList.remove("is-showing", "is-fading");
+    setStatus("Reading your photo…");
+    await wait(1500);
+    setStatus("Finding 4 records…");
+    await wait(1500);
+    setStatus("Updating 3 artifacts…");
+    await wait(1400);
+    setStatus("");
+
+    // 4. New lines land in the notebook, highlighted, and the books update.
+    collectText.innerHTML =
+      "collected 860 dollars from washers<br>265 dollars dryers<br>15 dollars soap machine";
+    collectTotal.textContent = "+1,140";
+    collect.classList.remove("is-updated");
+    void collect.offsetWidth;
+    collect.classList.add("is-updated");
+    await wait(500);
+    safe.hidden = false;
+    void safe.offsetWidth;
+    safe.classList.add("is-updated");
+    if (totalP) countUp(totalP, 790, 1010, 900);
+    await wait(1300);
+    typeInto(toast, "3 artifacts updated");
+    beam.classList.remove("is-on");
+    running = false;
+  };
+
+  window.addEventListener("open-camera", run);
+  toast.addEventListener("click", () => openSheet(true));
+  toast.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openSheet(true);
+    }
   });
+  sheetClose?.addEventListener("click", () => openSheet(false));
 }
 
 if (typeof document !== "undefined") {
@@ -376,3 +458,114 @@ if (typeof document !== "undefined") {
     attachFakeCamera();
   }
 }
+
+// "Updating model" shimmers for 5 seconds, then reads "Updated!".
+function attachUpdatedStatus() {
+  const status = document.querySelector(".entry__status--thinking");
+
+  if (!status) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    status.textContent = "Updated!";
+    status.classList.remove("entry__status--thinking");
+    status.classList.add("entry__status--result", "entry__status--done");
+  }, 5000);
+}
+
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attachUpdatedStatus, { once: true });
+  } else {
+    attachUpdatedStatus();
+  }
+}
+
+function attachDeposit() {
+  const dep = document.querySelector("#dep");
+  if (!dep) return;
+  const $ = (s) => dep.querySelector(s);
+  const num = $("#dep-num"), amount = $("#dep-amount"), swipe = $("#dep-swipe"), knob = $("#dep-knob");
+  const note = document.querySelector("#live-note-input");
+  let raw = "";
+  const fmt = (r) => {
+    if (!r) return "0";
+    const [i, d] = r.split(".");
+    return Number(i || 0).toLocaleString("en-US") + (d !== undefined ? "." + d : "");
+  };
+  const render = () => {
+    num.textContent = fmt(raw);
+    amount.classList.toggle("is-zero", !raw || Number(raw) === 0);
+    num.style.fontSize = raw.length > 7 ? "0.7em" : "";
+  };
+  const resetKnob = (snap) => {
+    swipe.classList.toggle("is-snap", !!snap);
+    knob.style.setProperty("--x", "0px");
+    swipe.style.setProperty("--fill", "0px");
+    swipe.classList.remove("is-ready");
+  };
+  const show = (id) => ["#dep-entry", "#dep-busy", "#dep-done"].forEach((s) => ($(s).hidden = s !== id));
+  const open = () => {
+    raw = ""; render(); resetKnob(false); show("#dep-entry");
+    dep.classList.remove("is-busy", "is-done");
+    dep.classList.add("is-open");
+    dep.setAttribute("aria-hidden", "false");
+  };
+  const close = () => {
+    dep.classList.remove("is-open", "is-busy", "is-done");
+    dep.setAttribute("aria-hidden", "true");
+  };
+  const confirm = () => {
+    if (!raw || Number(raw) === 0) { resetKnob(true); return; }
+    const value = Number(raw);
+    show("#dep-busy");
+    dep.classList.add("is-busy");
+    setTimeout(() => {
+      $("#dep-total").textContent = "$" + value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+      show("#dep-done");
+      dep.classList.add("is-done");
+      dep.classList.remove("is-busy");
+      if (note) {
+        note.value = (note.value ? note.value + "\n" : "") + `deposited ${value.toLocaleString("en-US")} dollars at bank`;
+        note.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      setTimeout(close, 2600);
+    }, 2300);
+  };
+  dep.querySelectorAll(".dep__key").forEach((b) =>
+    b.addEventListener("click", () => {
+      const k = b.dataset.key;
+      if (k === "back") raw = raw.slice(0, -1);
+      else if (k === ".") { if (!raw.includes(".")) raw = (raw || "0") + "."; }
+      else if (raw.replace(".", "").length < 9 && !(raw.includes(".") && raw.split(".")[1].length >= 2)) raw = raw === "0" ? k : raw + k;
+      render();
+    })
+  );
+  $("#dep-back").addEventListener("click", close);
+  let startX = null, max = 0;
+  knob.addEventListener("pointerdown", (e) => {
+    startX = e.clientX;
+    max = swipe.clientWidth - knob.offsetWidth - knob.offsetLeft * 2;
+    swipe.classList.remove("is-snap");
+    knob.setPointerCapture(e.pointerId);
+  });
+  knob.addEventListener("pointermove", (e) => {
+    if (startX === null) return;
+    const x = Math.max(0, Math.min(max, e.clientX - startX));
+    knob.style.setProperty("--x", x + "px");
+    swipe.style.setProperty("--fill", x + knob.offsetWidth + "px");
+    swipe.classList.toggle("is-ready", x > max * 0.85);
+  });
+  const end = (e) => {
+    if (startX === null) return;
+    const x = Math.max(0, e.clientX - startX);
+    startX = null;
+    if (x > max * 0.85) confirm(); else resetKnob(true);
+  };
+  knob.addEventListener("pointerup", end);
+  knob.addEventListener("pointercancel", end);
+  knob.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); confirm(); } });
+  window.addEventListener("open-calculator", open);
+}
+if (typeof document !== "undefined") attachDeposit();

@@ -74,28 +74,37 @@
                   <span>Danica Hartawan</span>
                 </span>
                 <div id="bot-avatar-menu-root"></div>
+                <span class="bean-status" id="bean-status" aria-live="polite"></span>
+                <span class="artifacts-toast" id="artifacts-toast" role="button" tabindex="0" aria-label="3 artifacts updated" hidden></span>
               </div>
 
               <div class="note-photos" id="note-photos"></div>
 
               <div class="note-entries" id="note-entries">
-                <div class="entry">
-                  <p class="entry__text">collected $680 from washers<br>$240 dryers</p>
-                  <span class="entry__status entry__status--result"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>+$920</span>
+                <div class="entry" id="entry-collect">
+                  <p class="entry__text" id="entry-collect-text">collected 680 dollars from washers<br>240 dollars dryers</p>
+                  <span class="entry__status entry__status--result"><span id="entry-collect-total">+920</span></span>
                 </div>
                 <div class="entry">
-                  <p class="entry__text">washer 6 broke again<br>paid $85 to fix it</p>
-                  <span class="entry__status entry__status--thinking">Thinking</span>
+                  <p class="entry__text">washer 6 broke again<br>paid 85 dollars to fix it</p>
+                  <span class="entry__status entry__status--thinking">Updating model</span>
                 </div>
                 <div class="entry">
-                  <p class="entry__text">bought detergent $45<br>kept $100 for change</p>
-                  <span class="entry__status entry__status--sources"><span class="entry__dots" aria-hidden="true"><i></i><i></i><i></i></span>3 sources</span>
+                  <p class="entry__text">bought detergent 45 dollars<br>kept 100 dollars for change</p>
+                  <span class="entry__status entry__status--sources"><span class="entry__dots" aria-hidden="true"><i></i><i></i><i></i></span>3 artifacts</span>
                 </div>
                 <div class="entry">
-                  <p class="entry__text">deposited $690 at bank</p>
-                  <span class="entry__status entry__status--result"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>$690</span>
+                  <p class="entry__text">deposited 690 dollars at bank</p>
+                  <span class="entry__status entry__status--result">690</span>
                 </div>
+                <div class="entry entry--new" id="entry-safe" hidden>
+                  <p class="entry__text">220 dollars cash left in safe</p>
+                  <span class="entry__status entry__status--result">220</span>
+                </div>
+                
               </div>
+
+              
 
               <form class="live-note" id="live-note-form" novalidate>
                 <label class="sr-only" for="live-note-input">Add a note</label>
@@ -104,7 +113,7 @@
                   name="live-note"
                   rows="12"
                   autocomplete="off"
-                  placeholder="Start writing…"
+                 
                   aria-describedby="live-note-help"
                 ></textarea>
 
@@ -139,16 +148,91 @@
           <div class="screen-photo" id="screen-photo" aria-hidden="true"></div>
           <div class="screen-beam" id="screen-beam" aria-hidden="true"></div>
           <div class="camera" id="camera" aria-hidden="true">
-            <div class="camera__viewfinder"></div>
-            <button class="camera__close" id="camera-close" type="button" aria-label="Close camera">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
-            </button>
-            <button class="camera__shutter" id="camera-shutter" type="button" aria-label="Take photo"><span></span></button>
+            <video class="camera__video" id="camera-video" src="./assets/camera-demo.mp4" muted playsinline preload="auto"></video>
             <div class="camera__flash"></div>
           </div>
 
+          
+
+          <section class="dep" id="dep" aria-hidden="true" aria-label="Log a deposit">
+            <div class="dep__glow" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="dep__view dep__entry" id="dep-entry">
+              <header class="dep__top"><button type="button" class="dep__back" id="dep-back" aria-label="Close"><svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg></button><span>Add money</span><i></i></header>
+              <div class="dep__amount" id="dep-amount"><span class="dep__cur">$</span><span id="dep-num">0</span></div>
+              <div class="dep__sub">USD</div>
+              <div class="dep__acct"><span>Laundry cash &rarr; Bank <b>&bull;&bull; 4821</b></span><em>$1,140</em></div>
+              <div class="dep__pad">
+              <button type="button" class="dep__key" data-key="1">1</button>
+              <button type="button" class="dep__key" data-key="2">2</button>
+              <button type="button" class="dep__key" data-key="3">3</button>
+              <button type="button" class="dep__key" data-key="4">4</button>
+              <button type="button" class="dep__key" data-key="5">5</button>
+              <button type="button" class="dep__key" data-key="6">6</button>
+              <button type="button" class="dep__key" data-key="7">7</button>
+              <button type="button" class="dep__key" data-key="8">8</button>
+              <button type="button" class="dep__key" data-key="9">9</button>
+              <button type="button" class="dep__key" data-key=".">.</button>
+              <button type="button" class="dep__key" data-key="0">0</button>
+              <button type="button" class="dep__key" data-key="back"><svg viewBox="0 0 24 24"><path d="M9 6h10v12H9l-5-6z"/><path d="m12.5 9.5 4 5M16.5 9.5l-4 5"/></svg></button>
+              </div>
+              <div class="dep__swipe" id="dep-swipe"><button type="button" class="dep__knob" id="dep-knob" aria-label="Swipe to deposit"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><span id="dep-swipe-label">Swipe to deposit</span></div>
+            </div>
+            <div class="dep__view dep__busy" id="dep-busy" hidden><p><i></i>PROCESSING DEPOSIT</p></div>
+            <div class="dep__view dep__done" id="dep-done" hidden>
+              <span class="dep__ok"><i></i>DEPOSIT LOGGED</span>
+              <div class="dep__card"><svg class="dep__chip" viewBox="0 0 24 18"><rect x="1" y="1" width="22" height="16" rx="3"/><path d="M1 7h22M1 11h22M9 1v16"/></svg><b>bean</b></div>
+              <div class="dep__total" id="dep-total">$0</div>
+            </div>
+          </section>
+
+          <section class="artifacts" id="artifacts" aria-hidden="true" aria-label="Updated artifacts">
+            <button class="artifacts__close" id="artifacts-close" type="button" aria-label="Close artifacts">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+            </button>
+            <div class="artifacts__scroll">
+              <p class="artifacts__eyebrow">Bean · November 9</p>
+              <h2 class="artifacts__title">Your books, updated.</h2>
+
+              <div class="artifacts__stats">
+                <div><span>Total collections</span><b>1,140</b><em>+220 from photo</em></div>
+                <div><span>Bank deposits</span><b>690</b><em>No change</em></div>
+              </div>
+
+              <article class="artifact">
+                <h3>Cash reconciliation</h3>
+                <table>
+                  <tr><td>Original collections</td><td>920</td></tr>
+                  <tr class="is-new"><td>Evening collections</td><td>+220</td></tr>
+                  <tr><td>Total collections</td><td>1,140</td></tr>
+                  <tr><td>Cash expenses</td><td>−130</td></tr>
+                  <tr><td>Bank deposit</td><td>−690</td></tr>
+                  <tr><td>Change reserve</td><td>−100</td></tr>
+                  <tr class="is-total"><td>Cash remaining in safe</td><td>220</td></tr>
+                </table>
+              </article>
+
+              <article class="artifact">
+                <h3>Income &amp; expense ledger</h3>
+                <table>
+                  <tr class="is-head"><td>Category</td><td>Before</td><td>After</td></tr>
+                  <tr class="is-new"><td>Washer collections</td><td>680</td><td>860</td></tr>
+                  <tr class="is-new"><td>Dryer collections</td><td>240</td><td>265</td></tr>
+                  <tr class="is-new"><td>Soap machine</td><td>0</td><td>15</td></tr>
+                  <tr><td>Repair expense</td><td>85</td><td>85</td></tr>
+                  <tr><td>Detergent purchase</td><td>45</td><td>45</td></tr>
+                </table>
+              </article>
+
+              <article class="artifact">
+                <h3>Bookkeeper package</h3>
+                <p>Financial summary updated. The handwritten evening slip is attached as supporting evidence and the proposed journal entries are refreshed. Export the reviewed records as CSV or a PDF package.</p>
+                <img class="artifact__photo" src="./assets/camera-last.jpg" alt="Handwritten evening collection slip" />
+              </article>
+            </div>
+          </section>
+
           <div class="totals" aria-label="Totals">
-            <span class="totals__item"><svg class="totals__icon totals__icon--p" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 11.5L12 5.5l6 6"/></svg><span class="sr-only">Profit</span>790</span>
+            <span class="totals__item"><svg class="totals__icon totals__icon--p" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 11.5L12 5.5l6 6"/></svg><span class="sr-only">Profit</span><span id="total-p">790</span></span>
             <span class="totals__dot" aria-hidden="true"></span>
             <span class="totals__item"><svg class="totals__icon totals__icon--l" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M6 12.5l6 6 6-6"/></svg><span class="sr-only">Loss</span>130</span>
           </div>
