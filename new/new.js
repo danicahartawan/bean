@@ -440,7 +440,7 @@ function beanCollapse(overlay, card, inners, done) {
 (() => {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const items = [];
-  document.querySelectorAll(".work .proj h3, .work .row .card, .lc, #gl-conn").forEach((el) => {
+  document.querySelectorAll(".work .proj h3, .lc, #gl-conn").forEach((el) => {
     items.push({ el, lag: el.classList.contains("card") ? [...el.parentNode.children].indexOf(el) * 0.06 : 0 });
     el.classList.add("scrollfx");
   });
@@ -460,6 +460,33 @@ function beanCollapse(overlay, card, inners, done) {
       el.style.translate = `0 ${((1 - e) * 36).toFixed(1)}px`;
       el.style.filter = (1 - e) + exit > 0.01 ? `blur(${(((1 - e) * 10) + exit * 10).toFixed(1)}px)` : "none";
     }
+  };
+  const q = () => { if (!queued) { queued = true; requestAnimationFrame(run); } };
+  addEventListener("scroll", q, { passive: true }); addEventListener("resize", q);
+  run();
+})();
+
+
+/* Cards start bunched and overlapping at staggered heights, then spread into a straight row as you scroll
+   (the joshuabaker.com project-grid transition). Progress is tied directly to scroll position. */
+(() => {
+  const row = document.querySelector(".work .row");
+  if (!row || matchMedia("(prefers-reduced-motion: reduce)").matches || matchMedia("(max-width: 600px)").matches) return;
+  const cards = [...row.querySelectorAll(".card")];
+  const drop = [46, 112, 14, 84, 30];
+  let queued = false;
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const run = () => {
+    queued = false;
+    const vh = innerHeight, r = row.getBoundingClientRect();
+    // 0 while the row is still low in the viewport, 1 once it has climbed to the upper-middle
+    const p = ease(Math.min(1, Math.max(0, (vh * 0.98 - r.top) / (vh * 0.62))));
+    const mid = row.offsetWidth / 2;
+    cards.forEach((c, i) => {
+      const dx = mid - (c.offsetLeft + c.offsetWidth / 2);
+      c.style.translate = `${(dx * 0.62 * (1 - p)).toFixed(1)}px ${((drop[i % drop.length]) * (1 - p)).toFixed(1)}px`;
+      c.style.zIndex = String(10 - Math.abs(i - (cards.length - 1) / 2) * 2 | 0);
+    });
   };
   const q = () => { if (!queued) { queued = true; requestAnimationFrame(run); } };
   addEventListener("scroll", q, { passive: true }); addEventListener("resize", q);

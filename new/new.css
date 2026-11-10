@@ -770,3 +770,4 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__heat i.on.o2 { background: #f08a5a; }
 .gl__heat i.on.o3 { background: #f6b895; }
 .gl__heat i.on.g { background: #426c53; }
+.work .row .card { will-change: translate; }
