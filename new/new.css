@@ -694,3 +694,22 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__go { background: #2f6f52 !important; color: #fff; display: grid !important; place-items: center; } .gl__go svg { width: 20px; height: 20px; }
 
 .gl__cx > div { grid-template-columns: 120px 1fr !important; } .gl__cx dd { display: flex; align-items: center; gap: 8px; } .gl__cx dd i { width: 8px; height: 8px; border-radius: 50%; background: #2f9d62; }
+
+/* Gumloop scale: small, quiet type, full-width columns */
+.wrap.gl { width: calc(100vw - 52px); max-width: none; grid-template-columns: minmax(0, 1fr) 305px; gap: 48px; padding-top: 52px; }
+.gl__hi { margin: 0 0 20px; font-size: 24px; letter-spacing: -0.02em; }
+.gl__box { padding: 15px 16px 10px; border-radius: 16px; box-shadow: 0 0 0 1px #ecebe6, 0 2px 8px rgb(38 37 30 / 4%); }
+.gl__box p { margin: 0 0 14px; font-size: 14px; }
+.gl__row { gap: 10px; font-size: 13px; } .gl__plus { width: 30px; height: 30px; } .gl__plus svg, .gl__mic svg { width: 16px; height: 16px; }
+.gl__go { width: 32px; height: 32px; } .gl__go svg { width: 16px; height: 16px; }
+.gl__conn { gap: 10px; padding: 8px 4px 0 10px; font-size: 13px; } .gl__conn button { width: 24px; height: 24px; } .gl__conn button svg { width: 14px; height: 14px; }
+.gl__ics b { width: 16px; height: 16px; border-width: 1.5px; }
+.gl__panel { margin-top: 22px; padding: 12px 16px 8px; border-radius: 16px; } .gl__panel .proj h3 { font-size: 14px; font-weight: 500; }
+.gl__agent { gap: 10px; } .gl__av .orb { width: 56px; height: 56px; border-radius: 16px; }
+.gl__who strong { font-size: 16px; margin-bottom: 4px; } .gl__n strong { font-size: 16px; } .gl__n span { font-size: 12px; }
+.gl__ics--s { font-size: 11px; } .gl__ics--s b { width: 14px; height: 14px; }
+.gl__heat { gap: 3px; margin: 20px 0 22px; padding-bottom: 20px; }
+.gl__sec { padding-bottom: 16px; margin-bottom: 18px; }
+.gl__sec h4 { margin-bottom: 8px; font-size: 14px; } .gl__sec h4 svg { width: 14px; height: 14px; }
+.gl__sec dl > div { grid-template-columns: 100px 1fr 18px; padding: 8px 0; font-size: 14px; } .gl__cx > div { grid-template-columns: 100px 1fr !important; } .gl__sec dl svg { width: 15px; height: 15px; }
+.gl__hi { color: #7a7974; }
