@@ -42,10 +42,10 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const controls = document.createElement("div");
   controls.className = "carousel-controls";
   controls.setAttribute("aria-label", "Rotate artifacts");
-  [["←", "Previous artifact", -1], ["→", "Next artifact", 1]].forEach(([text, name, direction]) => {
+  [["M12.5 4.5 7 10l5.5 5.5", "Previous artifact", -1], ["M7.5 4.5 13 10l-5.5 5.5", "Next artifact", 1]].forEach(([text, name, direction]) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.textContent = text;
+    button.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${text}"/></svg>`;
     button.setAttribute("aria-label", name);
     button.addEventListener("click", () => rotate(active + direction));
     controls.append(button);
