@@ -771,3 +771,6 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__heat i.on.o3 { background: #f6b895; }
 .gl__heat i.on.g { background: #426c53; }
 .work .row .card { will-change: translate; }
+/* scroll-driven spread: --open goes 0.12 -> 1 as the page scrolls from the top */
+.work .row .card:not([style*="--position: 2"]) { transform: translateX(calc(var(--position) * var(--spread) * var(--open, 1))) translateZ(calc(var(--distance) * -170px * var(--open, 1))) rotateY(calc(var(--position) * -26deg * var(--open, 1))); }
+.work .row .card { transition: transform 260ms cubic-bezier(.22,1,.36,1), translate 260ms cubic-bezier(.22,1,.36,1), opacity 450ms; }
