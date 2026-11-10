@@ -467,27 +467,27 @@ function beanCollapse(overlay, card, inners, done) {
 })();
 
 
-/* Cards start bunched and stacked at staggered heights, then fan out into the carousel as you scroll
-   (the joshuabaker.com project-grid transition). Progress is tied directly to scroll position. */
+/* Flat row of cards: they start bunched, overlapping at staggered heights, then slide apart into an
+   even row as you scroll (the joshuabaker.com project-grid transition). Tied directly to scroll position. */
 (() => {
   const row = document.querySelector(".work .row");
   if (!row || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const cards = [...row.querySelectorAll(".card")];
-  const dropFor = { 0: 18, 1: 96, "-1": 60 };
-  let queued = false;
+  const drop = [30, 96, 8, 66, 40];
   const ease = (t) => 1 - Math.pow(1 - t, 3);
+  let queued = false;
   const run = () => {
     queued = false;
-    const room = Math.max(120, Math.min(300, document.documentElement.scrollHeight - innerHeight - 20));
+    const room = Math.max(140, Math.min(320, document.documentElement.scrollHeight - innerHeight - 20));
     const p = ease(Math.min(1, Math.max(0, scrollY / room)));
-    row.style.setProperty("--open", (0.12 + 0.88 * p).toFixed(3));
-    cards.forEach((c) => {
-      const pos = parseInt(c.style.getPropertyValue("--position"), 10);
-      c.style.translate = `0 ${((dropFor[pos] ?? 0) * (1 - p)).toFixed(1)}px`;
+    const mid = row.offsetWidth / 2;
+    cards.forEach((c, i) => {
+      const dx = mid - (c.offsetLeft + c.offsetWidth / 2);
+      c.style.translate = `${(dx * 0.34 * (1 - p)).toFixed(1)}px ${(drop[i % drop.length] * (1 - p)).toFixed(1)}px`;
+      c.style.zIndex = String(cards.length - Math.abs(i - (cards.length - 1) / 2) * 2 | 0);
     });
   };
   const q = () => { if (!queued) { queued = true; requestAnimationFrame(run); } };
   addEventListener("scroll", q, { passive: true }); addEventListener("resize", q);
-  new MutationObserver(q).observe(row, { attributes: true, subtree: true, attributeFilter: ["style"] });
   run();
 })();

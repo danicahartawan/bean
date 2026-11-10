@@ -778,3 +778,14 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__call { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 12px; border: 0; border-radius: 999px; background: #2f6f52; color: #fff; font: inherit; font-size: 14px; cursor: pointer; transition: background .2s, transform .2s; }
 .gl__call:hover { background: #285f46; } .gl__call:active { transform: scale(.96); }
 .gl__call svg { width: 17px; height: 17px; } .gl__call span { font-size: 14px; color: #fff; }
+
+/* Flat artifacts row (replaces the 3D stack): even cards that slide apart on scroll */
+.work .row { display: flex !important; gap: 16px; height: auto !important; perspective: none !important; padding: 8px 0 30px !important; overflow: visible; }
+.work .row .card, .work .row .card.is-selected, .work .row .card[style*="--position"] {
+  position: relative !important; left: auto !important; top: auto !important; margin: 0 !important; flex: 1 1 0 !important; width: 0 !important; min-width: 0; height: 340px !important;
+  transform: none !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; transition: translate 280ms cubic-bezier(.22,1,.36,1), box-shadow .2s;
+  animation: none !important;
+}
+.work .row .card:hover { box-shadow: 0 6px 22px rgb(38 37 30 / 10%); }
+.work .carousel-controls, .work .bars { display: none !important; }
+@media (max-width: 600px) { .work .row { flex-direction: column; } .work .row .card { flex: none !important; width: 100% !important; height: 210px !important; } }
