@@ -64,22 +64,26 @@ precision highp float; precision highp sampler2D; in vec2 vUv, vL, vR, vT, vB; o
 
 document.querySelectorAll('a[href^="../new"]').forEach((a) => a.addEventListener("click", () => { try { sessionStorage.setItem("bean-hello", "1"); } catch (e) {} }));
 
-// Click to spawn a bean.
+// Click: a bean spawns, swells to fill the screen in the same green as the /new/ intro, then we go there.
 (() => {
   const NS = "http://www.w3.org/2000/svg";
-  addEventListener("pointerdown", (e) => {
-    if (e.target.closest("a")) return;
-    const size = 70 + Math.random() * 60, rot = (Math.random() - 0.5) * 80;
+  let going = false;
+  const enter = (e) => {
+    if (going) return; going = true;
+    try { sessionStorage.setItem("bean-hello", "1"); } catch (err) {}
     const wrap = document.createElement("div");
-    wrap.className = "bean-spawn";
-    wrap.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;width:${size}px;--r:${rot}deg;--dx:${(Math.random() - 0.5) * 120}px`;
+    wrap.className = "bean-go";
+    wrap.style.cssText = `left:${e.clientX}px;top:${e.clientY}px`;
     const svg = document.createElementNS(NS, "svg");
     svg.setAttribute("viewBox", "0 0 120 90");
     const path = document.createElementNS(NS, "path");
     path.setAttribute("d", "M22 66C-2 44 14 8 56 8c34 0 62 18 52 48-8 22-32 22-42 8-7-10-20-8-22 4-2 14-10 14-22 2z");
     path.setAttribute("transform", "rotate(-8 60 45)");
-    path.setAttribute("fill", ["#2f6f52", "#3f8f68", "#1f5a40"][Math.floor(Math.random() * 3)]);
+    path.setAttribute("fill", "#244737");
     svg.appendChild(path); wrap.appendChild(svg); document.body.appendChild(wrap);
-    setTimeout(() => wrap.remove(), 5200);
-  });
+    document.body.classList.add("going");
+    setTimeout(() => { location.href = "../new/"; }, 1250);
+  };
+  addEventListener("pointerdown", enter);
+  addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") enter({ clientX: innerWidth / 2, clientY: innerHeight / 2 }); });
 })();

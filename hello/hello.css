@@ -8,7 +8,9 @@ body { color: #f2f2f2; font-family: "NB International", "Neue Montreal", "Helvet
 .hd a:hover { opacity: .55; }
 .copy { text-align: right; }
 @media (max-width: 760px) { .hd { grid-template-columns: 1fr 1fr; font-size: 20px; line-height: 24px; padding: 20px; } .hide-m { display: none; } }
-.bean-spawn { position: fixed; z-index: 1; margin: 0; pointer-events: none; transform: translate(-50%, -50%) rotate(var(--r)) scale(0); animation: bean-pop .55s cubic-bezier(.2,1.5,.4,1) forwards, bean-float 5s ease-in .55s forwards; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 45%)); }
-.bean-spawn svg { display: block; width: 100%; height: auto; overflow: visible; }
-@keyframes bean-pop { to { transform: translate(-50%, -50%) rotate(var(--r)) scale(1); } }
-@keyframes bean-float { 0% { transform: translate(-50%, -50%) rotate(var(--r)) scale(1); opacity: 1; } 100% { transform: translate(calc(-50% + var(--dx)), calc(-50% - 160px)) rotate(calc(var(--r) * 2)) scale(.85); opacity: 0; } }
+.bean-go { position: fixed; z-index: 5; width: 110px; pointer-events: none; transform: translate(-50%, -50%) rotate(-12deg) scale(0); animation: go-pop .45s cubic-bezier(.2,1.5,.4,1) forwards, go-fill .85s cubic-bezier(.7,0,.2,1) .4s forwards; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 40%)); }
+.bean-go svg { display: block; width: 100%; height: auto; overflow: visible; }
+@keyframes go-pop { to { transform: translate(-50%, -50%) rotate(-12deg) scale(1); } }
+@keyframes go-fill { from { transform: translate(-50%, -50%) rotate(-12deg) scale(1); } to { transform: translate(-50%, -50%) rotate(0deg) scale(60); } }
+body.going #fluid { transition: opacity .9s ease .3s; opacity: .2; }
+html { cursor: pointer; }
