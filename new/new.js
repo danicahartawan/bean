@@ -8,6 +8,7 @@
     dock?.removeAttribute("inert");
     document.querySelector("#bean-brand")?.classList.add("is-visible");
     entry.remove();
+    document.body.classList.add("artifacts-ready");
   };
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     finish();
@@ -22,46 +23,109 @@
   window.setTimeout(finish, 3800);
 })();
 document.querySelectorAll("[data-row]").forEach((row) => {
-  const bars = row.parentElement.querySelectorAll("[data-bars] i");
   const cards = [...row.children];
-  const GAP = 30;
-  const base = () => cards[0].offsetLeft;
-  const layout = () => {
-    const sl = row.scrollLeft;
-    let active = 0, best = 1e9;
-    cards.forEach((c, i) => {
-      const pos = c.offsetLeft - base() - sl; // 0 = aligned with content left
-      const w = c.offsetWidth + GAP;
-      const d = pos / w;
-      if (Math.abs(pos) < best) { best = Math.abs(pos); active = i; }
-      let t;
-      if (d >= 0) {
-        const k = Math.min(1, d);
-        t = `scale(${1 - 0.14 * k})`;
-        c.style.opacity = 1;
-      } else {
-        const p = Math.min(1, -d);
-        const e = p * p * (3 - 2 * p);
-        t = `rotateY(${(-26 * e).toFixed(1)}deg) scale(${(1 - 0.72 * e).toFixed(3)}, ${(1 - 0.12 * e).toFixed(3)})`;
-        c.style.transformOrigin = "right center";
-        c.style.opacity = 1 - 0.15 * e;
-        c.style.zIndex = 0;
-        c.style.transform = t;
-        return;
-      }
-      c.style.transformOrigin = "left center";
-      c.style.transform = t;
+  const bars = [...row.parentElement.querySelectorAll("[data-bars] i")];
+  let active = 0;
+  const rotate = (index) => {
+    active = (index + cards.length) % cards.length;
+    cards.forEach((card, i) => {
+      const distance = (i - active + cards.length) % cards.length;
+      const slot = distance === cards.length - 1 ? -1 : distance;
+      card.style.setProperty("--position", slot);
+      card.style.setProperty("--distance", Math.abs(slot));
+      card.style.zIndex = String(4 - Math.abs(slot));
+      card.classList.remove("is-selected");
+      card.tabIndex = slot === 2 ? -1 : 0;
     });
-    if (sl >= row.scrollWidth - row.clientWidth - 2) active = cards.length - 1;
-    bars.forEach((b, n) => b.classList.toggle("on", n === active));
-    const lb = row.parentElement.querySelector(".agent"); const t = cards[active] && cards[active].dataset.label; if (lb && t && lb.textContent !== t) lb.textContent = t;
+    bars.forEach((bar, i) => bar.classList.toggle("on", i === active));
   };
-  row.addEventListener("scroll", layout, { passive: true });
-  window.addEventListener("resize", layout);
-  layout();
-  bars.forEach((b, n) => b.addEventListener("click", () => cards[n] && row.scrollTo({ left: cards[n].offsetLeft - base(), behavior: "smooth" })));
+  const controls = document.createElement("div");
+  controls.className = "carousel-controls";
+  controls.setAttribute("aria-label", "Rotate artifacts");
+  [["←", "Previous artifact", -1], ["→", "Next artifact", 1]].forEach(([text, name, direction]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = text;
+    button.setAttribute("aria-label", name);
+    button.addEventListener("click", () => rotate(active + direction));
+    controls.append(button);
+  });
+  row.after(controls);
+  document.addEventListener("keydown", event => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    if (document.querySelector("#bean-entry") || !document.querySelector("#agent").hidden || !document.querySelector("#frame").hidden) return;
+    if (event.target.closest("input, textarea, select, [contenteditable]")) return;
+    event.preventDefault();
+    if (!event.repeat) rotate(active + (event.key === "ArrowRight" ? 1 : -1));
+  });
+  const select = (index) => {
+    cards.forEach((card, i) => card.classList.toggle("is-selected", i === index));
+    bars.forEach((bar, i) => bar.classList.toggle("on", i === index));
+  };
+  const previews = [
+    ["Agent", "Ask about your business", [["Uses", "Laundry Log, P&L and cash records"], ["Helps with", "Revenue questions and purchase forecasts"]]],
+    ["Forecast", "Plan before you spend", [["Compare", "Cash with and without a purchase"], ["Review", "30-day outlook and washer replacement"]]],
+    ["Profit & Loss", "See how the day went", [["Recorded sales", "$1,140"], ["Recorded costs", "$130"], ["Profit so far", "$1,010"], ["Also includes", "Cash reconciliation and ledger"]]],
+    ["Laundry Log", "Your original daily records", [["Review", "Collections, expenses and source notes"], ["Follow through", "Updated books and bookkeeper package"]]],
+  ];
+  cards.forEach((card, index) => {
+    const front = document.createElement("div");
+    front.className = "artifact-front";
+    front.append(...card.childNodes);
+    const flip = document.createElement("div");
+    flip.className = "artifact-flip";
+    const back = document.createElement("div");
+    back.className = "artifact-back";
+    const [name, description, facts] = previews[index];
+    const heading = document.createElement("h4");
+    heading.textContent = name;
+    const summary = document.createElement("p");
+    summary.textContent = description;
+    const list = document.createElement("dl");
+    facts.forEach(([label, value]) => {
+      const term = document.createElement("dt");
+      term.textContent = label;
+      const detail = document.createElement("dd");
+      detail.textContent = value;
+      list.append(term, detail);
+    });
+    const open = document.createElement("span");
+    open.className = "artifact-open";
+    open.textContent = "Click to open ↗";
+    back.append(heading, summary, list, open);
+    flip.append(front, back);
+    card.append(flip);
+    const caption = document.createElement("div");
+    caption.className = "artifact-caption";
+    const title = document.createElement("strong");
+    title.textContent = card.dataset.label;
+    const action = document.createElement("span");
+    action.textContent = ["Ask a question ↗", "Plan your next purchase ↗", "View income and expenses ↗", "Explore Bean ↗"][index];
+    caption.append(title, action);
+    card.append(caption);
+    card.addEventListener("pointerenter", event => {
+      if (event.pointerType === "mouse") select(index);
+    });
+    card.addEventListener("pointerleave", () => card.classList.remove("is-selected"));
+    card.addEventListener("blur", () => card.classList.remove("is-selected"));
+    card.addEventListener("focus", () => select(index));
+  });
+  bars.forEach((bar, index) => {
+    bar.setAttribute("role", "button");
+    bar.setAttribute("tabindex", "0");
+    bar.setAttribute("aria-label", `Preview ${cards[index].dataset.label}`);
+    bar.addEventListener("click", () => rotate(index));
+    bar.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        select(index);
+        cards[index].focus();
+      }
+    });
+  });
+  cards.forEach((card, index) => card.style.setProperty("--order", index));
+  rotate(0);
 });
-
 (() => {
   const ag = document.getElementById("agent");
   if (!ag) return;

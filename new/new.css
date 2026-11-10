@@ -518,3 +518,114 @@ body:has(.bean-entry) > .wrap, body:has(.bean-entry) > .dock { animation: entry-
 .bean-brand svg { width: 100%; height: 100%; fill: #2f6f52; transform: rotate(-8deg); animation: bean-glow 3.8s ease-in-out infinite; }
 @keyframes bean-glow { 0%,100% { filter: drop-shadow(0 0 2px rgb(145 165 138 / 15%)); opacity: .9; } 50% { filter: drop-shadow(0 0 9px rgb(145 165 138 / 45%)); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .bean-brand svg, .bean-entry__trail::before { animation: none; } }
+
+/* All artifacts remain visible; hover and keyboard focus expand the preview. */
+.work .row { width: 100%; margin: 0; padding: 6px 0; gap: 16px; overflow: visible; perspective: none; scroll-snap-type: none; }
+.work .row .card { flex: 1 1 0; width: 0; min-width: 0; height: 340px; transform: none; transform-origin: center; transition: flex-grow 360ms cubic-bezier(.22,1,.36,1), box-shadow 200ms; cursor: pointer; }
+.work .row .card.is-selected { flex-grow: 1.7; box-shadow: 0 4px 18px rgb(38 37 30 / 9%); }
+.work .row .card:focus-visible { outline: 3px solid #426c53; outline-offset: 4px; }
+.work .row .orb { width: clamp(85px, 16vw, 175px); height: auto; aspect-ratio: 1; }
+.work .row .phone { max-width: 85%; }
+.work .row .card::after { content: attr(data-label); position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; font-size: 15px; color: #26251e; }
+@media (min-width: 1000px) { .wrap:has(.row) { width: min(1080px, calc(100vw - 80px)); } }
+@media (max-width: 600px) { .work .row { flex-direction: column; } .work .row .card { width: 100%; flex: none; height: 210px; } .work .row .card.is-selected { flex: none; } .work .row .phone { transform: scale(.6); } .work .row .orb { width: 125px; } }
+@media (prefers-reduced-motion: reduce) { .work .row .card { transition: none; } }
+
+/* A shallow circular stage with directional lighting and soft floor shadows. */
+.work:has(.row) { padding-top: 100px; }
+.work .row { --spread: clamp(160px, 26vw, 290px); position: relative; display: block; height: 440px; perspective: 1200px; isolation: isolate; overflow: visible; }
+.work .row::before { content: ''; position: absolute; left: 5%; right: 5%; top: 76%; height: 95px; background: radial-gradient(ellipse, rgb(96 108 87 / 12%), transparent 70%); pointer-events: none; }
+.work .row .card { position: absolute; left: 50%; top: 15px; width: clamp(190px, 27vw, 290px); height: 330px; margin-left: clamp(-145px, -13.5vw, -95px); overflow: visible; border-radius: 24px; transform: translateX(calc(var(--slot) * var(--spread))) translateZ(calc(var(--depth) * -140px)) rotateY(calc(var(--slot) * -24deg)); transition: transform 650ms cubic-bezier(.22,1,.36,1), filter 450ms; box-shadow: inset 0 1px 0 rgb(255 255 255 / 65%), 5px 10px 18px rgb(48 57 43 / 8%); filter: brightness(.95); }
+.work .row .card.is-selected { transform: translateX(0) translateZ(25px) rotateY(0); filter: brightness(1); box-shadow: inset 0 1px 0 rgb(255 255 255 / 75%), 6px 12px 20px rgb(48 57 43 / 9%); }
+.work .row .card::before { content: ''; position: absolute; left: 2%; right: -8%; bottom: -28px; height: 24px; border-radius: 50%; background: rgb(50 62 41 / 24%); filter: blur(13px); transform: skewX(-15deg) scaleX(.95); pointer-events: none; z-index: -1; transition: opacity 650ms, transform 650ms; opacity: .6; }
+.work .row .card.is-selected::before { opacity: 1; transform: skewX(-15deg) scaleX(1.05); }
+.work .row .card::after { display: none; }
+.work .row .orb { width: 155px; height: 155px; }
+.work .row .phone { top: 24px; height: 245px; width: 120px; padding-top: 28px; border-radius: 22px; }
+.work .row .card.white { background: linear-gradient(145deg, #fff, #eeeee7); }
+.work .row .card.sky { background: linear-gradient(145deg, #e7ebe3, #b2bdae); }
+.artifact-caption { position: absolute; top: calc(100% + 40px); left: -15px; right: -15px; text-align: center; color: #26251e; pointer-events: none; }
+.artifact-caption strong { display: block; font-size: 18px; font-weight: 500; }
+.artifact-caption span { display: block; margin-top: 7px; font-size: 14px; color: #686b60; }
+.work .row .card:not(.is-selected) .artifact-caption span { opacity: .65; }
+.proj > .agent { display: none; }
+body:has(.bean-entry) > .wrap { animation: none; opacity: 0; }
+body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease both; }
+.artifacts-ready .work .row .card { animation: pack-arrive 950ms cubic-bezier(.16,1,.3,1) both; animation-delay: calc((var(--slot) + 1) * 110ms); }
+@keyframes pack-arrive { from { opacity: 0; transform: translateX(0) translateY(120px) translateZ(-550px) rotateY(calc(var(--slot) * -65deg)) rotateZ(calc(var(--slot) * 12deg)) scale(.35); } to { opacity: 1; } }
+@keyframes stage-reveal { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 600px) { .work .row { --spread: 115px; height: 380px; } .work .row .card { width: 170px; margin-left: -85px; height: 270px; } .work .row .orb { width: 110px; height: 110px; } .work .row .phone { transform: translateX(-50%) scale(.8); transform-origin: top center; } .artifact-caption strong { font-size: 15px; } .artifact-caption span { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .artifacts-ready .work .row .card, body.artifacts-ready > .wrap { animation: none; } .work .row .card { transition: none; } }
+
+/* Stable targets: each artifact stays in its own slot during hover. */
+.work .row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; height: auto; padding-bottom: 95px; perspective: 1200px; }
+.work .row .card, .work .row .card.is-selected { position: relative; top: auto; left: auto; margin: 0; width: 100%; height: 290px; transform: none; filter: none; flex: none; transition: transform 200ms ease, box-shadow 200ms ease; }
+.work .row .card.is-selected { transform: translateY(-5px) scale(1.035); box-shadow: 4px 16px 26px rgb(48 57 43 / 13%); }
+.work .row .card .orb { width: min(135px, 80%); height: auto; aspect-ratio: 1; }
+.work .row .card .logo-b { width: 65%; height: auto; }
+.artifact-caption { top: calc(100% + 32px); left: 0; right: 0; }
+.artifact-caption span { opacity: 0 !important; transform: translateY(3px); transition: opacity 180ms, transform 180ms; }
+.work .row .card.is-selected .artifact-caption span { opacity: 1 !important; transform: none; }
+.artifacts-ready .work .row .card { animation: stable-arrive 700ms cubic-bezier(.16,1,.3,1) backwards; animation-delay: calc(var(--order) * 100ms); }
+@keyframes stable-arrive { from { opacity: 0; transform: translateY(55px) scale(.85); } to { opacity: 1; transform: none; } }
+@media (max-width: 800px) { .work .row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 100px 20px; } }
+@media (hover: none) { .artifact-caption span { opacity: 1 !important; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .artifacts-ready .work .row .card { animation: none; } .work .row .card.is-selected { transform: none; } }
+
+/* Fixed carousel arc; the inner card flips without moving the hover target. */
+.work .row { gap: 18px; perspective: 1400px; padding-top: 16px; }
+.work .row .card, .work .row .card.is-selected { background: transparent; box-shadow: none; transform: none; filter: none; overflow: visible; }
+.artifact-flip { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateY(var(--arc, 0deg)) translateY(var(--lift, 0px)); transition: transform 500ms cubic-bezier(.22,1,.36,1); }
+.work .row .card:nth-child(1) { --arc: 20deg; --lift: 18px; }
+.work .row .card:nth-child(2) { --arc: 7deg; --lift: 0px; }
+.work .row .card:nth-child(3) { --arc: -7deg; --lift: 0px; }
+.work .row .card:nth-child(4) { --arc: -20deg; --lift: 18px; }
+.work .row .card.is-selected .artifact-flip { transform: rotateY(180deg) scale(1.025); }
+.artifact-front, .artifact-back { position: absolute; inset: 0; border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: inset 0 1px 0 rgb(255 255 255 / 70%), 5px 12px 24px rgb(48 57 43 / 10%); overflow: hidden; }
+.artifact-front { display: grid; place-items: center; background: #e6e5e0; }
+.white .artifact-front { background: linear-gradient(145deg, #fff, #eeeee7); }
+.sage .artifact-front { background: linear-gradient(145deg, #a9b79a, #6e8663); }
+.sky .artifact-front { background: linear-gradient(145deg, #e7ebe3, #b2bdae); }
+.artifact-back { transform: rotateY(180deg); background: #f3f2eb; padding: 22px 18px; color: #26251e; text-align: left; display: flex; flex-direction: column; }
+.artifact-back h4 { font-size: 19px; font-weight: 500; margin: 0 0 7px; }
+.artifact-back p { font-size: 14px; line-height: 1.4; margin: 0 0 14px; color: #62665b; }
+.artifact-back dl { margin: 0; font-size: 13px; line-height: 1.4; }
+.artifact-back dt { color: #686b60; margin-top: 8px; }
+.artifact-back dd { margin: 2px 0 0; }
+.artifact-open { font-size: 13px; margin-top: auto; padding-top: 12px; color: #315d42; }
+.work .row .card.is-selected::before { opacity: .8; }
+@media (max-width: 800px) { .work .row .card { --arc: 0deg; --lift: 0px; } }
+@media (prefers-reduced-motion: reduce) { .artifact-flip { transition: none; } }
+
+/* Pack carousel: stable hover previews, intentional one-step rotation. */
+.work .row { --spread: clamp(145px, 25vw, 280px); display: block; height: 460px; perspective: 1200px; padding: 0; margin: 0; }
+.work .row .card, .work .row .card.is-selected { position: absolute; left: 50%; top: 15px; width: clamp(205px, 27vw, 280px); height: 330px; margin-left: clamp(-140px, -13.5vw, -102.5px); transform: translateX(calc(var(--position) * var(--spread))) translateZ(calc(var(--distance) * -170px)) rotateY(calc(var(--position) * -26deg)); transition: transform 650ms cubic-bezier(.22,1,.36,1), opacity 450ms; }
+.work .row .card[style*="--position: 2"] { transform: translateY(-18px) translateZ(-500px); opacity: 1; pointer-events: none; }
+.work .row .artifact-flip { --arc: 0deg; --lift: 0px; transform: none; }
+.work .row .card.is-selected .artifact-flip { transform: rotateY(180deg); }
+.artifact-back { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 20px; }
+.artifact-back > * { flex-shrink: 0; }
+.artifact-back .artifact-open { position: sticky; bottom: -20px; background: #f3f2eb; padding-bottom: 10px; }
+.carousel-controls { display: flex; justify-content: center; gap: 12px; margin: -12px 0 18px; }
+.carousel-controls button { width: 48px; height: 44px; border: 1px solid #cbcfc3; border-radius: 50%; background: #f7f7f4; color: #315d42; font-size: 24px; cursor: pointer; }
+.carousel-controls button:hover { background: #e6ebe0; }
+.carousel-controls button:focus-visible { outline: 3px solid #426c53; outline-offset: 3px; }
+.artifacts-ready .work .row .card { animation: carousel-arrive 900ms cubic-bezier(.16,1,.3,1) backwards; animation-delay: calc(var(--order) * 100ms); }
+@keyframes carousel-arrive { from { opacity: 0; transform: translateY(90px) translateZ(-600px) rotateY(calc(var(--position) * -60deg)) scale(.4); } }
+@media (max-width: 600px) { .work .row { --spread: 130px; height: 430px; } .work .row .card, .work .row .card.is-selected { width: 210px; margin-left: -105px; height: 310px; } .artifact-back { padding: 16px; } }
+@media (prefers-reduced-motion: reduce) { .artifacts-ready .work .row .card { animation: none; transition: none; } }
+
+/* Keep the rear card fully occluded by the foreground card. */
+.work .row .card[style*="--position: 2"] { visibility: hidden; opacity: 0; pointer-events: none; }
+
+.artifact-flip { transition: transform 850ms cubic-bezier(.22,1,.36,1); }
+@media (prefers-reduced-motion: reduce) { .artifact-flip { transition: none; } }
+
+/* Only the two rotating faces paint the card; the hover target stays invisible. */
+.work .row .card:is(.white, .sage, .sky, .card--main),
+.work .row .card.is-selected:is(.white, .sage, .sky, .card--main) { background: transparent; box-shadow: none; filter: none; }
+.work .row .artifact-flip { transform-style: preserve-3d; transition: transform 850ms cubic-bezier(.45,0,.55,1); }
+.artifact-front { transform: translateZ(.6px); }
+.artifact-back { transform: rotateY(180deg) translateZ(.6px); }
+.artifact-front, .artifact-back { backface-visibility: hidden; -webkit-backface-visibility: hidden; border: 1px solid rgb(79 88 67 / 12%); }
+@media (prefers-reduced-motion: reduce) { .work .row .artifact-flip { transition: none; } }

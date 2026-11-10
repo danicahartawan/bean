@@ -1906,3 +1906,75 @@ a:focus-visible {
 .dep__chip { width: 9cqw; fill: none; stroke: #b8b7b2; stroke-width: 1; }
 @keyframes dep-card { from { opacity: 0; transform: translateY(14cqw) scale(.94); } to { opacity: 1; transform: none; } }
 .dep__total { margin-top: 12cqw; font-size: 10cqw; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; animation: dep-card 700ms 160ms cubic-bezier(.2,.8,.3,1) both; }
+
+/* Import companion sits beside the original phone preview. */
+.stage { grid-template-columns: var(--device-width) 300px; justify-content: center; column-gap: clamp(65px, 10vw, 180px); }
+.import-demo { width: 300px; text-align: center; align-self: center; position: relative; color: var(--text); }
+.import-demo__frame { display: grid; place-items: center; width: 250px; height: 250px; margin: 0 auto; border: 1px solid #777d6e; border-radius: 3px; background: #f7f7f4; }
+.import-demo__frame img { display: block; width: 210px; height: 210px; mix-blend-mode: multiply; }
+.import-demo__arrow { display: block; width: 280px; height: 135px; margin: -8px auto -18px; overflow: visible; }
+.import-demo__arrow path { fill: none; stroke: #67816a; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 7; }
+.import-demo p { font: inherit; font-size: 23px; font-weight: 400; margin: 0 0 10px; letter-spacing: -.02em; }
+.import-demo small { color: var(--text-soft); font-size: 12px; }
+@media (max-width: 760px) { body { overflow-y: auto; } .stage { grid-template-columns: 1fr; gap: 44px; padding-bottom: 50px; } .import-demo { justify-self: center; } }
+
+/* Balanced phone and scan companion, retaining the QR quiet zone. */
+.stage { --device-width: min(350px, calc((100svh - 90px) * .415), calc(100vw - 34px)); grid-template-columns: var(--device-width) 290px; column-gap: clamp(65px, 9vw, 140px); }
+.import-demo { width: 290px; padding-top: 90px; padding-bottom: 40px; }
+.import-demo__frame { width: 228px; height: 228px; border: 2px solid #2f6f52; padding: 10px; background: #f7f7f4; }
+.import-demo__frame img { width: 204px; height: 204px; }
+.import-demo__arrow { position: absolute; width: 140px; height: 90px; top: 5px; right: -55px; margin: 0; transform: scaleY(-1); }
+.import-demo__arrow path { stroke: #2f6f52; stroke-width: 1.9; stroke-dasharray: 1 6; }
+.import-demo p { position: absolute; top: 0; right: -72px; margin: 0; font-size: 18px; letter-spacing: -.015em; }
+.import-demo small { display: block; margin-top: 14px; font-size: 11px; }
+@media (max-width: 760px) { .stage { grid-template-columns: 1fr; gap: 20px; } .import-demo { margin-right: 55px; padding-top: 90px; } }
+
+/* Unframed brown QR with the handwritten loop anchored to its label. */
+.stage { column-gap: clamp(35px, 5vw, 75px); }
+.import-demo { width: 290px; padding-top: 130px; }
+.import-demo__frame { width: 270px; height: 270px; border: 0; padding: 0; background: transparent; }
+.import-demo__frame img { width: 270px; height: 270px; }
+.import-demo__arrow { top: 18px; right: -118px; width: 190px; height: 147px; transform: none; }
+.import-demo__arrow path { stroke: #44382f; stroke-width: 2.5; stroke-dasharray: 5 6; stroke-linecap: round; }
+.import-demo p { top: 0; right: -116px; font-size: 18px; color: #44382f; }
+@media (max-width: 760px) { .stage { gap: 12px; } .import-demo { margin-right: 65px; width: 250px; } .import-demo__frame, .import-demo__frame img { width: 250px; height: 250px; } .import-demo__arrow { right: -70px; width: 150px; } .import-demo p { right: -70px; font-size: 16px; } }
+
+/* Compact annotation: curve begins directly beneath the label center. */
+.import-demo__arrow { top: 30px; right: -28px; width: 140px; height: 108px; }
+.import-demo p { top: 0; right: -48px; width: 180px; text-align: center; font-size: 18px; line-height: 24px; }
+@media (max-width: 760px) { .import-demo__arrow { top: 28px; right: -28px; width: 140px; height: 108px; } .import-demo p { right: -48px; width: 180px; font-size: 16px; line-height: 22px; } }
+
+.stage::before, .stage::after { display: none; }
+.import-demo__arrow { top: 25px; right: -28px; width: 140px; height: 108px; }
+.import-demo p { top: 0; right: -101px; width: 180px; text-align: center; font-size: 18px; line-height: 24px; }
+@media (max-width: 760px) { .import-demo__arrow { top: 25px; right: -28px; width: 140px; height: 108px; } .import-demo p { right: -101px; font-size: 16px; line-height: 22px; } }
+
+/* Reference composition: large QR, small loop at its upper-right edge. */
+.import-demo { width: 320px; padding-top: 95px; padding-bottom: 30px; }
+.import-demo__frame, .import-demo__frame img { width: 320px; height: 320px; }
+.import-demo__frame { border: 0; padding: 0; background: transparent; }
+.import-demo__arrow { width: 90px; height: 70px; top: 31px; right: -3px; margin: 0; transform: none; }
+.import-demo__arrow path { stroke: #44382f; stroke-width: 2.5; stroke-dasharray: 5 6; }
+.import-demo p { width: 180px; right: -45px; top: 0; font-size: 18px; line-height: 24px; text-align: center; margin: 0; }
+.import-demo small { margin-top: 16px; font-size: 12px; color: var(--text-soft); }
+@media (max-width: 760px) { .import-demo { width: 290px; margin-right: 20px; padding-top: 95px; } .import-demo__frame, .import-demo__frame img { width: 290px; height: 290px; } .import-demo__arrow { width: 90px; height: 70px; top: 31px; right: -3px; } .import-demo p { width: 180px; right: -45px; top: 0; font-size: 18px; line-height: 24px; } }
+
+/* Align the label center to the curve's starting x coordinate (194 / 220). */
+.import-demo .import-demo__arrow { top: 72px; right: -3px; width: 90px; height: 35px; }
+.import-demo p { top: 42px; left: calc(100% - 7.64px); right: auto; transform: translateX(-50%); width: 180px; margin: 0; text-align: center; font-size: 18px; line-height: 24px; }
+
+.import-demo { padding-top: 0; }
+.import-demo p { position: static; transform: none; width: 100%; margin: 12px 0 0; font-size: 18px; line-height: 24px; text-align: center; }
+.import-demo small { margin-top: 8px; }
+
+/* Center the QR graphic on the phone while leaving its captions in place. */
+@media (min-width: 761px) {
+  .import-demo__frame { transform: translateY(23px); }
+}
+
+/* Preserve the companion position after removing the temporary-code caption. */
+.import-demo { padding-bottom: 52px; }
+
+.case-study-back { position: fixed; top: 20px; left: 24px; z-index: 10; display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid #deded7; border-radius: 6px; background: #f7f7f4; color: #44382f; font-size: 14px; text-decoration: none; }
+.case-study-back:hover { background: #eaece3; }
+@media (max-width: 760px) { .stage { padding-top: 84px; } .case-study-back { top: 12px; left: 16px; } }
