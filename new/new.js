@@ -434,3 +434,15 @@ function beanCollapse(overlay, card, inners, done) {
   const heat = document.getElementById("gl-heat"); if (heat) { let h = ""; for (let i = 0; i < 20 * 7; i++) h += `<i${{3: "on", 17: "on o2", 18: "on g", 40: "on o3", 62: "on o2", 63: "on", 64: "on g", 90: "on o3", 91: "on", 118: "on g", 33: "on o3", 47: "on o2", 105: "on"}[i] ? ' class="' + {3: "on", 17: "on o2", 18: "on g", 40: "on o3", 62: "on o2", 63: "on", 64: "on g", 90: "on o3", 91: "on", 118: "on g", 33: "on o3", 47: "on o2", 105: "on"}[i] + '"' : ""}></i>`; heat.innerHTML = h; }
   const box = document.querySelector(".gl__box"); if (box) box.addEventListener("keydown", (e) => { if (e.key === "Enter") box.click(); });
 })();
+
+/* iPhone-version pop-up: slides in bottom-right, links to the original iPhone page. */
+(() => {
+  const ip = document.getElementById("ip"); if (!ip) return;
+  let gone = false; try { gone = sessionStorage.getItem("bean-ip-x") === "1"; } catch (e) {}
+  if (gone) return;
+  setTimeout(() => { ip.hidden = false; requestAnimationFrame(() => ip.classList.add("in")); }, 1400);
+  document.getElementById("ip-x").addEventListener("click", () => {
+    ip.classList.remove("in"); setTimeout(() => { ip.hidden = true; }, 450);
+    try { sessionStorage.setItem("bean-ip-x", "1"); } catch (e) {}
+  });
+})();
