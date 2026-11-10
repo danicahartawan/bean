@@ -764,3 +764,4 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .lg img.wide { padding: 0; transform: scale(1.5); }
 .gl__pl .lg:nth-child(4) { z-index: 0; }
 .bean-brand, #bean-brand { display: none !important; }
+.scrollfx { will-change: opacity, translate, filter; }

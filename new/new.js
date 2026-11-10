@@ -434,3 +434,34 @@ function beanCollapse(overlay, card, inners, done) {
   const heat = document.getElementById("gl-heat"); if (heat) { let h = ""; for (let i = 0; i < 20 * 7; i++) h += `<i${[3, 17, 18, 40, 62, 63, 64, 90, 91, 118].includes(i) ? ' class="on"' : ""}></i>`; heat.innerHTML = h; }
   const box = document.querySelector(".gl__box"); if (box) box.addEventListener("keydown", (e) => { if (e.key === "Enter") box.click(); });
 })();
+
+/* Scroll-driven enter/exit (joshuabaker.com style): items rise, fade and de-blur as they enter
+   from the bottom, then blur and fade as they leave under the top edge. Cards are staggered. */
+(() => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const items = [];
+  document.querySelectorAll(".work .proj h3, .work .row .card, .lc, #gl-conn").forEach((el) => {
+    items.push({ el, lag: el.classList.contains("card") ? [...el.parentNode.children].indexOf(el) * 0.06 : 0 });
+    el.classList.add("scrollfx");
+  });
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+  let queued = false;
+  const run = () => {
+    queued = false;
+    const vh = innerHeight, top = 70;
+    for (const { el, lag } of items) {
+      const r = el.getBoundingClientRect();
+      // entry: 0 when the top edge sits at the viewport bottom, 1 once it has risen ~40% of the viewport
+      const enter = clamp((vh - r.top) / (vh * 0.4) - lag * 4);
+      // exit: 0 while below the header line, 1 when the bottom edge has passed it
+      const exit = clamp((top - r.bottom + 90) / 90);
+      const e = 1 - Math.pow(1 - enter, 3);
+      el.style.opacity = (e * (1 - exit)).toFixed(3);
+      el.style.translate = `0 ${((1 - e) * 36).toFixed(1)}px`;
+      el.style.filter = (1 - e) + exit > 0.01 ? `blur(${(((1 - e) * 10) + exit * 10).toFixed(1)}px)` : "none";
+    }
+  };
+  const q = () => { if (!queued) { queued = true; requestAnimationFrame(run); } };
+  addEventListener("scroll", q, { passive: true }); addEventListener("resize", q);
+  run();
+})();
