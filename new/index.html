@@ -13,11 +13,11 @@
         <article class="proj">
           <h3>Recent artifacts</h3>
           <div class="row" data-row>
-            <div class="card card--main"><svg class="logo-b" viewBox="0 0 120 90" aria-hidden="true"><path fill="#2f6f52" d="M22 66C-2 44 14 8 56 8c34 0 62 18 52 48-8 22-32 22-42 8-7-10-20-8-22 4-2 14-10 14-22 2z" transform="rotate(-8 60 45)"/></svg>
+            <div class="card card--main" data-label="Agent"><svg class="logo-b" viewBox="0 0 120 90" aria-hidden="true"><path fill="#2f6f52" d="M22 66C-2 44 14 8 56 8c34 0 62 18 52 48-8 22-32 22-42 8-7-10-20-8-22 4-2 14-10 14-22 2z" transform="rotate(-8 60 45)"/></svg>
               <span class="chip chip--l">bean</span><span class="chip chip--r">Case Study</span></div>
-            <div class="card card--photo white" data-agent role="button" tabindex="0" aria-label="Open agent"><div class="orb"><span class="orb__eyes"><i></i><i></i></span></div></div>
-            <div class="card card--photo sage"><div class="phone phone--dark"><em>Add money</em><strong>$690</strong><u></u></div></div>
-            <div class="card card--photo sky" data-pnl role="button" tabindex="0" aria-label="Open Profit and Loss"><div class="phone"><b>Profit &amp; Loss</b><i></i><i></i><i class="s"></i></div></div>
+            <div class="card card--photo white" data-label="Agent" data-agent role="button" tabindex="0" aria-label="Open agent"><div class="orb"><span class="orb__eyes"><i></i><i></i></span></div></div>
+            <div class="card card--photo sage" data-label="Model" data-frame="../forecasting.html" role="button" tabindex="0" aria-label="Open Model"><div class="phone phone--dark"><em>Add money</em><strong>$690</strong><u></u></div></div>
+            <div class="card card--photo sky" data-label="Sheets" data-frame="../bookkeeper/?embed#sheet=pnl" role="button" tabindex="0" aria-label="Open Profit and Loss"><div class="phone"><b>Profit &amp; Loss</b><i></i><i></i><i class="s"></i></div></div>
           </div>
           <div class="bars" data-bars><i class="on"></i><i></i><i></i><i></i></div>
           <p class="agent">Agent</p>
@@ -95,7 +95,7 @@
               <div class="ag__arts-g">
                 <a class="art" data-nb-art hidden><div class="art__t t4"><svg viewBox="0 0 100 50"><path d="M4 40 L28 34 L52 26 L76 18 L96 10" /><path d="M4 40 L28 24 L52 28 L76 22 L96 20" /></svg></div><strong>Can I afford a new washer?</strong><small>Forecast Model &middot; Nov 9</small></a>
                 
-                <a class="art" data-pnl><div class="art__t t1"><i></i><b></b></div><strong>Profit &amp; Loss</strong><small>Mon 9/11</small></a>
+                <a class="art" data-frame="../bookkeeper/?embed#sheet=pnl"><div class="art__t t1"><i></i><b></b></div><strong>Profit &amp; Loss</strong><small>Mon 9/11</small></a>
                 <a class="art"><div class="art__t t2"><em>Cash Reconciliation, Mon 9/11</em><s></s><s></s><s></s></div><strong>Cash Reconciliation</strong><small>Mon 9/11</small></a>
                 <a class="art"><div class="art__t t3"><div class="ch ch1"><i></i><i></i></div><div class="ch ch2"></div></div><strong>Revenue Analysis</strong><small>bean model · Mon 9/11</small></a>
               </div>
@@ -109,6 +109,7 @@
       <a href="#" aria-label="About"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg></a>
       <a href="#bottom" aria-label="Expand"><svg viewBox="0 0 24 24"><path d="m8 9 4-4 4 4M8 15l4 4 4-4"/></svg></a>
     </nav>
+    <div class="fr" id="frame" hidden><button class="fr__x" type="button" aria-label="Close">Close</button><iframe title="" src="about:blank"></iframe></div>
     <div class="pl" id="pnl" hidden>
       <header class="pl__bar"><button type="button" class="pl__back" data-pl-close aria-label="Back">&larr;</button><span>Profit &amp; Loss &mdash; Budget vs Actual</span><i>&middot;&middot;&middot;</i></header>
       <div class="pl__body">

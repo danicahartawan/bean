@@ -30,6 +30,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
       c.style.transform = t;
     });
     bars.forEach((b, n) => b.classList.toggle("on", n === active));
+    const lb = row.parentElement.querySelector(".agent"); const t = cards[active] && cards[active].dataset.label; if (lb && t && lb.textContent !== t) lb.textContent = t;
   };
   row.addEventListener("scroll", layout, { passive: true });
   window.addEventListener("resize", layout);
@@ -290,4 +291,15 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   document.querySelectorAll("[data-pnl]").forEach((c) => { c.addEventListener("click", open); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } }); });
   pl.querySelector("[data-pl-close]").addEventListener("click", close);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pl.hidden) { e.stopImmediatePropagation(); close(); } }, true);
+})();
+
+// ===== Framed pages (Model / Sheets) =====
+(() => {
+  const fr = document.getElementById("frame"); if (!fr) return;
+  const f = fr.querySelector("iframe");
+  const open = (u) => { f.src = u; fr.hidden = false; fr.animate([{ opacity: 0, transform: "scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.32,.72,0,1)" }); };
+  const close = () => { if (fr.hidden) return; const a = fr.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 }); a.onfinish = () => { fr.hidden = true; f.src = "about:blank"; }; };
+  document.querySelectorAll("[data-frame]").forEach((c) => { c.addEventListener("click", () => open(c.dataset.frame)); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c.dataset.frame); } }); });
+  fr.querySelector(".fr__x").addEventListener("click", close);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !fr.hidden) { e.stopImmediatePropagation(); close(); } }, true);
 })();
