@@ -67,7 +67,7 @@ const remember = value => { try { localStorage.setItem(STORE_KEY, value ? '1' : 
 const recall = () => { try { return localStorage.getItem(STORE_KEY) === '1'; } catch { return false; } };
 
 function mount() {
-  if (window.self !== window.top || /[?&]embed/.test(location.search)) return; // no rail inside embedded pages
+  return; // vertical tab bar turned off (re-enable by removing this line)
   document.documentElement.classList.add('has-vtabs');
   const rail = document.createElement('nav');
   rail.className = 'vtabs';
