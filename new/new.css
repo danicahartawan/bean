@@ -692,3 +692,5 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 @media (max-width: 1000px) { .wrap.gl { grid-template-columns: 1fr; gap: 40px; } .gl__hi { font-size: 32px; } }
 
 .gl__go { background: #2f6f52 !important; color: #fff; display: grid !important; place-items: center; } .gl__go svg { width: 20px; height: 20px; }
+
+.gl__cx > div { grid-template-columns: 120px 1fr !important; } .gl__cx dd { display: flex; align-items: center; gap: 8px; } .gl__cx dd i { width: 8px; height: 8px; border-radius: 50%; background: #2f9d62; }
