@@ -1,0 +1,175 @@
+{
+  "collectedAt": "2026-11-10",
+  "collectionMethod": "Public article text retrieved with the web research reader",
+  "scope": "Japan consumer surveys across retail channels; not vending-machine transaction data",
+  "sources": [
+    {
+      "id": "soda-2026",
+      "url": "https://www.jmrlsi.co.jp/trend/mranking/02-drink/mranking449.html",
+      "publisher": "Japan Consumer Marketing Research Institute",
+      "title": "Soda 2026 consumer survey",
+      "publishedAt": "2026-10-23",
+      "surveyPeriod": "2026-08-27 / 2026-08-31",
+      "sampleSize": 1151
+    },
+    {
+      "id": "soda-2025",
+      "url": "https://www.jmrlsi.co.jp/trend/mranking/02-drink/mranking432.html",
+      "publisher": "Japan Consumer Marketing Research Institute",
+      "title": "Soda 2025 consumer survey",
+      "publishedAt": "2025-09-26",
+      "surveyPeriod": "2025-06-27 / 2025-06-30",
+      "sampleSize": 1180
+    },
+    {
+      "id": "tea-2026",
+      "url": "https://www.jmrlsi.co.jp/trend/mranking/02-drink/mranking450.html",
+      "publisher": "Japan Consumer Marketing Research Institute",
+      "title": "Tea 2026 consumer survey",
+      "publishedAt": "2026-11-06",
+      "surveyPeriod": "2026-08-27 / 2026-08-31",
+      "sampleSize": 1151
+    },
+    {
+      "id": "tea-2025",
+      "url": "https://www.jmrlsi.co.jp/trend/mranking/02-drink/mranking431.html",
+      "publisher": "Japan Consumer Marketing Research Institute",
+      "title": "Tea 2025 consumer survey",
+      "publishedAt": "2025-09-12",
+      "surveyPeriod": "2025-06-27 / 2025-06-30",
+      "sampleSize": 1180
+    },
+    {
+      "id": "energy-2026",
+      "url": "https://www.jmrlsi.co.jp/trend/mranking/02-drink/mranking447.html",
+      "publisher": "Japan Consumer Marketing Research Institute",
+      "title": "Energy 2026 consumer survey",
+      "publishedAt": "2026-07-17",
+      "surveyPeriod": null,
+      "sampleSize": null
+    },
+    {
+      "id": "energy-2025",
+      "url": "https://www.jmrlsi.co.jp/trend/mranking/02-drink/mranking425.html",
+      "publisher": "Japan Consumer Marketing Research Institute",
+      "title": "Energy 2025 consumer survey",
+      "publishedAt": "2025-05-16",
+      "surveyPeriod": "2025-04-03 / 2025-04-04",
+      "sampleSize": 1059
+    }
+  ],
+  "products": [
+    {
+      "id": "coca-cola",
+      "name": "Coca-Cola",
+      "match": "コカ・コーラ",
+      "category": "Soft drinks",
+      "purchase": 29.5,
+      "previousPurchase": 30,
+      "repeat": 62.6,
+      "previousRepeat": 57.8,
+      "source": "soda-2026",
+      "previousSource": "soda-2025",
+      "sampleUnitsPerDay": 9,
+      "sampleCategory": "cola"
+    },
+    {
+      "id": "mitsuya",
+      "name": "Mitsuya Cider",
+      "match": "三ツ矢サイダー",
+      "category": "Soft drinks",
+      "purchase": 18.7,
+      "previousPurchase": 15.7,
+      "repeat": null,
+      "previousRepeat": null,
+      "source": "soda-2026",
+      "previousSource": "soda-2025",
+      "sampleUnitsPerDay": 7,
+      "sampleCategory": "cola"
+    },
+    {
+      "id": "wilkinson",
+      "name": "Wilkinson Tansan",
+      "match": "ウィルキンソン タンサン",
+      "category": "Sparkling water",
+      "purchase": null,
+      "previousPurchase": null,
+      "repeat": 66.8,
+      "previousRepeat": 63,
+      "source": "soda-2026",
+      "previousSource": "soda-2025",
+      "sampleUnitsPerDay": 6,
+      "sampleCategory": "water"
+    },
+    {
+      "id": "monster",
+      "name": "Monster Energy",
+      "match": "モンスターエナジー",
+      "category": "Energy drinks",
+      "purchase": 10,
+      "previousPurchase": 14.3,
+      "repeat": 58.2,
+      "previousRepeat": 68.4,
+      "source": "energy-2026",
+      "previousSource": "energy-2025",
+      "sampleUnitsPerDay": 5,
+      "sampleCategory": "energy drink"
+    },
+    {
+      "id": "oi-ocha",
+      "name": "Oi Ocha Green Tea",
+      "match": "お～いお茶",
+      "category": "Tea",
+      "purchase": 28.1,
+      "previousPurchase": 32.2,
+      "repeat": 68.2,
+      "previousRepeat": 63,
+      "source": "tea-2026",
+      "previousSource": "tea-2025",
+      "sampleUnitsPerDay": 10,
+      "sampleCategory": "green tea"
+    },
+    {
+      "id": "ayataka",
+      "name": "Ayataka Green Tea",
+      "match": "綾鷹",
+      "category": "Tea",
+      "purchase": 25.6,
+      "previousPurchase": 29.2,
+      "repeat": 67.3,
+      "previousRepeat": 60.4,
+      "source": "tea-2026",
+      "previousSource": "tea-2025",
+      "sampleUnitsPerDay": 9,
+      "sampleCategory": "green tea"
+    },
+    {
+      "id": "iyemon",
+      "name": "Iyemon Green Tea",
+      "match": "伊右衛門",
+      "category": "Tea",
+      "purchase": 20.7,
+      "previousPurchase": 26.8,
+      "repeat": null,
+      "previousRepeat": 64,
+      "source": "tea-2026",
+      "previousSource": "tea-2025",
+      "sampleUnitsPerDay": 8,
+      "sampleCategory": "green tea"
+    },
+    {
+      "id": "yakan",
+      "name": "Yakan Barley Tea",
+      "match": "やかんの麦茶",
+      "category": "Tea",
+      "purchase": null,
+      "previousPurchase": null,
+      "repeat": 68.5,
+      "previousRepeat": 61.2,
+      "source": "tea-2026",
+      "previousSource": "tea-2025",
+      "sampleUnitsPerDay": 8,
+      "sampleCategory": "barley tea"
+    }
+  ]
+}

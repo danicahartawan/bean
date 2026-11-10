@@ -35,10 +35,28 @@ describe('sales forecast', () => {
     expect(screen.getByRole('button', { name: 'Week', exact: true }).getAttribute('aria-pressed')).toBe('true');
   });
 
+  it('supports keyboard selection and dismisses custom menus', () => {
+    render(<App />);
+    const picker = screen.getByRole('combobox', { name: 'Machine' });
+    fireEvent.keyDown(picker, {key:'ArrowDown'});
+    expect(picker.getAttribute('aria-expanded')).toBe('true');
+    fireEvent.keyDown(picker, {key:'End'});
+    fireEvent.keyDown(picker, {key:'Enter'});
+    expect(picker.value).toBe('Park');
+    expect(screen.queryByRole('listbox')).toBeNull();
+    fireEvent.click(picker);
+    fireEvent.keyDown(picker, {key:'Escape'});
+    expect(screen.queryByRole('listbox')).toBeNull();
+    fireEvent.click(picker);
+    fireEvent.pointerDown(document.body);
+    expect(screen.queryByRole('listbox')).toBeNull();
+  });
+
   it('jumps to a selected week and updates the machine cards together', () => {
     render(<App />);
     fireEvent.click(screen.getByRole('button', { name: 'Week', exact: true }));
-    fireEvent.change(screen.getByRole('combobox', { name: 'Select week' }), { target: { value: '7' } });
+    fireEvent.click(screen.getByRole('combobox', { name: 'Select week' }));
+    fireEvent.click(screen.getByRole('option', { name: 'Week of Dec 28' }));
     expect(document.querySelector('.revenue').textContent).toContain('¥88,400');
     const machineCards = [...document.querySelectorAll('.machine-insight')];
     expect(machineCards[1].textContent).toContain('¥9,800');
@@ -54,15 +72,18 @@ describe('sales forecast', () => {
     expect(screen.getByRole('heading', { name: 'Forecast Model' })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Month', exact: true }));
     const picker = screen.getByRole('combobox', { name: 'Select month' });
-    expect(picker.options.length).toBe(3);
-    expect(picker.options[0].textContent).toBe('Nov 9–30');
+    fireEvent.click(picker);
+    expect(screen.getAllByRole('option').length).toBe(3);
+    expect(screen.getAllByRole('option')[0].textContent).toContain('Nov 9–30');
     expect(document.querySelector('.revenue').textContent).toContain('¥313,400');
-    fireEvent.change(picker, { target: { value: '2' } });
+    fireEvent.click(screen.getByRole('option', { name: 'Jan 1–3' }));
     expect(document.querySelector('.revenue').textContent).toContain('¥37,900');
-    fireEvent.click(screen.getByRole('button', { name: 'Hot drinks', exact: true }));
+    fireEvent.click(screen.getByRole('combobox',{name:'Forecast data'}));
+    fireEvent.click(screen.getByRole('option',{name:'Hot drinks',exact:true}));
     expect(document.querySelector('.primary-insight .insight-title').textContent).toContain('Hot drink sales');
     expect(document.querySelector('.revenue').textContent).not.toContain('¥37,900');
-    fireEvent.click(screen.getByRole('button', { name: 'Compare', exact: true }));
+    fireEvent.click(screen.getByRole('combobox',{name:'Forecast data'}));
+    fireEvent.click(screen.getByRole('option',{name:'Compare',exact:true}));
     fireEvent.click(screen.getByRole('button', { name: 'Trends', exact: true }));
     expect(document.querySelectorAll('.compare-plot').length).toBe(3);
     expect(document.querySelector('.overview-heading').textContent).toContain('Compare machines');

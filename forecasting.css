@@ -1136,6 +1136,64 @@ dialog th:last-child {
 /* The composer border indicates focus for its textarea. */
 .composer textarea:focus, .composer textarea:focus-visible { outline: none; box-shadow: none; }
 
+/* All three forecasts share the sales grid and the 45% conversation region. */
+.forecast-pages { display: flex; gap: 3px; padding: 3px; border: 1px solid #ecece7; border-radius: 4px; margin-left: 20px; }
+.forecast-pages button { background: transparent; border: 0; border-radius: 2px; color: #7a7974; font-size: 13px; padding: 6px 12px; white-space: nowrap; }
+.forecast-pages button[aria-current=page] { background: #efeee9; color: #26251e; }
+.page-heading > span { margin-left: auto; }
+[data-forecast-page] .page-heading h1 { font-size: 27px; }
+.product-control { display: flex; align-items: center; gap: 8px; order: 0; font-size: 13px; }
+.product-control select { height: 36px; max-width: 180px; padding: 5px 8px; }
+.supplemental-grid .insight-stat { white-space: normal; overflow-wrap: anywhere; font-size: 27px; }
+.supplemental-grid .snapshot-count { margin-top: 8px; color: #7a7974; font-size: 11px; }
+.signal-pair { margin-top: 8px; display: grid; gap: 5px; }
+.signal-pair > div { display: flex; flex-direction: column; gap: 3px; }
+.signal-pair i { display: block; height: 3px; max-width: 100%; background: #26251e; }
+.signal-pair > div:first-child i { background: #d3d5cd; }
+.signal-pair span { display: flex; justify-content: space-between; color: #7a7974; font-size: 10px; }
+.signal-pair b { font-weight: 400; font-variant-numeric: tabular-nums; }
+.sources-link, .asset-edit-inline, .asset-model-note button { border: 0; padding: 0; background: transparent; color: #285a43; text-decoration: underline; text-underline-offset: 3px; font-size: 11px; white-space: nowrap; }
+.scenario-row .asset-model-note { font-size: 11px; color: #7a7974; display: flex; gap: 14px; align-items: center; }
+.asset-edit-inline { margin-top: 6px; text-align: left; }
+.asset-life-track { margin-top: 10px; height: 4px; border-radius: 4px; background: #e6e5e0; overflow: hidden; }
+.asset-life-track i { display: block; height: 100%; border-radius: 4px; background: #285a43; }
+.secondary-chart-wrapper { display: flex !important; flex-direction: column; }
+.secondary-chart-wrapper .overview-card { flex: 1; border: 1px solid #e9e9e4; border-radius: 3px; }
+.secondary-chart-wrapper .overview-heading h2 { font-size: 18px; }
+.source-scope-note { font-size: 11px; line-height: 1.45; color: #7a7974; margin: 6px 0 0; }
+.secondary-series { stroke: #26251e; fill: #26251e; }
+.secondary-series.series-1 { stroke: #8f9487; fill: #8f9487; }
+.secondary-series.series-2 { stroke: #b88c44; fill: #b88c44; }
+.secondary-series rect { fill: transparent; stroke: none; }
+.secondary-line { fill: none; stroke-width: 2; stroke-linejoin: round; }
+.secondary-bar { fill: none; stroke-width: 6; stroke-linecap: round; }
+.overview-chart .dense-chart-label { font-size: 9px; }
+.research-dialog { max-width: 980px; width: calc(100vw - 50px); max-height: 82dvh; overflow: auto; }
+.research-dialog p, .research-dialog li { font-size: 16px; line-height: 1.5; }
+.research-dialog h3 { font-family: Georgia,serif; font-weight: 400; font-size: 23px; }
+.research-dialog table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14px; }
+.research-dialog td, .research-dialog th { padding: 10px 8px; border-bottom: 1px solid #deded7; text-align: right; font-variant-numeric: tabular-nums; }
+.research-dialog td:first-child, .research-dialog th:first-child { text-align: left; }
+.research-dialog ul { padding-left: 20px; }
+.research-dialog a { text-decoration: underline; text-underline-offset: 3px; }
+.asset-editor { width: min(520px,calc(100vw - 30px)); max-height: 85dvh; overflow: auto; }
+.asset-editor form { display: grid; gap: 15px; margin-top: 18px; }
+.asset-editor label { display: grid; gap: 6px; font-size: 15px; }
+.asset-editor input { font: inherit; border: 1px solid #c5cbbd; border-radius: 5px; padding: 9px 12px; background: white; color: #26251e; }
+@media(max-width:1200px){.forecast-pages{margin-left:0}.forecast-pages button{padding:5px 8px;font-size:12px}[data-forecast-page] .page-heading h1{font-size:24px}.product-control select{max-width:135px}.product-control{gap:5px}.controls{gap:6px}}
+@media(max-height:800px){.signal-pair{gap:3px;margin-top:4px}.signal-pair span{font-size:9px}.supplemental-grid .insight-stat{font-size:23px}.asset-life-track{margin-top:6px}}
+@media(max-width:950px){.page-heading{flex-wrap:wrap;gap:8px}.page-heading>span{font-size:11px}.forecast-pages button{font-size:11px}.scenario-row{flex-wrap:wrap}.source-scope-note{font-size:10px}}
+
+/* Neutral focus and native cursors across forecast pages. */
+:is(.screen, .explain-card, dialog) :is(button, a, input, select, textarea, [data-explain]):focus-visible {
+  outline: 2px solid #9ea996;
+  outline-offset: 2px;
+}
+.screen [data-explain], dialog [data-explain] { cursor: default; }
+.screen button, .screen a, dialog button, dialog a { cursor: pointer; }
+.screen input, .screen textarea, dialog input { caret-color: #26251e; }
+.composer textarea:focus, .composer textarea:focus-visible { outline: none; box-shadow: none; }
+
 /* Ask Bean: white, same look as the /new agent chat, blur-fade at the top */
 .assistant { background: #fff !important; border: 0 !important; }
 .assistant-head { background: #fff; position: relative; z-index: 3; }
@@ -1168,3 +1226,145 @@ html, body, .screen, .workspace { background: #fff !important; }
 .insight-card:hover, .insight-card.active, .insight-card[aria-pressed="true"] { background: #faf9f6 !important; }
 .controls button, .controls select, .controls .view-switch, .controls .mode-toggle, .data-toggle { background: #f4f3ef !important; }
 .assistant { margin: 0 28px 14px; box-shadow: inset 0 0 0 1px #eeede8; }
+
+/* Shared menus use the page palette instead of the operating system popup. */
+.controls .forecast-select { display:flex; align-items:center; justify-content:space-between; gap:18px; height:36px; width:auto; min-width:110px; padding:6px 12px; border:1px solid #e7e6e0 !important; border-radius:6px; font:inherit; font-size:14px; color:#45453f; text-align:left; }
+.controls .forecast-select:focus-visible { outline:2px solid #9ea996; outline-offset:2px; }
+.controls .forecast-select[aria-expanded=true] { border-color:#9ea996 !important; }
+.controls .forecast-select svg { flex-shrink:0; transition:transform .15s; }
+.controls .forecast-select[aria-expanded=true] svg { transform:rotate(180deg); }
+.controls .day-control .forecast-select { width:145px; padding:6px 10px; }
+.controls .product-control .forecast-select { max-width:200px; }
+.forecast-select>span { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.forecast-select-menu { position:fixed; z-index:1000; box-sizing:border-box; padding:5px; overflow-y:auto; background:#fff; color:#26251e; border:1px solid #e5e4de; border-radius:9px; box-shadow:0 8px 24px #26251e1a; font:inherit; font-size:15px; }
+.forecast-select-menu [role=option] { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:40px; padding:8px 11px; box-sizing:border-box; border-radius:5px; cursor:pointer; }
+.forecast-select-menu [role=option][data-active=true] { background:#f4f3ef; }
+.forecast-select-menu [role=option][aria-selected=true] { color:#285a43; font-weight:500; }
+@media(max-width:1200px) { .controls .day-control .forecast-select{width:125px}.controls .product-control .forecast-select{max-width:150px} }
+
+/* Calm feedback: transform and opacity leave the page layout unchanged. */
+.insight-card {
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.insight-card:focus-within {
+  background: #faf9f6 !important;
+  box-shadow: inset 0 0 0 1px #b9c3b4 !important;
+}
+.controls button, .forecast-pages button, .question-chips button,
+.card-action, .send-button, .new-conversation, .sources-link, .asset-edit-inline {
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.composer { transition: background-color 180ms ease, box-shadow 180ms ease; }
+.composer:focus-within { box-shadow: inset 0 0 0 1px #a8b5a2; }
+.forecast-select-menu { transform-origin: top center; animation: bean-menu-in 140ms ease-out both; }
+.forecast-select-menu [role=option] { transition: background-color 120ms ease, color 120ms ease; }
+.overview-grid, .forecast-dashboard { animation: bean-view-in 200ms ease-out both; }
+.message { animation: bean-message-in 180ms ease-out both; }
+.explain-card { animation: bean-menu-in 140ms ease-out both; }
+.tiny-bars i, .asset-life-track i, .signal-pair i { transition: height 240ms ease, width 240ms ease, background-color 180ms ease; }
+.controls button:active:not(:disabled), .forecast-pages button:active, .question-chips button:active, .send-button:active { transform: scale(.98); }
+@media (hover:hover) and (pointer:fine) {
+  .insight-card:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px #d4d9ce, 0 4px 12px #26251e09 !important; }
+  .insight-card:hover .card-action { color: #285a43; }
+  .controls button:hover:not(:disabled), .forecast-pages button:hover { background: #eaece5 !important; }
+  .question-chips button:hover { background: #f7f8f4; box-shadow: inset 0 0 0 1px #cbd3c5; }
+  .send-button:hover { transform: translateY(-1px); box-shadow: 0 3px 8px #26251e24; }
+}
+@keyframes bean-menu-in { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:translateY(0); } }
+@keyframes bean-view-in { from { opacity:.65; } to { opacity:1; } }
+@keyframes bean-message-in { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce) {
+  .screen *, .screen *::before, .screen *::after, .forecast-select-menu, .forecast-select-menu * {
+    animation:none !important; transition:none !important; scroll-behavior:auto !important;
+  }
+  .screen .insight-card:hover, .screen button:hover, .screen button:active { transform:none !important; }
+}
+
+/* Depreciation reads like a quiet ledger, within the existing dashboard. */
+[data-forecast-page] .page-heading h1 { font-family:Georgia,'Times New Roman',serif !important; font-size:27px !important; letter-spacing:-.035em !important; }
+[data-forecast-page] .page-heading h1 span { color:#8a8a85; }
+[data-forecast-page] .ledger-card,
+[data-forecast-page] .ledger-card:hover,
+[data-forecast-page] .ledger-card:focus-within { background:#fff !important; border:0; box-shadow:inset 0 0 0 1px #e5e5e1 !important; transform:none; }
+.ledger-card { position:relative; padding:16px !important; }
+.ledger-card .insight-title { display:flex; align-items:center; justify-content:flex-start; gap:7px; color:#878781; font-size:12px; }
+.ledger-icon { width:16px; height:16px; flex-shrink:0; color:#92928c; }
+.ledger-sentence { color:#81817b; font-size:16px; line-height:1.5; margin:13px 0 6px; max-width:34ch; }
+.ledger-sentence strong { color:#24241f; font-weight:600; }
+.ledger-term { color:#a0a09a; font-size:11px; line-height:1.4; }
+.ledger-card .ledger-amount { font-size:32px !important; color:#24241f; padding:3px 0; margin:0; line-height:1.15; }
+.ledger-card.primary-insight .ledger-sentence { font-size:14px; margin-top:9px; }
+[data-forecast-page] .card-action,
+[data-forecast-page] .card-action:hover { color:#898983; text-decoration:none; font-size:11px; font-weight:400; padding:7px 0 0; }
+[data-forecast-page] .asset-life-track { height:4px; background:#ededeb; margin-top:12px; }
+[data-forecast-page] .asset-life-track i { background:#30302b; }
+.bean-note { isolation:isolate; }
+.bean-note::before { content:''; position:absolute; inset:4px -3px -3px 3px; z-index:-1; border:1px solid #e5e5e1; background:white; transform:rotate(-.65deg); border-radius:6px; }
+.bean-note::after { content:''; position:absolute; inset:0; z-index:-1; background:white; border-radius:6px; box-shadow:inset 0 0 0 1px #e5e5e1; }
+.note-actions { display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; }
+.note-actions button { border:0; background:transparent; display:flex; align-items:center; gap:5px; padding:0; color:#898983; font:inherit; font-size:11px; }
+.note-actions button:disabled { opacity:.5; cursor:default; }
+[data-forecast-page] .controls :is(.view-switch,.mode-toggle,.data-toggle),
+[data-forecast-page] .controls button { background:transparent !important; box-shadow:none; border:1px solid transparent !important; }
+[data-forecast-page] .controls button { color:#858580; }
+[data-forecast-page] .controls button[aria-pressed=true],
+[data-forecast-page] .controls .forecast-select { background:#fff !important; border:1px solid #e4e4df !important; border-radius:6px; color:#33332d; }
+[data-forecast-page] .controls button:hover:not(:disabled) { color:#26251e; background:#fff !important; }
+[data-forecast-page] .forecast-pages { border-color:#e6e6e1; }
+[data-forecast-page] .forecast-pages button[aria-current=page] { background:#fff; box-shadow:0 0 0 1px #e4e4df; }
+[data-forecast-page] .scenario-row { justify-content:center; }
+[data-forecast-page] .scenario-row footer { margin:0; color:#9a9a94; }
+[data-forecast-page] .assistant { grid-template-rows:auto minmax(0,1fr) auto auto; }
+[data-forecast-page] .composer { grid-row:4; background:#fff !important; border:1px solid #e5e5e0; border-radius:8px; }
+[data-forecast-page] .composer:focus-within { background:#fff !important; box-shadow:inset 0 0 0 1px #b5b5ac; }
+[data-forecast-page] .chat-body { mask-image:none; -webkit-mask-image:none; }
+[data-forecast-page] .chat-body::before { display:none; }
+[data-forecast-page] .question-chips { display:none; }
+[data-forecast-page] .message { max-width:100%; align-self:flex-start; }
+[data-forecast-page] .user-message>div { background:transparent !important; color:#92928c; font-size:13px; padding:0 4px; border-radius:0; }
+[data-forecast-page] .response-message>div { color:#262621; font-size:16px; }
+[data-forecast-page] .response-message strong { font-weight:600; }
+.ledger-starters { grid-row:3; display:flex; gap:8px; }
+.ledger-starters button { flex:1; text-align:left; border:0; background:#fafaf9; color:#92928c; font:inherit; font-size:12px; line-height:1.4; padding:8px 10px; border-radius:3px; transition:color 150ms ease,background 150ms ease; }
+.ledger-starters button:hover { color:#33332d; background:#f4f4f1; }
+.assistant-leaf { width:20px; height:18px; margin-right:7px; vertical-align:middle; color:#72726c; }
+[data-forecast-page] .new-conversation { text-decoration:none; }
+[data-forecast-page] .secondary-series.series-1 { stroke:#888882; fill:#888882; }
+[data-forecast-page] .secondary-series.series-2 { stroke:#b6b6b0; fill:#b6b6b0; }
+@media(max-height:800px) { .ledger-card{padding:11px !important}.ledger-sentence{font-size:14px;margin-top:9px;line-height:1.4}.ledger-card .ledger-amount{font-size:27px !important}.ledger-starters button{padding:5px 8px;font-size:11px} }
+[data-forecast-page] :is(button,[data-explain],textarea):focus-visible { outline-color:#9b9b94; }
+body:has([data-forecast-page]) .forecast-select-menu [role=option][aria-selected=true] { color:#26251e; }
+
+/* Keep conversation space for messages; the composer stays on one row. */
+.screen .assistant { grid-template-rows:minmax(0,1fr) auto; }
+.screen .chat-body { grid-row:1; }
+.screen .composer { grid-row:2; display:flex; align-items:center; gap:12px; min-height:56px; max-height:56px; padding:8px 14px; }
+.screen .composer textarea { flex:1; width:0; min-width:0; height:36px; min-height:36px; max-height:36px; padding:7px 0; margin:0; border:0; outline:none; box-shadow:none; resize:none; background:transparent; caret-color:#26251e; }
+.screen .composer textarea:focus, .screen .composer textarea:focus-visible { border:0; outline:none; box-shadow:none; }
+.screen .composer-foot { flex:none; display:flex; align-items:center; gap:10px; margin:0; padding:0; }
+.screen .composer-foot>div { display:flex; align-items:center; gap:12px; }
+.screen .composer-foot [role=status] { position:absolute; right:20px; bottom:64px; font-size:12px; }
+.screen .composer .send-button { width:36px; height:36px; min-width:36px; padding:0; font-size:25px; }
+.chat-reset { border:0; background:transparent; color:#92928b; font:inherit; font-size:23px; padding:3px; width:28px; height:32px; }
+.chat-reset:hover { color:#26251e; }
+[data-forecast-page] .page-heading h1 { font-family:inherit !important; font-size:20px !important; letter-spacing:-.02em !important; }
+.screen[data-forecast-page] .assistant { grid-template-rows:minmax(0,1fr) auto auto; }
+.screen[data-forecast-page] .ledger-starters { grid-row:2; }
+.screen[data-forecast-page] .composer { grid-row:3; }
+.screen .composer { flex-direction:row; }
+/* One date selector and one metric selector keep depreciation controls quiet. */
+[data-forecast-page] .page-heading>span,
+[data-forecast-page] .machine-control>span { display:none; }
+[data-forecast-page] .metric-control { order:2; }
+[data-forecast-page] .metric-control .forecast-select { min-width:128px; }
+
+/* A paper-soft tint separates conversation from the white forecast cards. */
+.screen .assistant { background:#fdfdfc !important; box-shadow:inset 0 1px 0 #eeeee9 !important; }
+.screen .assistant-head { background:#fdfdfc; }
+[data-forecast-page] .sources-link, [data-forecast-page] .reset-temperature { color:#898983; text-decoration:none; }
+[data-forecast-page] input[type=range] { accent-color:#4e4e47; }
+[data-forecast-page] .signal-pair i { background:#30302b; }
+[data-forecast-page] .signal-pair>div:first-child i { background:#d4d4cf; }
+/* Axis labels retain screen-pixel sizing while the plot fills its card. */
+.overview-chart text { font-size:14px; letter-spacing:normal; fill:#838780; }
+.overview-chart .dense-chart-label { font-size:12px; }

@@ -1,9 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { ReadableChart } from './forecasting-chart.jsx';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { createPortal } from 'react-dom';
 
 import DATA from './forecasting-data.json';
 import './new/new.css';
 import './forecasting.css';
+import { market, readAssets, secondaryReply } from './forecasting-models.js';
+import { ProductPanel, DepreciationPanel, ResearchDialog, AssetEditor, LedgerIcon } from './forecasting-panels.jsx';
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const yen = value => '¥' + Math.round(value).toLocaleString('en-US');
 const rounded = value => Math.round(value / 100) * 100;
@@ -85,7 +89,55 @@ function summaryItems(temperature) {
   ];
 }
 
+function ForecastSelect({label, value, options, onChange}) {
+  const id = useId();
+  const trigger = useRef(null);
+  const menu = useRef(null);
+  const [position, setPosition] = useState(null);
+  const [active, setActive] = useState(0);
+  const selected = options.findIndex(option=>String(option.value) === String(value));
+  function open() {
+    const rect = trigger.current.getBoundingClientRect();
+    setActive(Math.max(0,selected));
+    setPosition({top:rect.bottom + 6,left:Math.min(rect.left,window.innerWidth - Math.max(rect.width,180) - 12),minWidth:Math.max(rect.width,180),maxHeight:Math.max(100,window.innerHeight - rect.bottom - 20)});
+  }
+  function choose(index) { onChange(options[index].value); setPosition(null); trigger.current?.focus(); }
+  useEffect(()=>{
+    if (!position) return;
+    function outside(event) { if (!trigger.current?.contains(event.target) && !menu.current?.contains(event.target)) setPosition(null); }
+    function dismiss() { setPosition(null); }
+    document.addEventListener('pointerdown',outside);
+    window.addEventListener('resize',dismiss);
+    return ()=>{document.removeEventListener('pointerdown',outside);window.removeEventListener('resize',dismiss);};
+  },[position]);
+  useEffect(()=>{ if(position) menu.current?.querySelector('[data-active="true"]')?.scrollIntoView?.({block:'nearest'}); },[active,position]);
+  function keyDown(event) {
+    if(event.key === 'Escape' || event.key === 'Tab') { setPosition(null); return; }
+    if(['ArrowDown','ArrowUp','Home','End','Enter',' '].includes(event.key)) {
+      event.preventDefault();
+      if(!position) { open(); return; }
+      if(event.key === 'Enter' || event.key === ' ') choose(active);
+      else setActive(index=>event.key === 'Home' ? 0 : event.key === 'End' ? options.length-1 : (index + (event.key === 'ArrowDown' ? 1 : -1) + options.length)%options.length);
+    } else if(event.key.length === 1) {
+      const next=options.findIndex((option,index)=>index>active && option.label.toLowerCase().startsWith(event.key.toLowerCase()));
+      const match=next>=0 ? next : options.findIndex(option=>option.label.toLowerCase().startsWith(event.key.toLowerCase()));
+      if(match>=0) { if(!position) open(); setActive(match); }
+    }
+  }
+  return <><button ref={trigger} type="button" className="forecast-select" role="combobox" aria-label={label} aria-expanded={!!position} aria-controls={id} aria-haspopup="listbox" aria-activedescendant={position ? id+'-'+active : undefined} value={value} onKeyDown={keyDown} onBlur={event=>{if(!menu.current?.contains(event.relatedTarget))setPosition(null);}} onClick={()=>position ? setPosition(null) : open()}><span>{options[selected]?.label}</span><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></button>{position && createPortal(<div ref={menu} id={id} role="listbox" aria-label={label} className="forecast-select-menu" style={position}>{options.map((option,index)=><div id={id+'-'+index} key={option.value} role="option" aria-selected={index === selected} data-active={index === active} onPointerMove={()=>setActive(index)} onMouseDown={event=>event.preventDefault()} onClick={()=>choose(index)}><span>{option.label}</span><span aria-hidden="true">{index === selected ? '✓' : ''}</span></div>)}</div>,document.body)}</>;
+}
+
 export function App() {
+  const [page, setPage] = useState(() => ['products','depreciation'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'sales');
+  const [productId, setProductId] = useState('mitsuya');
+  const [productMetric, setProductMetric] = useState('purchase');
+  const [assetMetric, setAssetMetric] = useState('book');
+  const [assets, setAssets] = useState(readAssets);
+  const [editingAsset, setEditingAsset] = useState(null);
+  const [showSources, setShowSources] = useState(false);
+  useEffect(() => { try { localStorage.setItem('bean-forecast-assets', JSON.stringify(assets)); } catch {} }, [assets]);
+  function changePage(next) { setPage(next); history.replaceState(null, '', '#' + next); }
+
   const [mode, setMode] = useState(() => {
     try { return ['day','week','month'].includes(localStorage.getItem('bean-forecast-view')) ? localStorage.getItem('bean-forecast-view') : 'day'; }
     catch { return 'day'; }
@@ -123,47 +175,56 @@ export function App() {
     else if (mode === 'week') setWeek(index);
     else setDay(index);
   }
-  return <div className="screen" data-dashboard-view={view} data-metric={metric}>
+  const product = market.products.find(item => item.id === productId);
+  const asset = assets.find(item => item.name === machineName);
+  const pageTitle = {sales:'Forecast Model',products:'Product Trends',depreciation:'Machine Depreciation'}[page];
+  useEffect(() => { document.title = pageTitle + ' — Bean'; }, [pageTitle]);
+  const dataOptions = page === 'products' ? [['purchase','Demand'],['repeat','Repeat'],['units','Sample units']] : page === 'depreciation' ? [['book','Book value'],['expense','Expense'],['compare','Compare']] : [['sales','Sales'],['hot','Hot drinks'],['machines','Compare']];
+  const activeMetric = page === 'products' ? productMetric : page === 'depreciation' ? assetMetric : metric;
+  const setActiveMetric = page === 'products' ? setProductMetric : page === 'depreciation' ? setAssetMetric : setMetric;
+  const context = {product,asset,assets,machine:machineName,mode,index:selectedIndex,lows:periodDetails(mode).lows,temperature};
+  const pageChips = page === 'products' ? ['I want to know which products have a stronger demand signal', 'I want to know why ' + product.name + ' is changing', 'I want to know where this product data comes from'] : page === 'depreciation' ? ["I want to know when each machine is paid off", "I want to see this month's depreciation for all machines", "I want to plan when to replace a machine"] : null;
+  return <div className="screen" data-dashboard-view={view} data-metric={page === 'sales' ? metric : 'secondary'} data-forecast-page={page}>
     <main className="workspace">
-      <header className="page-heading"><div><h1>Forecast Model</h1><p>Your machines, at a glance.</p></div><span {...explainData('Forecast dates', 'The daily forecast covers Monday, Nov 9 through Sunday, Nov 15. The week view extends through the week of Dec 28.')}>{mode === 'month' ? MONTHS[month].range : mode === 'week' ? DATA.weeks.starts[week] + ' – ' + new Date(Date.UTC(2026, 10, 15 + week * 7)).toLocaleDateString('en-US', {month:'short',day:'numeric',timeZone:'UTC'}) : 'Nov 9 – 15'}</span></header>
+      <header className="page-heading"><div><h1>{pageTitle}</h1><p>Your machines, at a glance.</p></div><nav className="forecast-pages" aria-label="Forecast pages">{[['sales','Sales'],['products','Product Trends'],['depreciation','Depreciation']].map(([value,label]) => <button key={value} aria-current={page === value ? 'page' : undefined} onClick={()=>changePage(value)}>{label}</button>)}</nav><span {...explainData('Forecast dates' , 'The daily forecast covers Monday, Nov 9 through Sunday, Nov 15. The week view extends through the week of Dec 28.')}>{mode === 'month' ? MONTHS[month].range : mode === 'week' ? DATA.weeks.starts[week] + ' – ' + new Date(Date.UTC(2026, 10, 15 + week * 7)).toLocaleDateString('en-US', {month:'short',day:'numeric',timeZone:'UTC'}) : 'Nov 9 – 15'}</span></header>
       <div className="controls">
         <div className="view-switch" role="group" aria-label="Dashboard view">
           <button aria-pressed={view === 'overview'} onClick={() => setView('overview')}>Overview</button>
           <button aria-pressed={view === 'trends'} onClick={() => setView('trends')}>Trends</button>
         </div>
-        <label className="machine-control">Machine <select value={machineName} onChange={event => setMachine(event.target.value)}>
-          {DATA.machines.map(item => <option key={item.name}>{item.name}</option>)}
-        </select></label>
+        <div className="machine-control"><span>Machine</span><ForecastSelect label="Machine" value={machineName} onChange={setMachine} options={DATA.machines.map(item=>({value:item.name,label:item.name}))} /></div>
+        {page === 'products' && <div className="product-control"><span>Product</span><ForecastSelect label="Product" value={productId} onChange={setProductId} options={market.products.map(item=>({value:item.id,label:item.name}))} /></div>}
         <div className="mode-toggle" role="group" aria-label="Forecast period">
           {['day', 'week', 'month'].map(view => <button key={view} aria-pressed={mode === view} onClick={() => setMode(view)}>{view[0].toUpperCase() + view.slice(1)}</button>)}
         </div>
-        <div className="data-toggle" role="group" aria-label="Forecast data">
-          {[['sales','Sales'],['hot','Hot drinks'],['machines','Compare']].map(([value,label]) => <button key={value} aria-pressed={metric === value} onClick={() => setMetric(value)}>{label}</button>)}
-        </div>
+        <div className="metric-control"><ForecastSelect label="Forecast data" value={activeMetric} onChange={value=>{setActiveMetric(value);if(page === 'depreciation' && value === 'compare')setView('trends');}} options={dataOptions.map(([value,label])=>({value,label}))} /></div>
         <span className="day-control">
           <button disabled={selectedIndex === 0} onClick={() => selectPeriod(selectedIndex - 1)} aria-label="Previous day">‹</button>
-          <select aria-label={'Select ' + mode} value={selectedIndex} onChange={event => selectPeriod(Number(event.target.value))}>
-            {periodLabels.map((label,index) => <option value={index} key={label}>{mode === 'week' ? 'Week of ' : ''}{label}</option>)}
-          </select>
+          <ForecastSelect label={'Select ' + mode} value={selectedIndex} onChange={value=>selectPeriod(Number(value))} options={periodLabels.map((label,index)=>({value:index,label:(mode === 'week' ? 'Week of ' : '') + label}))} />
           <button disabled={selectedIndex === periodLabels.length - 1} onClick={() => selectPeriod(selectedIndex + 1)} aria-label="Next day">›</button>
         </span>
       </div>
-      {view === 'overview' ? <OverviewCards machine={machine} mode={mode} week={week} day={day} month={month} metric={metric} temperature={temperature} setMachine={setMachine} showTrends={showTrends} openLoad={loadList} setTemperature={setTemperature} /> :
-        <ForecastGraph machine={machine} month={month} metric={metric} day={day} temperature={temperature} mode={mode} week={week} setMachine={setMachine} chartStyle={chartStyle} setChartStyle={setChartStyle} />}
-      <div className="scenario-row">
-          <div className="temperature-control">
-            <label htmlFor="temperature">What if it’s colder?</label>
+      {page === 'products' ? <ProductPanel product={product} setProduct={setProductId} machine={machineName} mode={mode} index={selectedIndex} labels={periodLabels} lows={periodDetails(mode).lows} temperature={temperature} view={view} metric={productMetric} setMetric={setProductMetric} setView={setView} chartStyle={chartStyle} setChartStyle={setChartStyle} explain={explainData} sources={()=>setShowSources(true)} /> : page === 'depreciation' ? <DepreciationPanel assets={assets} machine={machineName} mode={mode} index={selectedIndex} labels={periodLabels} view={view} metric={assetMetric} setView={setView} setMachine={setMachine} edit={setEditingAsset} chartStyle={chartStyle} setChartStyle={setChartStyle} explain={explainData} sources={()=>setShowSources(true)} /> : (
+view === 'overview' ? <OverviewCards machine={machine} mode={mode} week={week} day={day} month={month} metric={metric} temperature={temperature} setMachine={setMachine} showTrends={showTrends} openLoad={loadList} setTemperature={setTemperature} /> :
+        <ForecastGraph machine={machine} month={month} metric={metric} day={day} temperature={temperature} mode={mode} week={week} setMachine={setMachine} chartStyle={chartStyle} setChartStyle={setChartStyle} />
+      )}
+      {page !== 'depreciation' && <div className="scenario-row">
+          {page !== 'depreciation' ? <div className="temperature-control">
+            <label htmlFor="temperature">{page === 'products' ? 'Sample-unit weather' : 'What if it’s colder?'}</label>
             <output htmlFor="temperature" {...explainData('Temperature scenario', temperature === null ? 'Using the forecast low for each day or week.' : `Every day is set to ${temperature}°C in this scenario.`)}>{temperature === null ? 'Using the weather forecast' : temperature + '°C'}</output>
             <input id="temperature" aria-label="What if it’s colder?" type="range" min="0" max="30"
               value={temperature ?? DATA.temperatures[0]} onChange={event => setTemperature(Number(event.target.value))} />
             <small>Sets every day to this temperature.</small>
             {temperature !== null && <button className="reset-temperature" onClick={() => setTemperature(null)}>Back to forecast</button>}
-          </div>
-      <footer>Imported data · forecasting-data.json</footer>
-      </div>
+          </div> : null}
+          {page === 'products' && <button className="sources-link" onClick={()=>setShowSources(true)}>Sources & method</button>}
+
+      </div>}
     </main>
-    <ForecastChat machine={machine} day={day} temperature={temperature} setTemperature={setTemperature}
+    <ForecastChat page={page} pageChips={pageChips} topicContext={context} machine={machine} day={day} temperature={temperature} setTemperature={setTemperature}
       setMachine={setMachine} setDay={setDay} openLoad={loadList} askRequest={askRequest} mode={mode} week={week} setWeek={setWeek} month={month} />
+    <ResearchDialog open={showSources} onClose={()=>setShowSources(false)} />
+    <AssetEditor asset={assets.find(item=>item.name === editingAsset) ?? null} onClose={()=>setEditingAsset(null)} onSave={next=>setAssets(previous=>previous.map(item=>item.name === next.name ? next : item))} />
     <ExplainLayer onAsk={question => setAskRequest({ question, id: Date.now() })} />
     <dialog ref={dialog} onCancel={() => setShowLoad(false)} onClose={() => setShowLoad(false)}>
       <div className="load-heading"><h2>Station · Tuesday, Nov 10</h2><button onClick={() => setShowLoad(false)} aria-label="Close load list">×</button></div>
@@ -246,7 +307,7 @@ function ForecastGraph({ machine, month, metric, day, temperature, mode, week, s
     </div>
     <section className="visual-card overview-card">
       <div className="overview-heading"><h2>{metric === 'machines' ? 'Compare machines' : metric === 'hot' ? 'Hot drink sales' : 'Sales over time'} <span>{metric === 'machines' ? 'All machines' : machine.name}</span></h2><div className="chart-view-toggle" role="group" aria-label="Chart style">{['bars','lines'].map(style => <button key={style} aria-pressed={chartStyle === style} onClick={() => setChartStyle(style)}>{style === 'bars' ? 'Bars' : 'Lines'}</button>)}</div><div className="overview-legend">{metric === 'machines' ? comparison.map((item,i) => <span key={item.name}><i className={'compare-key key-' + i} />{item.name}</span>) : <><span><i className="blue-dot" />Expected sales</span><span><i className="pink-dot" />Hot drinks</span><span><i className="dash-line" />Busy {mode}</span></>}</div></div>
-      <svg className="overview-chart" viewBox="0 0 780 280" preserveAspectRatio="none" role="img" aria-label={`${machine.name} ${mode === 'month' ? 'monthly' : weekly ? 'eight-week' : 'seven-day'} sales overview`}>
+      <ReadableChart className="overview-chart" viewBox="0 0 780 280" preserveAspectRatio="none" role="img" aria-label={`${machine.name} ${mode === 'month' ? 'monthly' : weekly ? 'eight-week' : 'seven-day'} sales overview`}>
         {[0, .25, .5, .75, 1].map(value => <g key={value}><path d={`M60 ${230 - value * 195}H750`} className="overview-grid" /><text x="48" y={234 - value * 195} textAnchor="end" {...explainData('Sales scale', `${yen(value * max)} on the sales chart.`)}>{yen(value * max)}</text></g>)}
         <path d={path(busy) + ' L730,230 L60,230Z'} className="busy-area" />
         {chartStyle === 'lines' && <><path d={path(series)} className="expected-trend" /><path d={path(hotSales)} className="hot-trend" /></>}
@@ -265,7 +326,7 @@ function ForecastGraph({ machine, month, metric, day, temperature, mode, week, s
             <text x={x} y="273" textAnchor="middle" {...explainData('Forecast low', 'The average low for this day or week, from the weather forecast.')}>{weekly ? 'Low ' : ''}{temperature ?? lows[i]}°C</text>
           </g>;
         })}
-      </svg>
+      </ReadableChart>
     </section>
   </div>;
 }
@@ -320,46 +381,46 @@ function OverviewCards({ machine, mode, week, day, month, metric, temperature, s
   const park = DATA.machines.find(item => item.name === 'Park');
   const gap = Math.round((1 - park.actual / park.expected) * 100);
   return <div className="overview-grid">
-    <section className="insight-card primary-insight">
-      <div className="insight-title">{metric === 'hot' ? 'Hot drink sales' : 'Expected sales'} <span>{machine.name}</span></div>
+    <section className="insight-card ledger-card primary-insight">
+      <div className="insight-title"><LedgerIcon kind="book" />{metric === 'hot' ? 'Hot drink sales' : 'Expected sales'} <span>{machine.name}</span></div>
       <div className="metric-content"><div className="revenue"><strong {...explainData(`${machine.name}, ${period}’s expected sales`, `Expected sales for ${period.toLowerCase()} at ${machine.name}, based on sample sales and weather.`)}>{yen(sales[index])}<button className="permanent-info" aria-label="Explain expected sales">ⓘ</button></strong></div><p className="period-caption">{period}</p></div>
       <span className="insight-note">{change === null ? 'Up to ' + yen(rounded(sales[index] * 1.25)) + ' when busy' : Math.abs(change) + '% ' + (change < 0 ? 'less' : 'more') + ' than the previous ' + mode}</span>
-      <button className="card-action" onClick={() => showTrends(machine.name)}>Explore sales ↗</button>
+      <button className="card-action" onClick={() => showTrends(machine.name)}>Explore sales</button>
     </section>
-    <section className="insight-card">
-      <div className="insight-title">Hot drink demand</div>
-      <div className="insight-stat" {...explainData('Hot drink share', `The sample mix is ${hotShare}% hot drinks for ${period.toLowerCase()}. This reflects the drink mix and the selected weather scenario.`)}>{hotShare}<span>%</span></div>
-      <span className="insight-note">of sales in the forecast mix</span>
+    <section className="insight-card ledger-card">
+      <div className="insight-title"><LedgerIcon kind="book" />Hot drink demand</div>
+      <p className="ledger-sentence" {...explainData('Hot drink share', `The sample mix is ${hotShare}% hot drinks for ${period.toLowerCase()}. This reflects the drink mix and the selected weather scenario.`)}>Hot drinks make up <strong>{hotShare}%</strong> of sales at {machine.name}.</p>
+      <span className="ledger-term">Forecast drink mix</span>
       <TinyBars values={lows.map((_, i) => mix(i))} selected={index} />
-      <button className="card-action" onClick={() => showTrends(machine.name)}>See demand over time ↗</button>
+      <button className="card-action" onClick={() => showTrends(machine.name)}>See demand over time</button>
     </section>
-    <section className="insight-card">
-      <div className="insight-title">Peak {mode}</div>
-      <div className="insight-stat period-stat">{labels[best]}</div>
+    <section className="insight-card ledger-card">
+      <div className="insight-title"><LedgerIcon kind="book" />Peak {mode}</div>
+      <p className="ledger-sentence">{machine.name} peaks on <strong>{labels[best]}</strong>, with <strong>{yen(sales[best])}</strong> expected.</p>
       <span className="insight-note" {...explainData('Peak expected sales', `${yen(sales[best])} is the highest expected sales in the periods shown for ${machine.name}.`)}>{yen(sales[best])} expected at {machine.name}</span>
       <MiniSales values={sales} selected={best} color="blue" label="Sales outlook" />
-      <button className="card-action" onClick={() => showTrends(machine.name, best)}>View this {mode} ↗</button>
+      <button className="card-action" onClick={() => showTrends(machine.name, best)}>View this {mode}</button>
     </section>
-    <section className="insight-card check-card">
-      <div className="insight-title"><i className="attention-dot" />Needs a check <span>Park</span></div>
-      <div className="insight-stat" {...explainData('Park’s sales gap', 'Park earned ¥6,900 less than expected last week. Sales stopped on Wednesday afternoon, which looks like a jam.')} aria-label={gap + '% below expected'}>−{gap}<span>%</span></div>
-      <span className="insight-note">below expected last week</span>
+    <section className="insight-card ledger-card check-card">
+      <div className="insight-title"><LedgerIcon kind="book" />Needs a check <span>Park</span></div>
+      <p className="ledger-sentence" {...explainData('Park’s sales gap', 'Park earned ¥6,900 less than expected last week. Sales stopped on Wednesday afternoon, which looks like a jam.')} aria-label={gap + '% below expected'}>Park earned <strong>{gap}% less</strong> than expected last week.</p>
+      <span className="ledger-term">Check for a jam</span>
       <div className="last-week-pair"><span>Expected <b>{yen(park.expected)}</b></span><span>Actual <b>{yen(park.actual)}</b></span></div>
-      <button className="card-action" onClick={() => showTrends('Park')}>Look at Park ↗</button>
+      <button className="card-action" onClick={() => showTrends('Park')}>Look at Park</button>
     </section>
-    {fleet.map(item => <section className={'insight-card machine-insight ' + (machine.name === item.name ? 'is-selected' : '')} key={item.name}>
-      <div className="insight-title">{item.name}<span>{period}</span></div>
-      <div className="insight-stat" {...explainData(item.name + ' expected sales', `${yen(item.series[index])} in expected sales for ${period.toLowerCase()}.`)}>{yen(item.series[index])}</div>
+    {fleet.map(item => <section className={'insight-card ledger-card machine-insight ' + (machine.name === item.name ? 'is-selected' : '')} key={item.name}>
+      <div className="insight-title"><LedgerIcon kind="book" />{item.name}<span>{period}</span></div>
+      <p className="ledger-sentence" {...explainData(item.name + ' expected sales', `${yen(item.series[index])} in expected sales for ${period.toLowerCase()}.`)}>{item.name} is expected to earn <strong>{yen(item.series[index])}</strong> for {period}.</p>
       <span className="insight-note">Up to {yen(rounded(item.series[index] * 1.25))} when busy</span>
       <MiniSales values={item.series} selected={index} color="blue" label={item.name + ' sales trend'} />
-      <div className="machine-actions"><button className="card-action" onClick={() => { setMachine(item.name); showTrends(item.name); }}>Explore forecast ↗</button>{item.name === 'Station' && <button className="card-action" onClick={openLoad}>Load list ↗</button>}</div>
+      <div className="machine-actions"><button className="card-action" onClick={() => { setMachine(item.name); showTrends(item.name); }}>Explore forecast</button>{item.name === 'Station' && <button className="card-action" onClick={openLoad}>Load list</button>}</div>
     </section>)}
-    <section className="insight-card weather-insight">
-      <div className="insight-title">Weather & demand</div>
-      <div className="insight-stat">{temperature ?? lows[index]}<span>°C</span></div>
+    <section className="insight-card ledger-card weather-insight">
+      <div className="insight-title"><LedgerIcon kind="book" />Weather & demand</div>
+      <p className="ledger-sentence">The forecast low is <strong>{temperature ?? lows[index]}°C</strong> for this {mode}.</p>
       <span className="insight-note">{mode === 'day' ? 'Daily low' : 'Average low for this ' + mode}</span>
       <div className="weather-strip">{lows.map((low, i) => <div key={i} className={i === index ? 'selected-low' : ''} {...explainData('Forecast low', 'The average low for this day or week, from the weather forecast.')}><span>{weekly ? labels[i].replace('Nov ', 'N').replace('Dec ', 'D') : labels[i].slice(0, 1)}</span><b>{temperature ?? low}°</b></div>)}</div>
-      <button className="card-action" onClick={() => setTemperature(temperature === null ? 5 : null)}>{temperature === null ? 'Try a colder forecast ↗' : 'Back to weather forecast ↗'}</button>
+      <button className="card-action" onClick={() => setTemperature(temperature === null ? 5 : null)}>{temperature === null ? 'Try a colder forecast' : 'Back to weather forecast'}</button>
     </section>
   </div>;
 }
@@ -369,7 +430,7 @@ function TinyBars({ values, selected }) {
   return <div className="tiny-bars" role="img" aria-label="Hot drink demand over the forecast"><span className="tiny-bar-baseline" />{values.map((value, index) => <i key={index} className={index === selected ? 'selected' : ''} style={{ height: Math.max(4, value / maximum * 44) }} />)}</div>;
 }
 
-function ForecastChat({ machine, day, temperature, setTemperature, setMachine, setDay, openLoad, askRequest, mode, week, setWeek, month }) {
+function ForecastChat({ page, pageChips, topicContext, machine, day, temperature, setTemperature, setMachine, setDay, openLoad, askRequest, mode, week, setWeek, month }) {
   const [messages, setMessages] = useState(() => {
     try {
       const saved = JSON.parse(sessionStorage.getItem('bean-forecast-chat') || '[]');
@@ -385,9 +446,13 @@ function ForecastChat({ machine, day, temperature, setTemperature, setMachine, s
   useEffect(() => {
     if (askRequest) { setDraft(askRequest.question); input.current?.focus(); }
   }, [askRequest]);
-  const chips = mode === 'week' ? [`How will ${machine.name} sales change over the next 8 weeks?`, `What should I change at ${machine.name} for winter?`, `Why does Office drop in the week of Dec 28?`] : [`Why is ${machine.name} ${machine.name === 'Office' ? 'above' : 'below'} expected?`, `When should I visit ${machine.name} next?`, `What sells best at ${machine.name} when it’s cold?`];
+  const chips = pageChips ?? (mode === 'week' ? [`How will ${machine.name} sales change over the next 8 weeks?`, `What should I change at ${machine.name} for winter?`, `Why does Office drop in the week of Dec 28?`] : [`Why is ${machine.name} ${machine.name === 'Office' ? 'above' : 'below'} expected?`, `When should I visit ${machine.name} next?`, `What sells best at ${machine.name} when it’s cold?`]);
   function answer(prompt) {
     if (!prompt.trim()) return;
+    if (page !== 'sales') {
+      const reply = secondaryReply(page,prompt,topicContext);
+      setMessages(previous=>[...previous,{user:true,text:prompt},{text:reply}]);setDraft('');return;
+    }
     const query = prompt.toLowerCase();
     const target = DATA.machines.find(item => query.includes(item.name.toLowerCase())) ?? machine;
     const requestedDay = DAYS.findIndex(name => query.includes(name.toLowerCase()));
@@ -440,14 +505,15 @@ function ForecastChat({ machine, day, temperature, setTemperature, setMachine, s
     try { recognition.start(); setListening(true); } catch { notice('The microphone could not start.'); }
   }
   return <aside className="assistant">
-    <div className="assistant-head"><div><strong>Ask Bean</strong><span>Ask about any machine or period.</span></div>{messages.length > 0 && <button className="new-conversation" onClick={() => setMessages([])}>New conversation</button>}</div>
+
     <div className="chat-body" ref={log}>
-      <div className={'question-chips ' + (messages.length ? 'has-conversation' : '')}>{chips.map(chip => <button key={chip} onClick={() => answer(chip)}>{chip}</button>)}</div>
-      <div role="log" aria-label="Conversation">{messages.map((message, index) => <div key={index} className={'message ' + (message.user ? 'user-message' : 'response-message')}><div>{message.text}</div></div>)}</div>
+
+      <div role="log" aria-label="Conversation">{messages.map((message, index) => <div key={index} className={'message ' + (message.user ? 'user-message' : 'response-message')}><div>{!message.user ? message.text.split(/(¥[\d,]+(?:\.\d+)?|\d+(?:\.\d+)?%)/g).map((part,i)=>/^(¥|\d.*%$)/.test(part)?<strong key={i}>{part}</strong>:part) : message.text}</div></div>)}</div>
     </div>
+    {<div className="ledger-starters">{(page === 'sales' ? [`I want to see ${machine.name} sales over time`, `I want to know when to visit ${machine.name} next`, `I want to know what sells best at ${machine.name} when it’s cold`] : chips).map(chip=><button key={chip} onClick={()=>{setDraft(chip);input.current?.focus();}}>{chip}</button>)}</div>}
     <form className="composer" onSubmit={event => { event.preventDefault(); answer(draft); }}>
-      <textarea ref={input} aria-label="Ask about your forecast" placeholder="Try 'What should I load at Station Tuesday?'" value={draft} onChange={event => setDraft(event.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); answer(draft); } }} />
-      <div className="composer-foot"><span role="status">{listening ? 'Listening…' : ''}</span><div>
+      <textarea ref={input} aria-label="Ask about your forecast" placeholder={page === 'depreciation' ? 'Ask about your machines…' : "Try 'What should I load at Station Tuesday?'"} value={draft} onChange={event => setDraft(event.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); answer(draft); } }} />
+      <div className="composer-foot">{messages.length > 0 && <button type="button" className="chat-reset" aria-label="New conversation" title="New conversation" onClick={()=>setMessages([])}>↺</button>}<span role="status">{listening ? 'Listening…' : ''}</span><div>
         <button type="button" className={'mic-button ' + (listening ? 'listening' : '')} onClick={voice} aria-label={listening ? 'Stop listening' : 'Use voice input'}><svg width="16" height="18" viewBox="0 0 16 20" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="5" y="1" width="6" height="11" rx="3" /><path d="M2 9a6 6 0 0012 0M8 15v4M5 19h6" /></svg></button>
         <button className="send-button" aria-label="Send message">↑</button>
       </div></div>
