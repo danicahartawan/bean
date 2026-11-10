@@ -262,3 +262,21 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input.value); } });
   ag.querySelectorAll("[data-q]").forEach((x) => x.addEventListener("click", () => (x.dataset.demo === "forecast" ? demoForecast() : send(x.dataset.q))));
 })();
+
+// ===== Profit & Loss sheet =====
+(() => {
+  const pl = document.getElementById("pnl"), tb = document.getElementById("pl-rows");
+  if (!pl) return;
+  const rows = [
+    ["Washer collections", "$800", "$860", "+$60", "Ahead"], ["Dryer collections", "$250", "$265", "+$15", "Ahead"], ["Soap machine collections", "$20", "$15", "\u2212$5", "Behind"],
+    ["Total revenue", "$1,070", "$1,140", "+$70", "Ahead", 1], ["Repairs \u2014 washer 6", "$50", "$85", "\u2212$35", "Over budget"], ["Detergent & supplies", "$50", "$45", "+$5", "On budget"],
+    ["Total expenses", "$100", "$130", "\u2212$30", "Over budget", 1], ["Net profit", "$970", "$1,010", "+$40", "Ahead", 1],
+  ];
+  const cls = (st) => (st === "Behind" || st === "Over budget" ? "bad" : "ok");
+  tb.innerHTML = rows.map((r, i) => `<tr class="${r[5] ? "tot" : ""}"><td class="n">${i + 1}</td><td>${r[0].replace("&", "&amp;")}</td><td class="r">${r[1]}</td><td class="r">${r[2]}</td><td class="r d ${r[3][0] === "+" ? "up" : "dn"}">${r[3]}</td><td><span class="pill2 ${cls(r[4])}">${r[4]}</span></td></tr>`).join("");
+  const open = () => { pl.hidden = false; pl.animate([{ opacity: 0, transform: "scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.32,.72,0,1)" }); };
+  const close = () => { if (pl.hidden) return; const a = pl.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 }); a.onfinish = () => (pl.hidden = true); };
+  document.querySelectorAll("[data-pnl]").forEach((c) => { c.addEventListener("click", open); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } }); });
+  pl.querySelector("[data-pl-close]").addEventListener("click", close);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pl.hidden) { e.stopImmediatePropagation(); close(); } }, true);
+})();
