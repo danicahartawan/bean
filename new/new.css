@@ -774,3 +774,7 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 /* scroll-driven spread: --open goes 0.12 -> 1 as the page scrolls from the top */
 .work .row .card:not([style*="--position: 2"]) { transform: translateX(calc(var(--position) * var(--spread) * var(--open, 1))) translateZ(calc(var(--distance) * -170px * var(--open, 1))) rotateY(calc(var(--position) * -26deg * var(--open, 1))); }
 .work .row .card { transition: transform 260ms cubic-bezier(.22,1,.36,1), translate 260ms cubic-bezier(.22,1,.36,1), opacity 450ms; }
+.gl__agent .gl__n { margin-left: auto; }
+.gl__call { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 12px; border: 0; border-radius: 999px; background: #2f6f52; color: #fff; font: inherit; font-size: 14px; cursor: pointer; transition: background .2s, transform .2s; }
+.gl__call:hover { background: #285f46; } .gl__call:active { transform: scale(.96); }
+.gl__call svg { width: 17px; height: 17px; } .gl__call span { font-size: 14px; color: #fff; }
