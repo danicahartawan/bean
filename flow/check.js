@@ -29,18 +29,17 @@
     li.innerHTML = `
       <div><span class="read__label">${read.label}</span><strong class="read__value">${dollars(read.value)}</strong></div>
       <div class="read__actions">
-        <button type="button" class="btn btn--ok" data-ok>${ok.has(read.key) ? '✓ Right' : 'Looks right'}</button>
-        <button type="button" class="btn" data-fix>Fix</button>
-      </div>
-      ${ok.has(read.key) ? '<p class="read__state">Checked</p>' : ''}`;
-    li.querySelector('[data-ok]').addEventListener('click', () => { ok.add(read.key); draw(); tell(); });
+        ${ok.has(read.key) ? '<span class="tag tag--green">Checked</span>' : '<button type="button" data-ok>Looks right</button>'}
+        <button type="button" class="quiet" data-fix>Fix</button>
+      </div>`;
+    li.querySelector('[data-ok]')?.addEventListener('click', () => { ok.add(read.key); draw(); tell(); });
     li.querySelector('[data-fix]').addEventListener('click', () => {
       if (li.querySelector('.read__fix')) return;
       const fix = document.createElement('div');
       fix.className = 'read__fix';
       fix.innerHTML = `<label for="fix-${read.key}">Correct amount $</label>
         <input id="fix-${read.key}" type="number" inputmode="numeric" min="0" value="${read.value}" />
-        <button type="button" class="btn btn--primary">Save</button>`;
+        <button type="button">Save</button>`;
       li.append(fix);
       const input = fix.querySelector('input');
       input.focus(); input.select();
@@ -61,5 +60,8 @@
 
   // the flow's "Everything looks right" button calls this
   window.confirmAll = () => { READS.forEach(r => ok.add(r.key)); draw(); tell(); };
+  // the flow's animation ticks rows off one at a time
+  window.confirmOne = i => { if (READS[i]) { ok.add(READS[i].key); draw(); list.children[i]?.classList.add('just-ok'); tell(); } };
+  window.resetChecks = () => { ok.clear(); draw(); tell(); };
   draw();
 })();

@@ -107,3 +107,19 @@ body {
 .tbar { justify-content: flex-start; gap: 16px; padding-left: 12px; }
 .tbar .tbar__run { margin: 0; }
 .tbar .tbar__icons { margin-left: auto; }
+
+/* cleaner table edges: rows only get a bottom line, the table itself carries the card edge,
+   and it fits its space instead of running past the right side */
+.gscroll, .pnl-page .gscroll { box-shadow: none; background: transparent; border-radius: 0; }
+.sheetview .grid, .sheetview:has(#pnl-summary:not([hidden])) .grid {
+  width: 100%; min-width: 0; border: 1px solid #e5e5e1; border-radius: 6px; border-spacing: 0; overflow: hidden;
+}
+.sheetview .grid th, .sheetview .grid td,
+.sheetview .grid th.rn, .sheetview .grid td.rn { border: 0; border-bottom: 1px solid var(--line); }
+.sheetview .grid tr:last-child td { border-bottom: 0; }
+.sheetview .grid th:first-child { border-top-left-radius: 6px; }
+.sheetview .grid th:last-child { border-top-right-radius: 6px; }
+/* labels may wrap so the table always fits; amounts stay on one line */
+.sheetview .grid th, .sheetview .grid td { white-space: normal; }
+.sheetview .grid td.num { white-space: nowrap; }
+.sheetview .grid td:nth-child(2), .sheetview .grid th:nth-child(2) { min-width: 140px; }

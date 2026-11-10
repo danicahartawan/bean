@@ -149,16 +149,12 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     }
   };
   const close = () => {
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const done = () => { ag.hidden = true; if (srcCard) srcCard.style.visibility = ""; anim = null; if (location.hash === "#agent") history.replaceState(null, "", location.pathname + location.search); };
-    if (!srcCard || reduce) return done();
-    if (anim) anim.cancel();
-    const t = { duration: 560, easing: "cubic-bezier(.32,.72,0,1)", fill: "both" };
-    frame.animate([{ opacity: 1, transform: "none", filter: "blur(0)" }, { opacity: 0, transform: "scale(.94)", filter: "blur(6px)" }], { duration: 260, easing: "ease-in", fill: "both" });
-    anim = ag.animate([{ clipPath: FULL, backgroundColor: "#f7f7f4" }, { clipPath: clipFor(srcCard), backgroundColor: "#ffffff" }], { ...t, delay: 120 });
-    anim.onfinish = () => { done(); frame.getAnimations().forEach((a) => a.cancel()); };
-  };
-  document.querySelectorAll("[data-agent]").forEach((c) => {
+    if (ag.hidden) return;
+    if (anim) { anim.cancel(); anim = null; }
+    beanCollapse(ag, srcCard, [frame], () => {
+      if (location.hash === "#agent") history.replaceState(null, "", location.pathname + location.search);
+    });
+  };  document.querySelectorAll("[data-agent]").forEach((c) => {
     c.addEventListener("click", () => open(c));
     c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c); } });
   });
@@ -423,7 +419,14 @@ function beanCollapse(overlay, card, inners, done) {
   overlay.getAnimations().forEach((a) => a.cancel());
   const bg = getComputedStyle(overlay).backgroundColor;
   inners.forEach((el) => el.animate([{ opacity: 1, transform: "none", filter: "blur(0)" }, { opacity: 0, transform: "scale(.94)", filter: "blur(6px)" }], { duration: 260, easing: "ease-in", fill: "both" }));
-  const anim = overlay.animate([{ clipPath: BEAN_FULL, backgroundColor: bg }, { clipPath: beanClip(card, overlay), backgroundColor: "#ffffff" }], { duration: 560, easing: BEAN_EASE, fill: "both", delay: 120 });
+  // Let the destination show through only as the shrinking view reaches it.
+  card.style.visibility = "";
+  const target = beanClip(card, overlay);
+  const anim = overlay.animate([
+    { clipPath: BEAN_FULL, backgroundColor: bg, opacity: 1, offset: 0 },
+    { clipPath: target, backgroundColor: "#f7f7f4", opacity: 1, offset: .65, easing: "cubic-bezier(.4,0,.2,1)" },
+    { clipPath: target, backgroundColor: "#f7f7f4", opacity: 0, offset: 1 },
+  ], { duration: 1050, easing: "cubic-bezier(.22,.61,.36,1)", fill: "both", delay: 70 });
   anim.onfinish = finish;
 }
 

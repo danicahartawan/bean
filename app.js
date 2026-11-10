@@ -223,8 +223,17 @@ function attachTearCalendar() {
     if (torn) return;
     torn = true;
     calendar.classList.add("is-tearing");
-    window.setTimeout(() => window.dispatchEvent(new Event("calendar-torn")), 800);
-    window.setTimeout(() => calendar.classList.add("is-gone"), 1750);
+    let completed = false;
+    const complete = () => {
+      if (completed) return;
+      completed = true;
+      window.dispatchEvent(new Event("calendar-torn"));
+    };
+    calendar.querySelector(".tear-calendar__sheet")?.addEventListener("animationend", (event) => {
+      if (event.animationName === "cal-rip-smooth") complete();
+    });
+    window.setTimeout(complete, 1800);
+    window.setTimeout(() => calendar.classList.add("is-gone"), 2000);
   };
 
   calendar.addEventListener("click", tear);

@@ -6,10 +6,10 @@ import test from "node:test";
 const root = path.resolve(import.meta.dirname, "..");
 const read = file => readFile(path.join(root, file), "utf8");
 
-test("flow page has the four steps in order", async () => {
+test("flow page has the five steps in order", async () => {
   const html = await read("flow/index.html");
   const steps = [...html.matchAll(/data-step="(\w+)"/g)].map(m => m[1]);
-  assert.deepEqual(steps, ["send", "check", "books", "ahead"]);
+  assert.deepEqual(steps, ["send", "check", "books", "agent", "text"]);
   assert.match(html, /<script type="module" src="\.\/flow\.js"><\/script>/);
   assert.match(html, /<script type="module" src="\/src\/sitenav\.js"><\/script>/);
 });
@@ -35,4 +35,11 @@ test("step 2 checks the same evening slip numbers as the books", async () => {
 test("flow pages are part of the build", async () => {
   const config = await read("vite.config.js");
   for (const page of ["flow/index.html", "flow/note.html", "flow/check.html"]) assert.ok(config.includes(page), page);
+});
+
+test("flow features the agent chat and the text-message demo", async () => {
+  const flow = await read("flow/flow.js");
+  assert.match(flow, /\/new\/#agent/);
+  assert.match(flow, /\/messaging\//);
+  assert.match(flow, /data-demo="forecast"/);
 });

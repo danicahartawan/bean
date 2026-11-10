@@ -1987,3 +1987,58 @@ a:focus-visible {
 }
 .case-study-back:hover { background: #e6e5e0; }
 @media (max-width: 760px) { .case-study-back { top: 12px; right: 12px; left: auto; } }
+
+/* Laundry Log (/) shows just the phone; Import (/#import) adds the QR panel beside it. */
+.stage { grid-template-columns: var(--device-width); column-gap: 0; justify-content: center; }
+.stage.has-import { grid-template-columns: var(--device-width) 290px; column-gap: clamp(35px, 5vw, 75px); }
+.import-demo[hidden] { display: none; }
+@media (max-width: 760px) { .stage.has-import { grid-template-columns: 1fr; } }
+/* Keep the tear on the compositor and reveal the note after the sheet clears. */
+.tear-calendar__sheet { will-change: transform; backface-visibility: hidden; }
+.tear-calendar.is-tearing .tear-calendar__sheet { animation: cal-rip-smooth 1250ms cubic-bezier(.4,0,.65,1) forwards; }
+@keyframes cal-rip-smooth {
+  0% { transform: translate3d(0,0,0) rotateX(0) rotateZ(0); }
+  32% { transform: translate3d(-.5%,2%,24px) rotateX(12deg) rotateZ(-2deg); }
+  58% { transform: translate3d(-8%,20%,55px) rotateX(24deg) rotateZ(-10deg); }
+  100% { transform: translate3d(-48%,140%,90px) rotateX(45deg) rotateZ(-30deg); }
+}
+@media (prefers-reduced-motion: reduce) { .tear-calendar__sheet { will-change: auto; } .tear-calendar.is-tearing .tear-calendar__sheet { animation: none; } }
+
+/* One uninterrupted peel, without intermediate holds or changes of pace. */
+.tear-calendar.is-tearing .tear-calendar__sheet { animation: cal-rip-smooth 1250ms linear forwards; }
+@keyframes cal-rip-smooth {
+  from { transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  to { transform: translate3d(-48%,140%,90px) rotateX(45deg) rotateY(-12deg) rotateZ(-30deg); }
+}
+@media (prefers-reduced-motion: reduce) { .tear-calendar.is-tearing .tear-calendar__sheet { animation: none; } }
+
+/* Peel from the top binding, then release into a falling sheet. */
+.tear-calendar.is-tearing .tear-calendar__sheet { transform-origin: 50% 0%; animation: cal-rip-smooth 1400ms linear forwards; }
+@keyframes cal-rip-smooth {
+  0% { transform: translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); animation-timing-function: cubic-bezier(.25,.35,.45,1); }
+  43% { transform: translate3d(0,3%,36px) rotateX(-24deg) rotateY(-3deg) rotateZ(-2deg); animation-timing-function: cubic-bezier(.4,0,1,.65); }
+  100% { transform: translate3d(-20%,155%,65px) rotateX(-38deg) rotateY(-9deg) rotateZ(-18deg); }
+}
+@media (prefers-reduced-motion: reduce) { .tear-calendar.is-tearing .tear-calendar__sheet { animation: none; } }
+
+/* Paper stays pinned at its top edge while the lifted lower edge curls. */
+.tear-calendar.is-tearing .tear-calendar__sheet { transform-origin: 50% 0%; animation: cal-rip-smooth 1600ms linear forwards; }
+.tear-calendar.is-tearing .tear-calendar__sheet::after { background: linear-gradient(to bottom, transparent 15%, rgb(255 255 255 / 7%) 48%, rgb(255 255 255 / 25%) 74%, rgb(9 24 13 / 38%) 100%); animation: cal-curl-light 1600ms linear forwards; }
+@keyframes cal-rip-smooth {
+  0% { transform: translate3d(0,0,0) rotateX(0deg) rotateZ(0deg); border-radius: 0; animation-timing-function: cubic-bezier(.3,0,.4,1); }
+  38% { transform: translate3d(0,0,0) rotateX(-35deg) rotateZ(-1deg); border-radius: 0 0 12% 8%; animation-timing-function: cubic-bezier(.3,.15,.6,1); }
+  53% { transform: translate3d(-1%,1%,12px) rotateX(-48deg) rotateZ(-3deg); border-radius: 0 0 18% 11%; animation-timing-function: cubic-bezier(.45,0,.9,.65); }
+  100% { transform: translate3d(-25%,165%,60px) rotateX(-22deg) rotateZ(-20deg); border-radius: 0 0 4% 3%; }
+}
+@keyframes cal-curl-light { 0% { opacity: 0; } 38% { opacity: .7; } 53% { opacity: 1; } 100% { opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { .tear-calendar.is-tearing .tear-calendar__sheet, .tear-calendar.is-tearing .tear-calendar__sheet::after { animation: none; } }
+
+/* Positive X rotation lifts the lower edge toward the viewer. */
+.tear-calendar.is-tearing .tear-calendar__sheet { transform-origin: 50% 0%; animation: cal-rip-smooth 1600ms linear forwards; }
+@keyframes cal-rip-smooth {
+  0% { transform: translate3d(0,0,0) rotateX(0deg) rotateZ(0deg); border-radius: 0; animation-timing-function: cubic-bezier(.3,0,.55,1); }
+  42% { transform: translate3d(0,0,12px) rotateX(32deg) rotateZ(-1deg); border-radius: 0 0 10% 7%; animation-timing-function: cubic-bezier(.35,.15,.65,1); }
+  58% { transform: translate3d(-1%,6%,34px) rotateX(40deg) rotateZ(-3deg); border-radius: 0 0 14% 10%; animation-timing-function: cubic-bezier(.4,.2,.85,.7); }
+  100% { transform: translate3d(-18%,160%,65px) rotateX(18deg) rotateZ(-16deg); border-radius: 0 0 3% 2%; }
+}
+@media (prefers-reduced-motion: reduce) { .tear-calendar.is-tearing .tear-calendar__sheet { animation: none; } }
