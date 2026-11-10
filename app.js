@@ -569,3 +569,51 @@ function attachDeposit() {
   window.addEventListener("open-calculator", open);
 }
 if (typeof document !== "undefined") attachDeposit();
+
+
+const AUTO_NOTE = "tipped the repair guy 20 dollars";
+
+function attachAutoNote() {
+  const input = document.querySelector("#live-note-input");
+
+  if (!input) {
+    return;
+  }
+
+  const run = () => {
+    if (input.value) {
+      return;
+    }
+    let i = 0;
+    const step = () => {
+      if (input.value && i === 0) {
+        return;
+      }
+      if (i >= AUTO_NOTE.length) {
+        return;
+      }
+      input.value = AUTO_NOTE.slice(0, ++i);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      window.setTimeout(step, 55);
+    };
+    step();
+  };
+
+  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const calendar = document.querySelector("#tear-calendar");
+  const start = () => window.setTimeout(run, reduced ? 0 : 2600);
+
+  if (calendar && !calendar.classList.contains("is-gone")) {
+    window.addEventListener("calendar-torn", start, { once: true });
+  } else {
+    start();
+  }
+}
+
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", attachAutoNote, { once: true });
+  } else {
+    attachAutoNote();
+  }
+}

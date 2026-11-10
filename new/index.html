@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Danica Hartawan — Design Portfolio</title>
+    <link rel="stylesheet" href="./new.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="work">
+
+        <article class="proj">
+          <h3>Recent artifacts</h3>
+          <div class="row" data-row>
+            <div class="card card--main"><svg class="logo-b" viewBox="0 0 120 90" aria-hidden="true"><path fill="#2f6f52" d="M22 66C-2 44 14 8 56 8c34 0 62 18 52 48-8 22-32 22-42 8-7-10-20-8-22 4-2 14-10 14-22 2z" transform="rotate(-8 60 45)"/></svg>
+              <span class="chip chip--l">bean</span><span class="chip chip--r">Case Study</span></div>
+            <div class="card card--photo white" data-agent role="button" tabindex="0" aria-label="Open agent"><div class="orb"><span class="orb__eyes"><i></i><i></i></span></div></div>
+            <div class="card card--photo sage"><div class="phone phone--dark"><em>Add money</em><strong>$690</strong><u></u></div></div>
+            <div class="card card--photo sky"><div class="phone"><b>Profit &amp; Loss</b><i></i><i></i><i class="s"></i></div></div>
+          </div>
+          <div class="bars" data-bars><i class="on"></i><i></i><i></i><i></i></div>
+          <p class="agent">Agent</p>
+        </article>
+      </section>
+    </main>
+    
+    <div class="ag" id="agent" hidden aria-modal="true" role="dialog" aria-label="Agent">
+      <div class="ag__frame">
+        
+        <main class="ag__main" id="ag-main">
+          <button class="ag__x" data-close aria-label="Back to portfolio">&times;</button>
+          <div class="ag__log" id="ag-log"></div>
+          <div class="nb" id="nb" hidden>
+            <button type="button" class="nb__back" data-nb-close>&larr; Back to chat</button>
+            <div class="nb__chip" id="nb-chip"><i class="ag__mark"></i><span>Forecast Model</span><em id="nb-chip-s">idle</em></div>
+            <div class="nb__book" id="nb-book">
+              <div class="pg pg--l"><div class="pg__in pg__in--cover"><h4>Books,<br>kept for you</h4></div></div>
+              <div class="pg pg--r"></div>
+              <div class="leaf" id="leaf3"><div class="face"><div class="pg__in" id="nb-art">
+                <h4>Can I afford a new washer?</h4>
+                <p class="mut">30-day forecast, sample data</p>
+                <div class="fx"><div><span>No purchase</span><strong id="fx-a">$6,800</strong></div><div><span>After buying</span><strong id="fx-b">$4,000</strong></div></div>
+                <svg class="fchart" id="fx-chart" viewBox="0 0 360 150"></svg>
+                <div class="flg"><i class="a"></i>No purchase<i class="b"></i>Buy<i class="r"></i>Reserve</div>
+                <p class="fa"><span id="fx-t"></span></p>
+              </div></div></div>
+              <div class="leaf" id="leaf2">
+                <div class="face"><div class="pg__in">
+                  <h4>Profit &amp; Loss</h4>
+                  <ul class="lg"><li>Revenue <b class="hl hl--g">$1,200</b></li><li>Expenses <b class="hl hl--o">$85</b></li><li class="tot">Net profit <b>$1,115</b></li></ul>
+                </div></div>
+                <div class="face back"><div class="pg__in">
+                  <h4>Scenario</h4>
+                  <label class="fld">Replacement cost<span class="fld__in">$<input id="nb-cost" type="number" min="0" step="100" value="2800"></span></label>
+                  <label class="fld">Cash reserve <b id="nb-res-v">$1,000</b><input id="nb-res" type="range" min="0" max="5000" step="100" value="1000"></label>
+                  <ul class="lg lg--s"><li>Starting cash<span>$4,000</span></li><li>Next 30 days<span>+$2,800</span></li></ul>
+                </div></div>
+              </div>
+              <div class="leaf" id="leaf1">
+                <div class="face"><div class="pg__in">
+                  <h4>Mon 9/11<br>Laundry Log</h4>
+                  <div class="meta"><span class="pill">Danica Hartawan</span><i class="ag__mark"></i></div>
+                  <ul class="lg lg--n" id="nb-log">
+                    <li data-l="washers" data-v="$860" data-c="g"></li><li data-l="dryers" data-v="$315" data-c="g"></li><li data-l="soap machine" data-v="$25" data-c="g"></li>
+                    <li class="gap" data-l="washer 6 repaired again"></li><li data-l="repair" data-v="$85" data-c="o"></li>
+                    <li class="gap" data-l="bank deposit" data-v="$690" data-c="g"></li>
+                  </ul>
+                </div></div>
+                <div class="face back"><div class="pg__in">
+                  <h4>What I read</h4>
+                  <ul class="lg lg--s"><li>Collected<span>$1,200</span></li><li>Spent<span>$85</span></li><li>Deposited<span>$690</span></li><li>Starting cash<span>$4,000</span></li></ul>
+                </div></div>
+              </div>
+            </div>
+            <ol class="tl" id="nb-proc"><li><span>Reading notebook</span><em>6 entries</em></li><li><span>Estimating cash flow</span><em>30 days</em></li><li><span>Comparing scenarios</span><em>2 options</em></li><li><span>Writing artifact</span><em>1 file</em></li></ol>
+            <i class="ag__mark nb__mascot"></i>
+          </div>
+
+          <div class="ag__dock">
+            <div class="ag__brand"><i class="ag__mark"></i><span>bean is a know-it-all</span></div>
+            <div class="ag__sug" id="ag-sug">
+              <button type="button" class="sug" data-q="Log today's laundry from my notebook photo"><b>Log today's laundry</b><span>from your notebook photo</span><div class="sug__p"><p><i></i>Washers<em>+$860</em></p><p><i></i>Dryers<em>+$265</em></p><p><i></i>Soap machine<em>+$15</em></p></div></button>
+              <button type="button" class="sug" data-q="Summarize this week's P&amp;L vs budget"><b>Summarize this week</b><span>profit &amp; loss vs budget</span><div class="sug__p"><p><i></i>Revenue<em>$1,140</em></p><p><i></i>Expenses<em>$130</em></p><p><i></i>Net profit<em>$1,010</em></p></div></button>
+              <button type="button" class="sug" data-q="Deposit $690 cash at the bank"><b>Deposit the cash</b><span>$690 to the bank</span><div class="sug__p sug__p--g"><div><small>Deposit</small><strong>$690</strong></div></div></button>
+              <button type="button" class="sug" data-demo="forecast" data-q="hey bean, use @Laundry Log and @Profit &amp; Loss to forecast whether I can afford to replace Washer #6 next month."><b>Replace washer 6?</b><span>forecast with the bean model</span><div class="sug__p"><p><i class="o"></i>Replacement<em>$2,800</em></p><p><i></i>30-day cash<em>+$2,800</em></p><p><i></i>After purchase<em>$4,000</em></p></div></button>
+              <button type="button" class="sug" data-q="Analyze my revenue with the bean model"><b>Analyze my revenue</b><span>using the bean model</span><div class="sug__p sug__p--c"><div class="ch ch1"><i></i><i></i></div><div class="ch ch2"></div></div></button>
+            </div>
+            <form class="ag__box" id="ag-form">
+              <button type="button" class="ag__ic" aria-label="Attach"><svg viewBox="0 0 24 24"><path d="m20 11-8 8a5 5 0 0 1-7-7l8-8a3.5 3.5 0 0 1 5 5l-8 8a2 2 0 0 1-3-3l7-7"/></svg></button>
+              <div class="ag__field"><div class="ag__mir" id="ag-mir" aria-hidden="true"></div><textarea id="ag-input" rows="1" placeholder="Ask anything" spellcheck="false"></textarea></div>
+              <ul class="ag__men" id="ag-men" hidden></ul>
+              <button type="button" class="ag__mode"><svg viewBox="0 0 24 24"><path d="M13 3 5 13h6l-1 8 8-10h-6z"/></svg><span>Fast</span><svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg></button>
+              <button type="submit" class="ag__go" aria-label="Send"><span class="ag__go-v"><svg viewBox="0 0 24 24"><path d="M5 10v4M9 7v10M13 4v16M17 8v8M21 11v2"/></svg></span><span class="ag__go-s"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></button>
+            </form>
+            <div class="ag__arts">
+              <div class="ag__arts-h"><span>Citing your books</span><a>View all</a></div>
+              <div class="ag__arts-g">
+                <a class="art" data-nb-art hidden><div class="art__t t4"><svg viewBox="0 0 100 50"><path d="M4 40 L28 34 L52 26 L76 18 L96 10" /><path d="M4 40 L28 24 L52 28 L76 22 L96 20" /></svg></div><strong>Can I afford a new washer?</strong><small>Forecast Model &middot; Nov 9</small></a>
+                
+                <a class="art"><div class="art__t t1"><i></i><b></b></div><strong>Profit &amp; Loss</strong><small>Mon 9/11</small></a>
+                <a class="art"><div class="art__t t2"><em>Cash Reconciliation, Mon 9/11</em><s></s><s></s><s></s></div><strong>Cash Reconciliation</strong><small>Mon 9/11</small></a>
+                <a class="art"><div class="art__t t3"><div class="ch ch1"><i></i><i></i></div><div class="ch ch2"></div></div><strong>Revenue Analysis</strong><small>bean model · Mon 9/11</small></a>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <nav class="dock" aria-label="Sections">
+      <a href="#" aria-label="Work" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2.5"/><path d="M9 8V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2"/></svg></a>
+      <a href="../" aria-label="Playground"><svg viewBox="0 0 24 24"><circle cx="7" cy="12" r="2.2"/><circle cx="17" cy="12" r="2.2"/><circle cx="12" cy="7" r="2.2"/><circle cx="12" cy="17" r="2.2"/></svg></a>
+      <a href="#" aria-label="About"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg></a>
+      <a href="#bottom" aria-label="Expand"><svg viewBox="0 0 24 24"><path d="m8 9 4-4 4 4M8 15l4 4 4-4"/></svg></a>
+    </nav>
+    <script src="./new.js"></script>
+  </body>
+</html>

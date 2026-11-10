@@ -198,3 +198,16 @@
 .avatar-gooey-menu__trigger:focus-visible {
   outline: none;
 }
+
+/* orb agent avatar */
+.orb-avatar { position: relative; overflow: hidden; background: #2f6f52; animation: orb-av-float 5s ease-in-out infinite; }
+.orb-avatar::before { content: ""; position: absolute; inset: -40%; background: radial-gradient(circle at 70% 40%, #f54e00 0 12%, transparent 40%), radial-gradient(circle at 25% 60%, #e6e5e0 0 22%, transparent 50%); filter: blur(5px); animation: orb-av-swirl 7s linear infinite; }
+.orb-avatar__eyes { position: absolute; left: 50%; top: 26%; display: flex; gap: 5px; transform: translateX(-50%); animation: orb-av-look 6s ease-in-out infinite; }
+.orb-avatar__eyes i { width: 5px; height: 11px; border-radius: 3px; background: #fff; animation: orb-av-blink 4.5s infinite; }
+@keyframes orb-av-float { 50% { transform: translateY(-1.5px); } }
+@keyframes orb-av-swirl { to { transform: rotate(360deg); } }
+@keyframes orb-av-look { 0%,100% { transform: translateX(-50%); } 30% { transform: translateX(-30%); } 65% { transform: translateX(-70%); } }
+@keyframes orb-av-blink { 0%,92%,100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+@media (prefers-reduced-motion: reduce) { .orb-avatar, .orb-avatar::before, .orb-avatar__eyes, .orb-avatar__eyes i { animation: none; } }
+.avatar-gooey-menu__avatar.orb-avatar { width: 30px !important; height: 30px !important; margin: 3px; }
+.orb-avatar__eyes { top: 27%; gap: 4px; } .orb-avatar__eyes i { width: 4px; height: 9px; }

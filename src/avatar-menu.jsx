@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { BotAvatar } from "bot-avatars";
 
 import "./avatar-menu.css";
 
@@ -150,14 +149,9 @@ export function AvatarGooeyMenu() {
         aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
         onClick={() => setIsOpen((open) => !open)}
       >
-        <BotAvatar
-          className="avatar-gooey-menu__avatar"
-          type="circle"
-          size={36}
-          color="#2f6f52"
-          state={isOpen ? "working" : "default"}
-          aria-hidden="true"
-        />
+        <span className="avatar-gooey-menu__avatar orb-avatar" aria-hidden="true">
+          <span className="orb-avatar__eyes"><i></i><i></i></span>
+        </span>
       </button>
     </div>
   );

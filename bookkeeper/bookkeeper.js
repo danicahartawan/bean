@@ -153,6 +153,12 @@ function openHome() {
 let current = null;
 
 function route() {
+  const landing = !location.hash || location.hash === "#";
+  document.body.classList.toggle("is-landing", landing);
+  if (landing) {
+    document.title = "Bean — Books, kept for you";
+    return;
+  }
   const m = location.hash.match(/^#sheet=(\w+)/);
   if (m && SHEETS[m[1]]) openSheet(m[1]);
   else openHome();
@@ -198,3 +204,22 @@ $("#send-bookkeeper").addEventListener("click", (e) => {
 
 window.addEventListener("hashchange", route);
 route();
+
+document.addEventListener("pointermove", (e) => {
+  const k = document.querySelector(".keys");
+  if (k) k.style.setProperty("--tilt", ((e.clientX / window.innerWidth - 0.5) * 6).toFixed(2) + "deg");
+});
+
+(function intro() {
+  const el = document.querySelector("#intro");
+  if (!el) return;
+  let seen = false;
+  try { seen = sessionStorage.getItem("bean-intro") === "1"; } catch (e) {}
+  if (seen || (location.hash && location.hash !== "#")) { el.remove(); return; }
+  const out = () => { el.classList.add("is-out"); setTimeout(() => el.remove(), 800); };
+  el.addEventListener("click", out);
+  setTimeout(() => el.classList.add("is-grow"), 1500);
+  setTimeout(() => el.classList.add("is-text"), 2300);
+  setTimeout(out, 4300);
+  try { sessionStorage.setItem("bean-intro", "1"); } catch (e) {}
+})();

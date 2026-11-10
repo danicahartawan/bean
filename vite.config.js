@@ -8,6 +8,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
+        new: resolve(__dirname, "new/index.html"),
         bookkeeper: resolve(__dirname, "bookkeeper/index.html"),
       },
     },
