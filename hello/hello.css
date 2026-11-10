@@ -8,9 +8,12 @@ body { color: #f2f2f2; font-family: "NB International", "Neue Montreal", "Helvet
 .hd a:hover { opacity: .55; }
 .copy { text-align: right; }
 @media (max-width: 760px) { .hd { grid-template-columns: 1fr 1fr; font-size: 20px; line-height: 24px; padding: 20px; } .hide-m { display: none; } }
-.bean-go { position: fixed; z-index: 5; width: 110px; pointer-events: none; transform: translate(-50%, -50%) rotate(-12deg) scale(0); animation: go-pop .45s cubic-bezier(.2,1.5,.4,1) forwards, go-fill .85s cubic-bezier(.7,0,.2,1) .4s forwards; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 40%)); }
-.bean-go svg { display: block; width: 100%; height: auto; overflow: visible; }
-@keyframes go-pop { to { transform: translate(-50%, -50%) rotate(-12deg) scale(1); } }
-@keyframes go-fill { from { transform: translate(-50%, -50%) rotate(-12deg) scale(1); } to { transform: translate(-50%, -50%) rotate(0deg) scale(60); } }
-body.going #fluid { transition: opacity .9s ease .3s; opacity: .2; }
+.orb-go { position: fixed; z-index: 6; width: 150px; height: 150px; border-radius: 50%; pointer-events: none; display: flex; align-items: center; justify-content: center; gap: 18px; transform: translate(-50%, -50%) scale(0); background: radial-gradient(circle at 74% 30%, #e8581c 0 14%, transparent 58%), radial-gradient(circle at 22% 68%, #e8e6e1 0 24%, transparent 62%), linear-gradient(135deg, #8aa095, #b9c3bb); box-shadow: 0 12px 40px rgb(0 0 0 / 35%); transition: transform .5s cubic-bezier(.2,1.5,.4,1), left .8s cubic-bezier(.65,0,.2,1), top .8s cubic-bezier(.65,0,.2,1), box-shadow .8s; }
+.orb-go.in { transform: translate(-50%, -50%) scale(1); }
+.orb-go.centre { left: 50% !important; top: 42% !important; transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 12px 40px rgb(0 0 0 / 8%); }
+.orb-go i { width: 13%; height: 30%; border-radius: 999px; background: #fff; animation: blink 3s infinite; }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+.wash { position: fixed; inset: 0; z-index: 5; background: #f7f7f4; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+.wash.on { opacity: 1; }
+body.going #fluid { opacity: .2; }
 html { cursor: pointer; }

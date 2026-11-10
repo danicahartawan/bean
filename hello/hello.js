@@ -64,25 +64,20 @@ precision highp float; precision highp sampler2D; in vec2 vUv, vL, vR, vT, vB; o
 
 document.querySelectorAll('a[href^="../new"]').forEach((a) => a.addEventListener("click", () => { try { sessionStorage.setItem("bean-hello", "1"); } catch (e) {} }));
 
-// Click: a bean spawns, swells to fill the screen in the same green as the /new/ intro, then we go there.
+// Click: the orb (eyes) pops in, drifts to centre, the page washes to cream, then we land on /new/.
 (() => {
-  const NS = "http://www.w3.org/2000/svg";
   let going = false;
   const enter = (e) => {
     if (going) return; going = true;
     try { sessionStorage.setItem("bean-hello", "1"); } catch (err) {}
-    const wrap = document.createElement("div");
-    wrap.className = "bean-go";
-    wrap.style.cssText = `left:${e.clientX}px;top:${e.clientY}px`;
-    const svg = document.createElementNS(NS, "svg");
-    svg.setAttribute("viewBox", "0 0 120 90");
-    const path = document.createElementNS(NS, "path");
-    path.setAttribute("d", "M22 66C-2 44 14 8 56 8c34 0 62 18 52 48-8 22-32 22-42 8-7-10-20-8-22 4-2 14-10 14-22 2z");
-    path.setAttribute("transform", "rotate(-8 60 45)");
-    path.setAttribute("fill", "#244737");
-    svg.appendChild(path); wrap.appendChild(svg); document.body.appendChild(wrap);
-    document.body.classList.add("going");
-    setTimeout(() => { location.href = "../new/"; }, 1250);
+    const orb = document.createElement("div");
+    orb.className = "orb-go";
+    orb.style.cssText = `left:${e.clientX}px;top:${e.clientY}px`;
+    orb.innerHTML = '<i></i><i></i>';
+    const wash = document.createElement("div"); wash.className = "wash";
+    document.body.append(wash, orb);
+    requestAnimationFrame(() => { orb.classList.add("in"); setTimeout(() => { orb.classList.add("centre"); wash.classList.add("on"); }, 520); });
+    setTimeout(() => { location.href = "../new/"; }, 1500);
   };
   addEventListener("pointerdown", enter);
   addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") enter({ clientX: innerWidth / 2, clientY: innerHeight / 2 }); });
