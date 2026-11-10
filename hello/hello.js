@@ -3,7 +3,7 @@
   const canvas = document.getElementById("fluid");
   const gl = canvas.getContext("webgl2", { alpha: false, antialias: false, preserveDrawingBuffer: false });
   if (!gl || !gl.getExtension("EXT_color_buffer_float")) { canvas.style.background = "radial-gradient(circle at 30% 40%, #3b0d6b, #000 60%)"; return; }
-  const SIM = 128, DYE = 1024, VEL_DISS = 0.2, DYE_DISS = 0.45, PRESSURE = 0.8, ITER = 20, CURL = 22, SPLAT = 0.1;
+  const SIM = 192, DYE = 768, VEL_DISS = 0.7, DYE_DISS = 0.55, PRESSURE = 0.8, ITER = 16, CURL = 8, SPLAT = 0.035;
   const vs = `#version 300 es
 precision highp float; in vec2 aPos; out vec2 vUv, vL, vR, vT, vB; uniform vec2 texel;
 void main(){ vUv = aPos*.5+.5; vL = vUv - vec2(texel.x,0.); vR = vUv + vec2(texel.x,0.); vT = vUv + vec2(0.,texel.y); vB = vUv - vec2(0.,texel.y); gl_Position = vec4(aPos,0.,1.); }`;
@@ -20,7 +20,7 @@ precision highp float; precision highp sampler2D; in vec2 vUv, vL, vR, vT, vB; o
     press: program(`uniform sampler2D uP, uD; void main(){ float L=texture(uP,vL).x, R=texture(uP,vR).x, T=texture(uP,vT).x, B=texture(uP,vB).x; float d = texture(uD,vUv).x; o = vec4((L+R+B+T-d)*.25,0.,0.,1.); }`),
     clear: program(`uniform sampler2D uT; uniform float v; void main(){ o = v*texture(uT,vUv); }`),
     grad: program(`uniform sampler2D uP, uV; void main(){ float L=texture(uP,vL).x, R=texture(uP,vR).x, T=texture(uP,vT).x, B=texture(uP,vB).x; vec2 v = texture(uV,vUv).xy - vec2(R-L,T-B); o = vec4(v,0.,1.); }`),
-    show: program(`uniform sampler2D uT; void main(){ vec3 c = texture(uT,vUv).rgb; c = c/(1.+max(max(c.r,c.g),c.b)*.15); o = vec4(c*1.15,1.); }`),
+    show: program(`uniform sampler2D uT; uniform vec2 texel; void main(){ vec3 c = texture(uT,vUv).rgb*.4; vec2 t = texel*2.; c += .075*(texture(uT,vUv+vec2(t.x,0.)).rgb+texture(uT,vUv-vec2(t.x,0.)).rgb+texture(uT,vUv+vec2(0.,t.y)).rgb+texture(uT,vUv-vec2(0.,t.y)).rgb+texture(uT,vUv+t).rgb+texture(uT,vUv-t).rgb+texture(uT,vUv+vec2(t.x,-t.y)).rgb+texture(uT,vUv+vec2(-t.x,t.y)).rgb); vec3 g = vec3(0.); for(int i=0;i<8;i++){ float a = float(i)*.785398; g += texture(uT,vUv+vec2(cos(a),sin(a))*texel*9.).rgb; } c += g*.05; c = c/(1.+max(max(c.r,c.g),c.b)*.2); o = vec4(c*1.5,1.); }`),
   };
   const quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,-1,1,1,1,1,-1]), gl.STATIC_DRAW);
   const idx = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idx); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0,1,2,0,2,3]), gl.STATIC_DRAW);
@@ -53,7 +53,7 @@ precision highp float; precision highp sampler2D; in vec2 vUv, vL, vR, vT, vB; o
   init(); addEventListener("resize", init);
   for (let i = 0; i < 9; i++) splat(Math.random(), Math.random(), (Math.random() - .5) * 1200, (Math.random() - .5) * 1200, color());
   let last = null, hue = 0;
-  const move = (x, y) => { const nx = x / innerWidth, ny = 1 - y / innerHeight; if (last) { const dx = (nx - last.x) * 3500, dy = (ny - last.y) * 3500; if (Math.abs(dx) + Math.abs(dy) > 0) { hue = (hue + .004) % 1; splat(nx, ny, dx, dy, hsv(hue, 1, 1).map((c) => c * 0.9)); } } last = { x: nx, y: ny }; };
+  const move = (x, y) => { const nx = x / innerWidth, ny = 1 - y / innerHeight; if (last) { const dx = (nx - last.x) * 2200, dy = (ny - last.y) * 2200; if (Math.abs(dx) + Math.abs(dy) > 0) { hue = (hue + .004) % 1; splat(nx, ny, dx, dy, hsv(hue, 1, 1).map((c) => c * 0.9)); } } last = { x: nx, y: ny }; };
   addEventListener("mousemove", (e) => move(e.clientX, e.clientY));
   addEventListener("touchmove", (e) => { const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
   addEventListener("touchstart", () => { last = null; }, { passive: true });
