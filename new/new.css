@@ -763,3 +763,4 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .gl__pl .lg { width: 26px; height: 22px; font-size: 8px; letter-spacing: -0.04em; }
 .lg img.wide { padding: 0; transform: scale(1.5); }
 .gl__pl .lg:nth-child(4) { z-index: 0; }
+.bean-brand, #bean-brand { display: none !important; }
