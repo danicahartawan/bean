@@ -1,6 +1,6 @@
 (() => {
   const entry = document.querySelector("#bean-entry");
-  if (!entry) return;
+  if (!entry) { document.querySelector("#bean-brand")?.classList.add("is-visible"); document.body.classList.add("artifacts-ready"); return; }
   const content = document.querySelector(".wrap");
   const dock = document.querySelector(".dock");
   const finish = () => {
