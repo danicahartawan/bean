@@ -1987,3 +1987,9 @@ a:focus-visible {
 }
 .case-study-back:hover { background: #e6e5e0; }
 @media (max-width: 760px) { .case-study-back { top: 12px; right: 12px; left: auto; } }
+
+/* Laundry Log (/) shows just the phone; Import (/#import) adds the QR panel beside it. */
+.stage { grid-template-columns: var(--device-width); column-gap: 0; justify-content: center; }
+.stage.has-import { grid-template-columns: var(--device-width) 290px; column-gap: clamp(35px, 5vw, 75px); }
+.import-demo[hidden] { display: none; }
+@media (max-width: 760px) { .stage.has-import { grid-template-columns: 1fr; } }

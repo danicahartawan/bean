@@ -11,44 +11,30 @@
       <header class="flow__top">
         <div class="flow__brand">
           <img src="../assets/bean-avatar.png" alt="" />
-          <div>
-            <h1>Today's books</h1>
-            <p>Monday, November 9</p>
-          </div>
+          <span><b>Today's books</b> · Monday, November 9</span>
         </div>
         <ol class="steps" aria-label="Steps">
-          <li><a href="#send" data-step="send"><b>1</b><span>Send your page</span></a></li>
-          <li><a href="#check" data-step="check"><b>2</b><span>Check what Bean read</span></a></li>
-          <li><a href="#books" data-step="books"><b>3</b><span>Your books</span></a></li>
-          <li><a href="#ahead" data-step="ahead"><b>4</b><span>Look ahead</span></a></li>
+          <li><button type="button" data-step="send"><span>Send your page</span><i></i></button></li>
+          <li><button type="button" data-step="check"><span>Check what Bean read</span><i></i></button></li>
+          <li><button type="button" data-step="books"><span>Your books</span><i></i></button></li>
+          <li><button type="button" data-step="agent"><span>Ask Bean</span><i></i></button></li>
+          <li><button type="button" data-step="text"><span>Text Bean</span><i></i></button></li>
         </ol>
       </header>
 
-      <main class="flow__main">
-        <section class="guide" aria-live="polite">
-          <p class="guide__step" id="guide-step">Step 1 of 4</p>
-          <h2 id="guide-title">Send today's page</h2>
-          <p class="guide__text" id="guide-text"></p>
-          <div class="guide__actions" id="guide-actions"></div>
-          <p class="guide__done" id="guide-done" hidden></p>
-          <nav class="guide__nav" aria-label="Move between steps">
-            <button class="btn btn--quiet" id="prev" type="button">← Back</button>
-            <button class="btn btn--primary" id="next" type="button">Next →</button>
-          </nav>
-        </section>
-
-        <section class="stage" id="stage" aria-label="Preview">
-          <div class="ahead" id="ahead" hidden>
-            <p class="ahead__eyebrow">This month · Nov 9–30</p>
-            <p class="ahead__big">About <strong id="ahead-total"></strong> expected across your 3 machines.</p>
-            <ul class="ahead__bars" id="ahead-bars"></ul>
-            <div class="ahead__note">
-              <b>Worth a check: Park</b>
-              <span id="ahead-check"></span>
-            </div>
-            <p class="ahead__foot">Sample forecast for three vending machines, in yen.</p>
+      <main class="stage" id="stage" aria-label="Today's books, playing">
+        <div class="flow__bottom">
+          <p class="caption" id="caption" aria-live="polite"><b id="cap-title"></b><span id="cap-text"></span></p>
+          <div class="controls">
+            <button class="ctrl" id="pause" type="button" aria-label="Pause">
+              <svg viewBox="0 0 20 20" aria-hidden="true" class="i-pause"><path d="M7 5v10M13 5v10"/></svg>
+              <svg viewBox="0 0 20 20" aria-hidden="true" class="i-play"><path d="M7 4.8v10.4L15.5 10Z"/></svg>
+            </button>
+            <button class="ctrl" id="replay" type="button" aria-label="Play from the start">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.6-3.9"/><path d="M4.5 3.8v3h3"/></svg>
+            </button>
           </div>
-        </section>
+        </div>
       </main>
     </div>
     <script type="module" src="./flow.js"></script>

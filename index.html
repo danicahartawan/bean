@@ -240,12 +240,21 @@
           <div class="home-indicator" aria-hidden="true"></div>
         </div>
       </article>
-      <aside class="import-demo" aria-label="Import QR preview">
+      <aside class="import-demo" hidden aria-label="Import QR preview">
         <div class="import-demo__frame"><img src="./assets/import-qr-demo.svg" alt="Temporary QR code for an example import link" width="210" height="210"></div>
         <p>Scan to import</p>
 
       </aside>
     </main>
+    <script>
+      // The QR panel belongs to Import (/#import); the plain Laundry Log (/) is just the phone.
+      (() => {
+        const qr = document.querySelector(".import-demo"), stage = document.querySelector(".stage");
+        const sync = () => { const on = location.hash === "#import"; qr.hidden = !on; stage.classList.toggle("has-import", on); };
+        addEventListener("hashchange", sync);
+        sync();
+      })();
+    </script>
     <script type="module" src="./src/main.jsx"></script>
     <script type="module" src="./app.js"></script>
       <script type="module" src="/src/sitenav.js"></script>

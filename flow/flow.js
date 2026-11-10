@@ -1,83 +1,91 @@
-// Today's books: one guided flow over copies of the existing pages.
-// 1 Send your page (flow/note.html, a copy of the phone note)
-// 2 Check what Bean read (flow/check.html)
-// 3 Your books (the v2 sheets, simplified while shown here)
-// 4 Look ahead (a short forecast summary; the full page is one tap away)
-
-const STEPS = ['send', 'check', 'books', 'ahead'];
-const COPY = {
-  send: {
-    title: "Send today's page",
-    text: 'Take a photo of your notebook page. Bean reads it and fills in your books for you.',
-    next: 'Next: check what Bean read',
-  },
-  check: {
-    title: 'Check what Bean read',
-    text: 'These are the numbers Bean read from your evening slip. Tap “Looks right” for each one, or “Fix” to change it.',
-    next: 'Next: see your books',
-  },
-  books: {
-    title: 'Your books are ready',
-    text: 'Bean filled in four pages for Monday. Pick one to look at, then print it or send it to your bookkeeper.',
-    next: 'Next: look ahead',
-  },
-  ahead: {
-    title: 'Look ahead',
-    text: 'What to expect from your machines for the rest of the month.',
-    next: 'Finish',
-  },
-};
-const SHEETS = [
-  { key: 'pnl', label: 'Profit & Loss' },
-  { key: 'recon', label: 'Cash count' },
-  { key: 'ledger', label: 'Ledger' },
-  { key: 'journal', label: 'Package for your accountant' },
-];
-// Month view of the sales forecast (forecasting.html#sales), sample data.
-const FORECAST = {
-  machines: [
-    { name: 'Station', value: 313400, note: 'up to ¥391,800 if it’s busy' },
-    { name: 'Office', value: 94900 },
-    { name: 'Park', value: 60600 },
-  ],
-  check: 'Park came in 35% under last week (¥12,900 vs ¥19,800 expected). It may be jammed.',
-};
-
-const ICON = {
-  camera: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="13" r="3.5"/></svg>',
-  print: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.5"/><path d="M7 14h10v6H7Z"/></svg>',
-  send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7Z"/><path d="m11 13 9-9"/></svg>',
-  check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
-  chart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"/><path d="M5 15l4-4 3 3 6-7"/></svg>',
-};
+// Today's books: a self-playing walkthrough over copies of the existing pages.
+// 1 Send your page   - flow/note.html (copy of the phone note): the camera demo plays and Bean reads it
+// 2 Check what Bean read - flow/check.html: each number is ticked off against the slip
+// 3 Your books       - the v2 sheets, simplified, cycling page by page
+// 4 Ask Bean         - the agent chat on /new/ works out a question from your own books
+// 5 Text Bean        - the phone message demo: @forecasting answers this month's sales
+// Click a step to jump to it; pause and replay sit beside the caption.
 
 const BASE = (import.meta.env?.BASE_URL || '/').replace(/\/$/, ''); // '/' locally, '/bean/' on GitHub Pages
+const STEPS = ['send', 'check', 'books', 'agent', 'text'];
+const SHEETS = [
+  { key: 'pnl', label: 'Profit & Loss', about: 'What came in, what went out, and what you kept: $1,010 profit for the day.' },
+  { key: 'recon', label: 'Cash count', about: 'What you collected, spent and deposited, so the safe should hold $220.' },
+  { key: 'ledger', label: 'Ledger', about: 'Every amount, line by line, the way your paper ledger has it.' },
+  { key: 'journal', label: 'Package for your accountant', about: 'Each entry with where its number came from, ready to hand over.' },
+];
+
 const $ = selector => document.querySelector(selector);
-const yen = value => '¥' + value.toLocaleString('en-US');
-const state = { sent: false, reading: false, checked: false, sawBooks: false, done: false, sheet: 'pnl', sentTo: false, detail: false };
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const stage = $('#stage');
 const frames = {};
+const state = { noteDone: false, paused: false };
 
-const stepNow = () => (STEPS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'send');
-const go = step => { if (location.hash.slice(1) === step) render(); else location.hash = step; };
+// ---------- a pausable clock ----------
+let runId = 0;
+class Stopped extends Error {}
+function sleep(ms) {
+  const id = runId;
+  return new Promise((resolve, reject) => {
+    let left = ms, last = performance.now();
+    const tick = () => {
+      if (id !== runId) return reject(new Stopped());
+      const now = performance.now();
+      if (!state.paused) left -= now - last;
+      last = now;
+      if (left <= 0) return resolve();
+      setTimeout(tick, 60);
+    };
+    tick();
+  });
+}
+async function waitFor(check, timeout) {
+  for (let waited = 0; waited < timeout && !check(); waited += 200) await sleep(200);
+}
 
-// ---------- frames: one per step, kept alive so nothing resets when you go back ----------
+// ---------- caption + step indicator ----------
+let captionTimer = 0;
+function caption(title, text = '') {
+  const el = $('#caption');
+  if (el.dataset.key === title + text) return;
+  el.dataset.key = title + text;
+  clearTimeout(captionTimer);
+  el.classList.add('is-out');
+  captionTimer = setTimeout(() => { $('#cap-title').textContent = title; $('#cap-text').textContent = text; el.classList.remove('is-out'); }, 260);
+}
+function progress(p) { document.querySelector('.steps .is-current')?.style.setProperty('--p', Math.min(1, p).toFixed(3)); }
+function setStep(step) {
+  const index = STEPS.indexOf(step);
+  document.querySelectorAll('.steps button').forEach((b, i) => {
+    b.classList.toggle('is-done', i < index);
+    b.classList.toggle('is-current', i === index);
+    b.style.setProperty('--p', '0');
+    if (i === index) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+  });
+  history.replaceState(null, '', '#' + step);
+}
+
+// ---------- frames: one per step, kept alive and cross-faded ----------
 function frameFor(key, src, title) {
   if (!frames[key]) {
     const frame = document.createElement('iframe');
     frame.title = title;
-    frame.hidden = true;
     frame.src = src;
-    frame.addEventListener('load', () => onFrameLoad(key, frame));
+    frame.tabIndex = -1;
+    frame.dataset.loaded = '';
+    frame.addEventListener('load', () => { frame.dataset.loaded = '1'; onFrameLoad(key, frame); });
     stage.append(frame);
     frames[key] = frame;
   }
   return frames[key];
 }
-function showOnly(key) {
-  Object.entries(frames).forEach(([k, f]) => { f.hidden = k !== key; });
-  $('#ahead').hidden = key !== 'ahead-summary';
+function show(key) {
+  Object.entries(frames).forEach(([k, f]) => f.classList.toggle('is-shown', k === key));
 }
+const loaded = key => waitFor(() => frames[key]?.dataset.loaded === '1', 8000);
+const reloadFrame = async key => { frames[key].dataset.loaded = ''; frames[key].contentWindow.location.reload(); await loaded(key); };
+const AGENT_SRC = () => `${BASE}/new/#agent`;
+const TEXT_SRC = () => `${BASE}/messaging/`;
 
 function onFrameLoad(key, frame) {
   const doc = frame.contentDocument;
@@ -85,27 +93,14 @@ function onFrameLoad(key, frame) {
   if (key === 'note') watchNote(doc);
   if (key === 'books') simplifyBooks(doc);
 }
-
-// Step 1: notice when Bean has finished reading the photo ("3 artifacts updated").
+// Step 1: Bean has finished when the note shows "3 artifacts updated".
 function watchNote(doc) {
   const toast = doc.getElementById('artifacts-toast');
   if (!toast) return;
-  const seen = () => {
-    if (!toast.hidden && toast.textContent.trim().length > 3) {
-      state.sent = true; state.reading = false; observer.disconnect(); render();
-    }
-  };
-  const observer = new MutationObserver(seen);
-  observer.observe(toast, { attributes: true, childList: true, subtree: true, characterData: true });
+  new MutationObserver(() => { if (!toast.hidden && toast.textContent.trim().length > 3) state.noteDone = true; })
+    .observe(toast, { attributes: true, childList: true, subtree: true, characterData: true });
 }
-function takePhoto() {
-  const frame = frames.note;
-  if (!frame?.contentWindow || state.reading) return;
-  state.reading = true; state.sent = false; render();
-  frame.contentWindow.dispatchEvent(new Event('open-camera'));
-}
-
-// Step 3: show the v2 sheets without the spreadsheet controls, in larger type.
+// Step 3: the v2 sheets without spreadsheet controls, in larger type.
 function simplifyBooks(doc) {
   if (doc.getElementById('flow-simplify')) return;
   const style = doc.createElement('style');
@@ -113,134 +108,144 @@ function simplifyBooks(doc) {
   style.textContent = `
     .sbar, .fbar, .tbar, .addrow, .plus-col, .grid .rn, .pnl-summary > h2 { display: none !important; }
     .sheetview { padding-top: 22px !important; }
-    .sheetview .grid { font-size: 18px !important; }
-    .sheetview .grid th { font-size: 15px !important; color: #5f5e57 !important; }
-    .sheetview .grid th, .sheetview .grid td { height: 52px !important; }
-    .pnl-page .money-overview span { font-size: 15px !important; color: #5f5e57 !important; }
-    .pnl-page .money-overview strong, .pnl-page .money-overview #coin-summary { font-size: 32px !important; }
-    .tag { font-size: 14px !important; padding: 3px 9px !important; }
+    .sheetview .grid { font-size: 17px !important; }
+    .sheetview .grid th, .sheetview .grid td { height: 48px !important; }
   `;
   doc.head.append(style);
 }
-function showSheet(key) {
-  state.sheet = key;
-  const frame = frames.books;
-  if (frame?.contentWindow) frame.contentWindow.location.hash = 'sheet=' + key;
-  render();
+
+// ---------- the four scenes ----------
+const SCENES = {
+  async send() {
+    frameFor('note', './note.html', 'Your notebook page');
+    show('note');
+    caption('Snap a photo of today’s page', 'Keep using the notebook you already have. Bean only needs a picture of it.');
+    await loaded('note');
+    await sleep(1600);
+    state.noteDone = false;
+    frames.note.contentWindow.dispatchEvent(new Event('open-camera'));
+    progress(.15);
+    await sleep(4600);
+    caption('Bean is reading your page…', 'It finds each amount you wrote down: washers, dryers, the soap machine, repairs.');
+    progress(.5);
+    await waitFor(() => state.noteDone, 16000);
+    progress(1);
+    caption('3 of your books are updated', 'Your evening slip added $220, so Monday comes to $1,140 collected.');
+    await sleep(2400);
+  },
+  async check() {
+    frameFor('check', './check.html', 'What Bean read');
+    show('check');
+    caption('Checking each number against your slip', 'Nothing goes into your books until it matches what you wrote. Tap “Fix” if one is off.');
+    await loaded('check');
+    const win = frames.check.contentWindow;
+    win.resetChecks?.();
+    await sleep(1400);
+    for (let i = 0; i < 3; i++) {
+      win.confirmOne?.(i);
+      progress((i + 1) / 3);
+      await sleep(1000);
+    }
+    caption('All three match your slip', 'Washers $180, dryers $25, soap machine $15.');
+    await sleep(2000);
+  },
+  async books() {
+    frameFor('books', `${BASE}/bookkeeper-v2/?embed#sheet=pnl`, 'Your books');
+    show('books');
+    frameFor('agent', AGENT_SRC(), 'Ask Bean');   // load ahead of time so they're ready
+    frameFor('text', TEXT_SRC(), 'Text Bean');
+    caption('Bean filled in four pages for Monday', 'The same pages a bookkeeper would keep, ready to print or send.');
+    await loaded('books');
+    await sleep(1800);
+    for (const [i, sheet] of SHEETS.entries()) {
+      const frame = frames.books;
+      if (frame.contentWindow.location.hash !== '#sheet=' + sheet.key) {
+        frame.classList.add('is-swapping');
+        await sleep(260);
+        frame.contentWindow.location.hash = 'sheet=' + sheet.key;
+        await sleep(120);
+        frame.classList.remove('is-swapping');
+      }
+      caption(sheet.label, sheet.about);
+      progress((i + 1) / SHEETS.length);
+      await sleep(2800);
+    }
+  },
+  async agent() {
+    const frame = frameFor('agent', AGENT_SRC(), 'Ask Bean');
+    if (frame.dataset.used) await reloadFrame('agent'); // start each time with a fresh chat
+    await loaded('agent');
+    show('agent');
+    caption('Ask Bean anything', 'Use @ to point Bean at your notebook or any of your books.');
+    const doc = frame.contentDocument;
+    await waitFor(() => !doc.getElementById('bean-entry') && !doc.getElementById('agent')?.hidden, 6000); // let its intro finish
+    await sleep(900);
+    frame.dataset.used = '1';
+    doc.querySelector('#agent [data-demo="forecast"]')?.click();
+    progress(.2);
+    await sleep(3200);
+    caption('Can you afford a new washer?', 'Bean checks your Laundry Log and Profit & Loss to find out.');
+    progress(.6);
+    await sleep(8000);
+    caption('Bean works it out from your own books', 'The answer comes with the numbers behind it, so you can check them.');
+    progress(1);
+    await sleep(6500);
+  },
+  async text() {
+    const frame = frameFor('text', TEXT_SRC(), 'Text Bean');
+    await loaded('text');
+    const doc = frame.contentDocument;
+    doc.getElementById('replay')?.click(); // play the message demo from the start
+    show('text');
+    caption('Or just text Bean', 'Ask from your phone, the way you’d text a friend.');
+    await sleep(4500);
+    caption('Bean looks it up in your forecast', 'It reads the same numbers you’d see on the forecast page.');
+    progress(.4);
+    await waitFor(() => /Heads up/.test(doc.getElementById('thread')?.textContent || ''), 40000);
+    caption('Bean answers in plain words', 'About ¥468,900 this month, and Park may need a visit.');
+    progress(.8);
+    await sleep(5500);
+    progress(1);
+    caption('That’s Monday, done', 'Tomorrow, just send another photo of your page.');
+  },
+};
+
+// ---------- play / pause / jump ----------
+async function play(from = 'send') {
+  const id = ++runId;
+  document.body.classList.remove('is-finished');
+  try {
+    for (const step of STEPS.slice(STEPS.indexOf(from))) {
+      setStep(step);
+      await SCENES[step]();
+    }
+    if (id === runId) {
+      document.querySelectorAll('.steps button').forEach(b => b.classList.add('is-done'));
+      document.body.classList.add('is-finished');
+    }
+  } catch (error) {
+    if (!(error instanceof Stopped)) throw error;
+  }
+}
+function setPaused(paused) {
+  state.paused = paused;
+  document.body.classList.toggle('is-paused', paused);
+  $('#pause').setAttribute('aria-label', paused ? 'Play' : 'Pause');
+  const note = frames.note?.contentDocument?.getElementById('camera-video');
+  if (note) paused ? note.pause() : note.play?.().catch(() => {});
 }
 
-// Step 2 talks back when everything has been checked.
-addEventListener('message', event => {
-  if (event.origin !== location.origin || !event.data) return;
-  if (event.data.bean === 'checked') { state.checked = true; render(); }
-  if (event.data.bean === 'unchecked') { state.checked = false; render(); }
+$('#pause').addEventListener('click', () => {
+  if (document.body.classList.contains('is-finished')) { setPaused(false); play('send'); return; }
+  setPaused(!state.paused);
 });
+$('#replay').addEventListener('click', () => { setPaused(false); play('send'); });
+document.querySelectorAll('.steps button').forEach(b => b.addEventListener('click', () => { setPaused(false); play(b.dataset.step); }));
 
-// ---------- the guide panel ----------
-function button(html, className, onClick, extra = {}) {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'btn ' + className;
-  b.innerHTML = html;
-  b.addEventListener('click', onClick);
-  Object.assign(b, extra);
-  return b;
-}
-function note(text, className = 'hint') {
-  const p = document.createElement('p');
-  p.className = className;
-  p.textContent = text;
-  return p;
-}
 
-function renderActions(step) {
-  const box = $('#guide-actions');
-  box.replaceChildren();
-  if (step === 'send') {
-    box.append(button(`${ICON.camera}<span>${state.reading ? 'Bean is reading your page…' : state.sent ? 'Take another photo' : 'Take a photo of today’s page'}</span>`,
-      'btn--primary btn--big', takePhoto, { disabled: state.reading }));
-    box.append(note('You can also type a new line straight into the note, like “tipped the repair guy 20 dollars”.'));
-  }
-  if (step === 'check') {
-    box.append(button(`${ICON.check}<span>Everything looks right</span>`, 'btn--ok btn--big', () => frames.check?.contentWindow?.confirmAll?.()));
-  }
-  if (step === 'books') {
-    box.append(note('Pages', 'label'));
-    SHEETS.forEach(sheet => box.append(button(`<span>${sheet.label}</span>`, state.sheet === sheet.key ? 'is-picked' : '', () => showSheet(sheet.key),
-      { ariaPressed: String(state.sheet === sheet.key) })));
-    box.append(note('This page', 'label'));
-    const row = document.createElement('div');
-    row.className = 'row';
-    row.append(
-      button(`${ICON.print}<span>Print</span>`, '', () => frames.books?.contentWindow?.print()),
-      button(`${ICON.send}<span>${state.sentTo ? 'Sent ✓' : 'Send'}</span>`, state.sentTo ? 'btn--ok' : '', () => { state.sentTo = true; render(); }),
-    );
-    box.append(row);
-    box.append(note('“Send” shares all four pages with your bookkeeper.'));
-  }
-  if (step === 'ahead') {
-    box.append(button(`${ICON.chart}<span>${state.detail ? 'Back to the summary' : 'See the full forecast'}</span>`, '', () => { state.detail = !state.detail; render(); }));
-  }
-}
+// typing or following a link like /flow/#books jumps there (our own replaceState doesn't fire this)
+addEventListener('hashchange', () => { const step = location.hash.slice(1); if (STEPS.includes(step)) { setPaused(false); play(step); } });
 
-function doneText(step) {
-  if (step === 'send' && state.sent) return '✓ Bean read your page and updated 3 of your books.';
-  if (step === 'check' && state.checked) return '✓ All checked. Bean will use these numbers.';
-  if (step === 'books' && state.sentTo) return '✓ Sent to your bookkeeper.';
-  if (step === 'ahead' && state.done) return '✓ You’re all set for Monday.';
-  return '';
-}
-
-function render() {
-  const step = stepNow();
-  const index = STEPS.indexOf(step);
-  const copy = COPY[step];
-  if (step === 'books') state.sawBooks = true;
-  const done = { send: state.sent, check: state.checked, books: state.sawBooks && step !== 'books', ahead: state.done };
-
-  document.querySelectorAll('.steps a').forEach((link, i) => {
-    const key = link.dataset.step;
-    link.classList.toggle('is-current', i === index);
-    link.classList.toggle('is-done', Boolean(done[key]) && i !== index);
-    if (i === index) link.setAttribute('aria-current', 'step'); else link.removeAttribute('aria-current');
-  });
-  $('#guide-step').textContent = `Step ${index + 1} of ${STEPS.length}`;
-  $('#guide-title').textContent = copy.title;
-  $('#guide-text').textContent = copy.text;
-  renderActions(step);
-  const message = doneText(step);
-  $('#guide-done').hidden = !message;
-  $('#guide-done').textContent = message;
-  $('#prev').disabled = index === 0;
-  $('#next').textContent = (step === 'ahead' && state.done) ? 'Start a new day' : copy.next + (step === 'ahead' ? ' ✓' : ' →');
-
-  // stage
-  if (step === 'send') { frameFor('note', './note.html', 'Your notebook page'); showOnly('note'); }
-  if (step === 'check') { frameFor('check', './check.html', 'What Bean read'); showOnly('check'); }
-  if (step === 'books') { frameFor('books', `${BASE}/bookkeeper-v2/?embed#sheet=${state.sheet}`, 'Your books'); showOnly('books'); }
-  if (step === 'ahead') {
-    if (state.detail) { frameFor('forecast', `${BASE}/forecasting.html`, 'Full forecast'); showOnly('forecast'); }
-    else showOnly('ahead-summary');
-  }
-}
-
-$('#prev').addEventListener('click', () => { const i = STEPS.indexOf(stepNow()); if (i > 0) go(STEPS[i - 1]); });
-$('#next').addEventListener('click', () => {
-  const i = STEPS.indexOf(stepNow());
-  if (i < STEPS.length - 1) { go(STEPS[i + 1]); return; }
-  if (!state.done) { state.done = true; render(); return; }
-  location.hash = 'send'; location.reload(); // start a new day
-});
-addEventListener('hashchange', render);
-
-// look-ahead summary content
-(() => {
-  const total = FORECAST.machines.reduce((sum, m) => sum + m.value, 0);
-  const max = Math.max(...FORECAST.machines.map(m => m.value));
-  $('#ahead-total').textContent = yen(total);
-  $('#ahead-bars').innerHTML = FORECAST.machines.map(m => `
-    <li><span>${m.name}</span><i style="width:${Math.round((m.value / max) * 100)}%"></i><b>${yen(m.value)}</b>${m.note ? `<small>${m.note}</small>` : ''}</li>`).join('');
-  $('#ahead-check').textContent = FORECAST.check;
-})();
-
-render();
+const start = STEPS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'send';
+if (reduceMotion) setPaused(true);
+play(start);
