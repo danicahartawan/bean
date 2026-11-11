@@ -214,6 +214,7 @@ function attachTearCalendar() {
 
   if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
     calendar.classList.add("is-gone");
+    window.tearCalendar = () => Promise.resolve();
     return;
   }
 
@@ -227,6 +228,12 @@ function attachTearCalendar() {
     window.setTimeout(() => calendar.classList.add("is-gone"), 1750);
   };
 
+  // Inside the walkthrough, the walkthrough decides when to tear (so it's seen); opened on its own, it tears by itself.
+  window.tearCalendar = () => new Promise((resolve) => {
+    if (torn) return resolve();
+    window.addEventListener("calendar-torn", () => resolve(), { once: true });
+    tear();
+  });
   calendar.addEventListener("click", tear);
   calendar.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -234,7 +241,7 @@ function attachTearCalendar() {
       tear();
     }
   });
-  window.setTimeout(tear, 2400);
+  if (window.parent === window) window.setTimeout(tear, 2400);
 }
 
 if (typeof document !== "undefined") {

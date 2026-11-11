@@ -241,3 +241,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* inside the Today's books walkthrough: skip the costly blur behind callouts */
 .is-fast .callouts::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgb(247 247 244 / 72%); }
+
+/* In the walkthrough (?fast), the phone matches the cream phone used in the other steps. */
+.is-fast .device-fit { width: calc(407px * var(--s)); height: calc(866px * var(--s)); }
+.is-fast .device {
+  width: 407px; height: 866px; border-radius: 59px; padding: 7px; background: linear-gradient(135deg, #f9f8f1 0%, #e7e7dc 52%, #faf9f4 100%);
+  box-shadow: 0 0 0 1px rgb(94 83 33 / 35%), inset 0 0 0 1px rgb(255 255 255 / 82%), 0 28px 82px rgb(90 77 21 / 22%), 0 8px 22px rgb(76 65 18 / 17%);
+}
+.is-fast .screen { border-radius: 57px; }

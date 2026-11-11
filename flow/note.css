@@ -33,3 +33,8 @@
 .tt-char--link { animation-name: tt-soft-link; }
 @keyframes tt-soft { from { opacity: 0; color: var(--tt-color); } 35% { opacity: 1; } to { opacity: 1; color: var(--text); } }
 @keyframes tt-soft-link { from { opacity: 0; color: var(--tt-color); } 35% { opacity: 1; } to { opacity: 1; color: #f54e00; } }
+
+/* Lighter to draw (smoother playback): no blur on the moving edge light, and the photo fades back without a blur */
+.screen-beam::after,
+.note-photo__beam::after { display: none; }
+.screen-photo.is-fading { filter: none; }

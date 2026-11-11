@@ -143,9 +143,15 @@ function watchNote(doc) {
 // ---------- the four scenes ----------
 const SCENES = {
   async send() {
-    await showWhenReady('note', './note.html', 'Your notebook page');
+    if (frames.note?.dataset.used) { frames.note.remove(); delete frames.note; } // a fresh page (and calendar) on every replay
+    const frame = await showWhenReady('note', './note.html', 'Your notebook page');
+    frame.dataset.used = '1';
+    caption('A new day in your notebook', 'Tear off the calendar to open Monday’s page.');
+    await sleep(1500);
+    // tear the calendar off where it can be seen, then let the page settle before the camera opens
+    await Promise.race([frame.contentWindow.tearCalendar?.() ?? Promise.resolve(), sleep(2500)]);
     caption('Snap a photo of today’s page', 'Keep using the notebook you already have. Bean only needs a picture of it.');
-    await sleep(1600);
+    await sleep(2000);
     state.noteDone = false;
     frames.note.contentWindow.dispatchEvent(new Event('open-camera'));
     progress(.2);
@@ -158,11 +164,10 @@ const SCENES = {
     await sleep(2800);
   },
   async check() {
-    const frame = await showWhenReady('check', './check.html', 'What Bean read');
+    const frame = await showWhenReady('check', './check.html', 'What Bean read', f => { f.contentWindow.resetChecks?.(); f.contentWindow.arrive?.(); });
     caption('Checking each number against your slip', 'Nothing goes into your books until it matches what you wrote. Tap “Fix” if one is off.');
     const win = frame.contentWindow;
-    win.resetChecks?.();
-    await sleep(1400);
+    await sleep(2100); // the phone slides over and the readings appear first
     for (let i = 0; i < 3; i++) {
       win.confirmOne?.(i);
       progress((i + 1) / 3);
@@ -179,11 +184,11 @@ const SCENES = {
     await sleep(300);
     tables.classList.add('is-in');   // the tables rise in and their rows fill, one after another
     progress(.35);
-    await sleep(2900);
+    await sleep(2200);
     tables.classList.add('is-key');  // then the line that matters in each lights up
     caption('Each one is up to date', 'Profit $1,010 for the day, $220 left in the safe, and a package ready for your accountant.');
     progress(.75);
-    await sleep(3600);
+    await sleep(2300);
     progress(1);
     tables.classList.add('is-out');  // and they float away before the next step
     await sleep(900);
@@ -228,9 +233,10 @@ const SCENES = {
   },
 };
 
-async function showWhenReady(key, src, title) {
+async function showWhenReady(key, src, title, before) {
   const frame = frameFor(key, src, title);
   await loaded(key);
+  before?.(frame);
   show(key);
   return frame;
 }
@@ -258,7 +264,7 @@ async function play(from = 'send') {
       await sleep(2400);                                 // let the last line be read
       if (id !== runId) return;
       document.body.classList.add('is-leaving');         // fade to a calm, empty page…
-      await sleep(700);
+      await sleep(1000);
       if (id !== runId) return;
       if (window.parent !== window) window.parent.postMessage({ bean: 'flow-done' }, location.origin);
       else location.href = `${BASE}/new/?skip`;          // ?skip: straight to the home page, no intro

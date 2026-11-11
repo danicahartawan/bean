@@ -1,9 +1,26 @@
 /* Step 2: the photo beside what Bean read. Styled like the forecasting page and the v2 sheets. */
 body.check-page { background: #fff; }
-.check { min-height: 100%; display: grid; grid-template-columns: minmax(220px, 1fr) minmax(300px, 1.1fr); gap: 28px; padding: 24px 28px; align-items: start; }
-.check__photo { margin: 0; position: sticky; top: 24px; }
-.check__photo img { display: block; width: 100%; max-height: calc(100vh - 96px); object-fit: contain; border-radius: 6px; background: #f4f4f1; box-shadow: inset 0 0 0 1px #e5e5e1; }
-.check__photo figcaption { margin-top: 8px; font-size: 12px; color: #7a7974; }
+/* Same phone, same size, as step 1 (styles.css .phone), so the phone carries on from one step to the next. */
+.check {
+  --device-width: min(350px, calc((100svh - 90px) * .415), calc(100vw - 34px));
+  min-height: 100vh; display: grid; grid-template-columns: var(--device-width) minmax(280px, 380px);
+  justify-content: center; align-items: center; column-gap: clamp(48px, 8vw, 120px); padding: 0 28px;
+}
+.check__photo { margin: 0; }
+.cphone {
+  position: relative; width: var(--device-width); padding: calc(var(--device-width) * .0165);
+  border: 1px solid rgb(94 83 33 / 35%); border-radius: calc(var(--device-width) * .143);
+  background: linear-gradient(135deg, #f9f8f1 0%, #e7e7dc 52%, #faf9f4 100%);
+  box-shadow: 0 28px 82px rgb(90 77 21 / 22%), 0 8px 22px rgb(76 65 18 / 17%), inset 0 0 0 1px rgb(255 255 255 / 82%), inset 0 0 0 2px rgb(116 102 48 / 10%);
+}
+.cphone::before { position: absolute; inset: 3px; border: 1px solid rgb(157 146 96 / 20%); border-radius: inherit; content: ""; pointer-events: none; }
+.cphone__screen { position: relative; width: 100%; aspect-ratio: 393 / 852; overflow: hidden; border-radius: calc(var(--device-width) * .124); background: #000; }
+.cphone__screen img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cphone__btn { position: absolute; z-index: -1; width: 4px; border-radius: 3px; background: linear-gradient(90deg, #b3ab7a, #f0eee1 60%, #8f875f); }
+.cphone__btn--action { top: 18%; left: -4px; height: 7%; }
+.cphone__btn--up { top: 28%; left: -4px; height: 10%; }
+.cphone__btn--down { top: 40%; left: -4px; height: 10%; }
+.cphone__btn--power { top: 29%; right: -4px; height: 16%; }
 
 .check__read h1 { margin: 0 0 4px; font-size: 20px; font-weight: 400; letter-spacing: -.02em; color: #26251e; }
 .check__read h1 + .reads { margin-top: 14px; }
@@ -39,4 +56,4 @@ body.check-page { background: #fff; }
 .read.just-ok { animation: tick .6s cubic-bezier(.32,.72,0,1); }
 @keyframes tick { 0% { box-shadow: inset 0 0 0 1.5px #2f6f52; } 100% { box-shadow: inset 0 0 0 1px #e5e5e1; } }
 @media (prefers-reduced-motion: reduce) { .read.just-ok { animation: none; } }
-@media (max-width: 760px) { .check { grid-template-columns: 1fr; padding: 16px; } .check__photo { position: static; } }
+@media (max-width: 760px) { .check { grid-template-columns: 1fr; padding: 16px; row-gap: 24px; } .check__photo { justify-self: center; } }

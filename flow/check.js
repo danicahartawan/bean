@@ -63,5 +63,17 @@
   // the flow's animation ticks rows off one at a time
   window.confirmOne = i => { if (READS[i]) { ok.add(READS[i].key); draw(); list.children[i]?.classList.add('just-ok'); tell(); } };
   window.resetChecks = () => { ok.clear(); draw(); tell(); };
+  // the flow calls this as the step appears: the phone starts where step 1's phone was (the middle),
+  // holds there while the step fades in, then slides over as Bean's readings appear beside it
+  window.arrive = () => {
+    const phone = document.getElementById('cphone'), read = document.querySelector('.check__read');
+    phone.getAnimations().forEach(a => a.cancel()); read.getAnimations().forEach(a => a.cancel());
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || innerWidth <= 760) return;
+    const r = phone.getBoundingClientRect();
+    const dx = innerWidth / 2 - (r.left + r.width / 2);
+    const t = { duration: 1900, easing: 'cubic-bezier(.45,.05,.2,1)' };
+    phone.animate([{ transform: `translateX(${dx}px)` }, { transform: `translateX(${dx}px)`, offset: .42 }, { transform: 'none' }], t);
+    read.animate([{ opacity: 0, transform: 'translateX(18px)' }, { opacity: 0, transform: 'translateX(18px)', offset: .5 }, { opacity: 1, transform: 'none' }], { ...t, easing: 'cubic-bezier(.33,0,.2,1)' });
+  };
   draw();
 })();
