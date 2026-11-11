@@ -1057,3 +1057,12 @@ body:has(#frame:not([hidden])) .wrap *, body:has(#frame:not([hidden])) .wrap *::
 /* Today's books card: a warm stone-sage, between the cream page and the Profit and Loss card */
 .card[data-frame$="flow/"].sage { background: linear-gradient(135deg, #f2f2eb, #c3c9b4); }
 .card[data-frame$="flow/"] .artifact-front { background: linear-gradient(145deg, #f2f2eb, #c3c9b4); }
+
+/* recent scanned documents */
+.gl__scans { display: grid; gap: 4px; }
+.gl__scans .sd { display: flex; align-items: center; gap: 12px; padding: 6px; margin: 0 -6px; border-radius: 12px; text-decoration: none; color: inherit; transition: background .15s; }
+.gl__scans .sd:hover { background: rgba(38,37,30,.05); }
+.gl__scans .sd img { width: 52px; height: 52px; flex: none; object-fit: cover; border-radius: 9px; border: 1px solid rgba(38,37,30,.1); background: #efeee8; }
+.gl__scans .sd span { display: grid; gap: 3px; min-width: 0; }
+.gl__scans .sd strong { font-size: 14px; font-weight: 500; color: #26251e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gl__scans .sd em { font-style: normal; font-size: 12px; color: #7a7974; }
