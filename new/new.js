@@ -390,7 +390,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   let loadTimer = 0;
   const reveal = () => {
     if (fr.hidden || f.src === "about:blank") return;
-    const a = f.animate([{ opacity: 0, transform: "scale(.98)" }, { opacity: 1, transform: "none" }], { duration: 900, easing: "cubic-bezier(.25,.6,.3,1)" });
+    const a = f.animate([{ opacity: 0, transform: "scale(.985)" }, { opacity: 1, transform: "none" }], { duration: 1300, easing: "cubic-bezier(.33,0,.2,1)" });
     f.style.opacity = "";
     a.onfinish = () => a.cancel();
   };
@@ -412,7 +412,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
 // A view grows out of the card that opened it and shrinks back into it on close.
 const BEAN_FULL = "inset(0px 0px 0px 0px round 0px)";
 const BEAN_EASE = "cubic-bezier(.32,.72,0,1)";
-const BEAN_OPEN_MS = 1500;
+const BEAN_OPEN_MS = 2200;
 function beanReduced() { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
 function beanClip(card, overlay) {
   const r = card.getBoundingClientRect(), o = overlay.getBoundingClientRect();
@@ -442,36 +442,42 @@ function beanGhost(card) {
   const dx = innerWidth / 2 - (r.width * s) / 2 - r.left, dy = innerHeight / 2 - (r.height * s) / 2 - r.top;
   return { el: g, mid: `translate(${dx}px, ${dy}px) scale(${s})`, far: `translate(${dx - (r.width * s * 0.03)}px, ${dy - (r.height * s * 0.03)}px) scale(${s * 1.06})` };
 }
-const BEAN_PRESS_MS = 170;
+const BEAN_PRESS_MS = 240;
 let beanOpenGhost = null; // the opening picture, cleared if the view closes before it lands
 function beanExpand(overlay, card, inners) {
   overlay.getAnimations().forEach((a) => a.cancel());
   overlay.hidden = false;
   if (!card || beanReduced()) return;
   const bg = getComputedStyle(overlay).backgroundColor, tint = beanTint(card), from = beanClip(card, overlay);
-  const grow = BEAN_OPEN_MS - BEAN_PRESS_MS;
+  const P = BEAN_PRESS_MS / BEAN_OPEN_MS, SHOWN = P + 0.14; // the view is fully faded in by SHOWN
   // 1. the card presses in a touch, like a button...
-  card.animate([{ scale: "1" }, { scale: ".955" }], { duration: BEAN_PRESS_MS, easing: "cubic-bezier(.3,0,.6,1)", fill: "forwards" });
-  // 2. ...then grows into the full view in its own colour, settling softly, while its picture flies to the middle and dissolves
+  card.animate([{ scale: "1" }, { scale: ".96" }], { duration: BEAN_PRESS_MS, easing: "cubic-bezier(.3,0,.5,1)", fill: "forwards" });
+  // 2. ...then the view fades in over the card in the card's own colour and grows softly to full screen
   const anim = overlay.animate([
-    { clipPath: from, backgroundColor: tint, offset: 0 },
-    { clipPath: from, backgroundColor: tint, offset: BEAN_PRESS_MS / BEAN_OPEN_MS },
-    { clipPath: BEAN_FULL, backgroundColor: bg, offset: 1 },
-  ], { duration: BEAN_OPEN_MS, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
+    { clipPath: from, backgroundColor: tint, opacity: 0, offset: 0 },
+    { clipPath: from, backgroundColor: tint, opacity: 0, offset: P },
+    { opacity: 1, offset: SHOWN },
+    { clipPath: BEAN_FULL, backgroundColor: bg, opacity: 1, offset: 1 },
+  ], { duration: BEAN_OPEN_MS, easing: "cubic-bezier(.45,.05,.2,1)", fill: "both" });
+  // 3. the card's picture lifts off exactly where it sits, drifts to the middle and dissolves
   beanOpenGhost?.remove();
-  const ghost = beanGhost(card);
-  if (ghost) {
-    beanOpenGhost = ghost.el;
-    const a = ghost.el.animate([
-      { transform: "none", opacity: 0 },
-      { transform: "none", opacity: 1, offset: 0.12 },
-      { transform: ghost.mid, opacity: 1, offset: 0.62 },
-      { transform: ghost.far, opacity: 0 },
-    ], { duration: grow + 150, delay: BEAN_PRESS_MS - 40, easing: "cubic-bezier(.3,.8,.3,1)", fill: "both" });
-    a.onfinish = () => { ghost.el.remove(); if (beanOpenGhost === ghost.el) beanOpenGhost = null; };
-  }
-  setTimeout(() => { card.style.visibility = "hidden"; card.getAnimations().forEach((a) => a.cancel()); }, BEAN_PRESS_MS);
-  inners.forEach((el) => { const a = el.animate([{ opacity: 0, transform: "scale(.96)" }, { opacity: 1, transform: "none" }], { duration: 900, delay: BEAN_OPEN_MS - 600, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both" }); a.onfinish = () => a.cancel(); });
+  setTimeout(() => {
+    if (overlay.hidden) return;
+    const ghost = beanGhost(card); // measured after the press, so it sits exactly on the card's picture
+    if (ghost) {
+      beanOpenGhost = ghost.el;
+      const a = ghost.el.animate([
+        { transform: "none", opacity: 1 },
+        { transform: ghost.mid, opacity: 1, offset: 0.55 },
+        { transform: ghost.far, opacity: 0 },
+      ], { duration: BEAN_OPEN_MS - BEAN_PRESS_MS, easing: "cubic-bezier(.45,.05,.25,1)", fill: "both" });
+      a.onfinish = () => { ghost.el.remove(); if (beanOpenGhost === ghost.el) beanOpenGhost = null; };
+    }
+    // the card itself stays until the view has covered it, so nothing blinks
+    setTimeout(() => { if (!overlay.hidden) { card.style.visibility = "hidden"; card.getAnimations().forEach((a) => a.cancel()); } }, (SHOWN - P) * BEAN_OPEN_MS);
+  }, BEAN_PRESS_MS);
+  // 4. the page inside fades up slowly once there's room for it
+  inners.forEach((el) => { const a = el.animate([{ opacity: 0, transform: "scale(.975)" }, { opacity: 1, transform: "none" }], { duration: 1300, delay: BEAN_OPEN_MS - 750, easing: "cubic-bezier(.33,0,.2,1)", fill: "both" }); a.onfinish = () => a.cancel(); });
   anim.onfinish = () => anim.cancel();
 }
 function beanCollapse(overlay, card, inners, done) {
@@ -482,30 +488,30 @@ function beanCollapse(overlay, card, inners, done) {
   card.getAnimations().forEach((a) => a.cancel());
   beanOpenGhost?.remove(); beanOpenGhost = null;
   const bg = getComputedStyle(overlay).backgroundColor, tint = beanTint(card);
-  const SHRINK = 820, WAIT = 120;
+  const SHRINK = 1300, WAIT = 280;
   // 1. the page inside fades away first (opacity + scale only; a blur on a full-screen page stutters)
-  inners.forEach((el) => el.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "scale(.97)" }], { duration: 260, easing: "ease-out", fill: "both" }));
+  inners.forEach((el) => el.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "scale(.97)" }], { duration: 520, easing: "cubic-bezier(.33,0,.2,1)", fill: "both" }));
   card.style.visibility = "";
   const target = beanClip(card, overlay);
   // 2. the view gathers back into its card, taking on the card's colour, as the card's picture flies home
-  const shrink = overlay.animate([{ clipPath: BEAN_FULL, backgroundColor: bg }, { clipPath: target, backgroundColor: tint }], { duration: SHRINK, easing: "cubic-bezier(.6,0,.25,1)", fill: "both", delay: WAIT });
+  const shrink = overlay.animate([{ clipPath: BEAN_FULL, backgroundColor: bg }, { clipPath: target, backgroundColor: tint }], { duration: SHRINK, easing: "cubic-bezier(.5,0,.2,1)", fill: "both", delay: WAIT });
   ghost = beanGhost(card);
   if (ghost) ghost.el.animate([
     { transform: ghost.far, opacity: 0 },
     { transform: ghost.mid, opacity: 1, offset: 0.3 },
     { transform: "none", opacity: 1 },
-  ], { duration: SHRINK, delay: WAIT, easing: "cubic-bezier(.6,0,.25,1)", fill: "both" });
+  ], { duration: SHRINK, delay: WAIT, easing: "cubic-bezier(.5,0,.2,1)", fill: "both" });
   shrink.onfinish = () => {
     // 3. it lands with a small bounce while handing over to the card underneath
     const r = card.getBoundingClientRect();
     overlay.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
-    const t = { duration: 560, easing: "cubic-bezier(.3,.7,.4,1)" };
+    const t = { duration: 820, easing: "cubic-bezier(.3,.7,.4,1)" };
     overlay.animate([
       { clipPath: target, backgroundColor: tint, opacity: 1, scale: "1" },
-      { clipPath: target, backgroundColor: tint, opacity: 0, scale: ".965", offset: .35 },
+      { clipPath: target, backgroundColor: tint, opacity: 0, scale: ".965", offset: .5 },
       { clipPath: target, backgroundColor: tint, opacity: 0, scale: "1" },
     ], { ...t, fill: "both" }).onfinish = finish;
-    if (ghost) { const g = ghost.el; g.getAnimations().forEach((a) => a.cancel()); g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: "forwards" }); }
+    if (ghost) { const g = ghost.el; g.getAnimations().forEach((a) => a.cancel()); g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 420, easing: "ease-out", fill: "forwards" }); }
     shrink.cancel();
     card.animate([{ scale: "1" }, { scale: ".955", offset: .35 }, { scale: "1.022", offset: .7 }, { scale: "1" }], t);
   };
