@@ -1,2 +1,35 @@
 /* Flow copy of the phone note: just the phone, centred (the QR panel is gone). */
 .stage { grid-template-columns: var(--device-width) !important; column-gap: 0 !important; justify-content: center; }
+
+/* A quieter beam than the original page: one soft Bean-green light that travels once, slowly, around the edge */
+.screen-beam,
+.note-photo__beam {
+  padding: 0.7cqw;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0 55%,
+    rgb(132 168 140 / 35%) 76%,
+    rgb(47 111 82 / 60%) 90%,
+    transparent 100%
+  );
+}
+.screen-beam::after,
+.note-photo__beam::after { opacity: 0.35; }
+.screen-beam.is-on,
+.note-photo.has-beam .note-photo__beam {
+  animation:
+    beam-spin 4400ms cubic-bezier(.45, 0, .55, 1) 1 forwards,
+    beam-fade-soft 4400ms ease-in-out forwards;
+}
+@keyframes beam-fade-soft {
+  0%   { opacity: 0; }
+  22%  { opacity: 0.75; }
+  72%  { opacity: 0.75; }
+  100% { opacity: 0; }
+}
+
+/* Typing: each letter fades in from a soft green and settles, slowly, instead of flashing rainbow colours */
+.tt-char { animation: tt-soft 1200ms ease-out forwards; }
+.tt-char--link { animation-name: tt-soft-link; }
+@keyframes tt-soft { from { opacity: 0; color: var(--tt-color); } 35% { opacity: 1; } to { opacity: 1; color: var(--text); } }
+@keyframes tt-soft-link { from { opacity: 0; color: var(--tt-color); } 35% { opacity: 1; } to { opacity: 1; color: #f54e00; } }

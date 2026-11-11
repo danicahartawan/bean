@@ -162,7 +162,7 @@ if (typeof document !== "undefined") {
 
 
 const TITLE_TEXT = "Mon 11/9 Laundry Log";
-const TITLE_COLORS = ["#ff4fd8", "#a56bff", "#ffa23a", "#5ec7d0", "#f0c040", "#ff6fa8"];
+const TITLE_COLORS = ["#8fae98"]; // the walkthrough types in one soft green (the original page flashes rainbow colours)
 
 function attachTypingTitle() {
   const live = document.querySelector("#type-title-live");
@@ -184,7 +184,7 @@ function attachTypingTitle() {
     char.style.setProperty("--tt-color", TITLE_COLORS[Math.floor(Math.random() * TITLE_COLORS.length)]);
     live.appendChild(char);
     index += 1;
-    window.setTimeout(typeNext, 75);
+    window.setTimeout(typeNext, 110);
   };
 
   const calendar = document.querySelector("#tear-calendar");
@@ -371,7 +371,7 @@ function attachFakeCamera() {
         span.textContent = ch;
         span.style.setProperty("--tt-color", TITLE_COLORS[Math.floor(Math.random() * TITLE_COLORS.length)]);
         el.appendChild(span);
-      }, reduced ? 0 : i * 45);
+      }, reduced ? 0 : i * 60);
     });
   };
 
@@ -389,15 +389,16 @@ function attachFakeCamera() {
     toast.textContent = "";
     setStatus("");
     video.currentTime = 0;
+    video.playbackRate = 1.25; // the flow plays the clip a little faster
     setCamera(true);
     try {
       await video.play();
       await new Promise((resolve) => {
         video.addEventListener("ended", resolve, { once: true });
-        window.setTimeout(resolve, 4500);
+        window.setTimeout(resolve, 3400);
       });
     } catch {
-      await wait(1500);
+      await wait(900);
     }
 
     // 2. The last frame fades back into the note; the beam rides the screen edge while Bean works.
@@ -405,21 +406,21 @@ function attachFakeCamera() {
     void shot.offsetWidth;
     shot.classList.add("is-showing");
     setCamera(false);
-    await wait(500);
+    await wait(320);
     shot.classList.add("is-fading");
     beam.classList.remove("is-on");
     void beam.offsetWidth;
     if (!reduced) beam.classList.add("is-on");
 
     // 3. Hardcoded thinking states beside the bean.
-    await wait(900);
+    await wait(450);
     shot.classList.remove("is-showing", "is-fading");
     setStatus("Reading your photo…");
-    await wait(1500);
+    await wait(1200);
     setStatus("Finding 4 records…");
-    await wait(1500);
+    await wait(1050);
     setStatus("Updating 3 artifacts…");
-    await wait(1400);
+    await wait(1050);
     setStatus("");
 
     // 4. New lines land in the notebook, highlighted, and the books update.
@@ -429,12 +430,12 @@ function attachFakeCamera() {
     collect.classList.remove("is-updated");
     void collect.offsetWidth;
     collect.classList.add("is-updated");
-    await wait(500);
+    await wait(320);
     safe.hidden = false;
     void safe.offsetWidth;
     safe.classList.add("is-updated");
     if (totalP) countUp(totalP, 790, 1010, 900);
-    await wait(1300);
+    await wait(1000);
     typeInto(toast, "3 artifacts updated");
     beam.classList.remove("is-on");
     running = false;

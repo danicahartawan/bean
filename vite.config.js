@@ -2,12 +2,12 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Serve /messaging and /flow (no trailing slash) in dev the same way they work when deployed.
+// Serve /messaging, /flow and /demo (no trailing slash) in dev the same way they work when deployed.
 const cleanPageUrls = {
   name: "clean-page-urls",
   configureServer(server) {
     server.middlewares.use((req, res, next) => {
-      const clean = ["/messaging", "/flow"].find(p => req.url === p || req.url?.startsWith(p + "?"));
+      const clean = ["/messaging", "/flow", "/demo"].find(p => req.url === p || req.url?.startsWith(p + "?"));
       if (clean) {
         res.statusCode = 302;
         res.setHeader("Location", req.url.replace(clean, clean + "/"));
@@ -34,6 +34,7 @@ export default defineConfig({
         flowNote: resolve(__dirname, "flow/note.html"),
         flowCheck: resolve(__dirname, "flow/check.html"),
         messaging: resolve(__dirname, "messaging/index.html"),
+        demo: resolve(__dirname, "demo/index.html"),
       },
     },
   },

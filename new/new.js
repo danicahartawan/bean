@@ -65,8 +65,8 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const previews = [
     ["Repair Request Agent", "Ask about your business", [["Uses", "Laundry Log, P&L and cash records"], ["Helps with", "Revenue questions and purchase forecasts"]]],
     ["Forecast Custom Model", "Plan before you spend", [["Compare", "Cash with and without a purchase"], ["Review", "30-day outlook and washer replacement"]]],
-    ["Profit and Loss Center Street", "See how the day went", [["Recorded sales", "$1,140"], ["Recorded costs", "$130"], ["Profit so far", "$1,010"], ["Also includes", "Cash reconciliation and ledger"]]],
-    ["Laundry Log", "Your original daily records", [["Review", "Collections, expenses and source notes"], ["Follow through", "Updated books and bookkeeper package"]]],
+    ["Profit and Loss Sheet", "See how the day went", [["Recorded sales", "$1,140"], ["Recorded costs", "$130"], ["Profit so far", "$1,010"], ["Also includes", "Cash reconciliation and ledger"]]],
+    ["Today's books", "Watch Monday get done", [["Shows", "Photo, check, books, Ask Bean and Text Bean"], ["Takes", "About a minute and a half"]]],
   ];
   cards.forEach((card, index) => {
     const front = document.createElement("div");
@@ -100,7 +100,7 @@ document.querySelectorAll("[data-row]").forEach((row) => {
     const title = document.createElement("strong");
     title.textContent = card.dataset.label;
     const action = document.createElement("span");
-    action.textContent = ["Ask a question ↗", "Plan your next purchase ↗", "View income and expenses ↗", "Explore Bean ↗"][index];
+    action.textContent = ["Ask a question ↗", "Plan your next purchase ↗", "View income and expenses ↗", "Watch how it works ↗"][index];
     caption.append(title, action);
     card.append(caption);
     card.addEventListener("pointerenter", event => {
@@ -386,8 +386,23 @@ document.querySelectorAll("[data-row]").forEach((row) => {
   const fr = document.getElementById("frame"); if (!fr) return;
   const f = fr.querySelector("iframe");
   let src = null;
-  const open = (u, card) => { src = card; f.src = u; beanExpand(fr, card, [f]); };
-  const close = () => { if (fr.hidden) return; beanCollapse(fr, src, [f], () => { f.src = "about:blank"; }); };
+  // The page loads only once the card has (nearly) finished growing, so loading it doesn't make the grow stutter.
+  let loadTimer = 0;
+  const reveal = () => {
+    if (fr.hidden || f.src === "about:blank") return;
+    const a = f.animate([{ opacity: 0, transform: "scale(.98)" }, { opacity: 1, transform: "none" }], { duration: 900, easing: "cubic-bezier(.25,.6,.3,1)" });
+    f.style.opacity = "";
+    a.onfinish = () => a.cancel();
+  };
+  f.addEventListener("load", reveal);
+  const open = (u, card) => {
+    src = card;
+    f.style.opacity = "0";
+    beanExpand(fr, card, []);
+    clearTimeout(loadTimer);
+    loadTimer = setTimeout(() => { f.src = u; }, beanReduced() ? 0 : BEAN_OPEN_MS - 300);
+  };
+  const close = () => { if (fr.hidden) return; clearTimeout(loadTimer); beanCollapse(fr, src, [f], () => { f.src = "about:blank"; f.style.opacity = ""; }); };
   document.querySelectorAll("[data-frame]").forEach((c) => { c.addEventListener("click", () => open(c.dataset.frame, c)); c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c.dataset.frame, c); } }); });
   fr.querySelector(".fr__x").addEventListener("click", close);
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !fr.hidden) { e.stopImmediatePropagation(); close(); } }, true);
@@ -397,37 +412,103 @@ document.querySelectorAll("[data-row]").forEach((row) => {
 // A view grows out of the card that opened it and shrinks back into it on close.
 const BEAN_FULL = "inset(0px 0px 0px 0px round 0px)";
 const BEAN_EASE = "cubic-bezier(.32,.72,0,1)";
+const BEAN_OPEN_MS = 1500;
 function beanReduced() { return matchMedia("(prefers-reduced-motion: reduce)").matches; }
 function beanClip(card, overlay) {
   const r = card.getBoundingClientRect(), o = overlay.getBoundingClientRect();
   return `inset(${Math.max(0, r.top - o.top)}px ${Math.max(0, o.right - r.right)}px ${Math.max(0, o.bottom - r.bottom)}px ${Math.max(0, r.left - o.left)}px round 28px)`;
 }
+// The card's own colour (the average of its gradient), so the view grows out of the card rather than out of a white box.
+function beanTint(card) {
+  const el = card.querySelector(".artifact-front") || card;
+  const cs = getComputedStyle(el);
+  const cols = (cs.backgroundImage.match(/rgba?\([^)]+\)/g) || []).map((c) => c.match(/[\d.]+/g).slice(0, 3).map(Number));
+  if (!cols.length) return cs.backgroundColor && cs.backgroundColor !== "rgba(0, 0, 0, 0)" ? cs.backgroundColor : "#ffffff";
+  return `rgb(${[0, 1, 2].map((i) => Math.round(cols.reduce((sum, c) => sum + c[i], 0) / cols.length)).join(",")})`;
+}
+// A copy of the card's picture that flies between the card and the middle of the screen.
+function beanGhost(card) {
+  const img = card.querySelector("img.shot");
+  if (!img) return null;
+  const r = img.getBoundingClientRect();
+  if (!r.width || !r.height) return null;
+  const cs = getComputedStyle(img);
+  const g = new Image();
+  g.src = img.currentSrc || img.src;
+  g.alt = "";
+  g.style.cssText = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;margin:0;z-index:1000;pointer-events:none;object-fit:contain;transform-origin:0 0;will-change:transform,opacity;border-radius:${cs.borderRadius};box-shadow:${cs.boxShadow};filter:${cs.filter};background:${cs.backgroundColor}`;
+  document.body.append(g);
+  const s = Math.min((innerWidth * 0.46) / r.width, (innerHeight * 0.62) / r.height);
+  const dx = innerWidth / 2 - (r.width * s) / 2 - r.left, dy = innerHeight / 2 - (r.height * s) / 2 - r.top;
+  return { el: g, mid: `translate(${dx}px, ${dy}px) scale(${s})`, far: `translate(${dx - (r.width * s * 0.03)}px, ${dy - (r.height * s * 0.03)}px) scale(${s * 1.06})` };
+}
+const BEAN_PRESS_MS = 170;
+let beanOpenGhost = null; // the opening picture, cleared if the view closes before it lands
 function beanExpand(overlay, card, inners) {
   overlay.getAnimations().forEach((a) => a.cancel());
   overlay.hidden = false;
   if (!card || beanReduced()) return;
-  const bg = getComputedStyle(overlay).backgroundColor;
-  const t = { duration: 680, easing: BEAN_EASE, fill: "both" };
-  const anim = overlay.animate([{ clipPath: beanClip(card, overlay), backgroundColor: "#ffffff" }, { clipPath: BEAN_FULL, backgroundColor: bg }], t);
-  inners.forEach((el) => el.animate([{ opacity: 0, transform: "scale(.94)", filter: "blur(6px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { ...t, duration: 520, delay: 240 }));
-  card.style.visibility = "hidden";
-  anim.onfinish = () => { anim.cancel(); inners.forEach((el) => el.getAnimations().forEach((a) => a.cancel())); };
+  const bg = getComputedStyle(overlay).backgroundColor, tint = beanTint(card), from = beanClip(card, overlay);
+  const grow = BEAN_OPEN_MS - BEAN_PRESS_MS;
+  // 1. the card presses in a touch, like a button...
+  card.animate([{ scale: "1" }, { scale: ".955" }], { duration: BEAN_PRESS_MS, easing: "cubic-bezier(.3,0,.6,1)", fill: "forwards" });
+  // 2. ...then grows into the full view in its own colour, settling softly, while its picture flies to the middle and dissolves
+  const anim = overlay.animate([
+    { clipPath: from, backgroundColor: tint, offset: 0 },
+    { clipPath: from, backgroundColor: tint, offset: BEAN_PRESS_MS / BEAN_OPEN_MS },
+    { clipPath: BEAN_FULL, backgroundColor: bg, offset: 1 },
+  ], { duration: BEAN_OPEN_MS, easing: "cubic-bezier(.22,1,.36,1)", fill: "both" });
+  beanOpenGhost?.remove();
+  const ghost = beanGhost(card);
+  if (ghost) {
+    beanOpenGhost = ghost.el;
+    const a = ghost.el.animate([
+      { transform: "none", opacity: 0 },
+      { transform: "none", opacity: 1, offset: 0.12 },
+      { transform: ghost.mid, opacity: 1, offset: 0.62 },
+      { transform: ghost.far, opacity: 0 },
+    ], { duration: grow + 150, delay: BEAN_PRESS_MS - 40, easing: "cubic-bezier(.3,.8,.3,1)", fill: "both" });
+    a.onfinish = () => { ghost.el.remove(); if (beanOpenGhost === ghost.el) beanOpenGhost = null; };
+  }
+  setTimeout(() => { card.style.visibility = "hidden"; card.getAnimations().forEach((a) => a.cancel()); }, BEAN_PRESS_MS);
+  inners.forEach((el) => { const a = el.animate([{ opacity: 0, transform: "scale(.96)" }, { opacity: 1, transform: "none" }], { duration: 900, delay: BEAN_OPEN_MS - 600, easing: "cubic-bezier(.25,.6,.3,1)", fill: "both" }); a.onfinish = () => a.cancel(); });
+  anim.onfinish = () => anim.cancel();
 }
 function beanCollapse(overlay, card, inners, done) {
-  const finish = () => { overlay.hidden = true; overlay.getAnimations().forEach((a) => a.cancel()); inners.forEach((el) => el.getAnimations().forEach((a) => a.cancel())); if (card) card.style.visibility = ""; if (done) done(); };
+  let ghost = null;
+  const finish = () => { overlay.hidden = true; overlay.style.transformOrigin = ""; overlay.getAnimations().forEach((a) => a.cancel()); inners.forEach((el) => el.getAnimations().forEach((a) => a.cancel())); ghost?.el.remove(); if (card) card.style.visibility = ""; if (done) done(); };
   if (!card || beanReduced() || !card.isConnected) return finish();
   overlay.getAnimations().forEach((a) => a.cancel());
-  const bg = getComputedStyle(overlay).backgroundColor;
-  inners.forEach((el) => el.animate([{ opacity: 1, transform: "none", filter: "blur(0)" }, { opacity: 0, transform: "scale(.94)", filter: "blur(6px)" }], { duration: 260, easing: "ease-in", fill: "both" }));
-  // Let the destination show through only as the shrinking view reaches it.
+  card.getAnimations().forEach((a) => a.cancel());
+  beanOpenGhost?.remove(); beanOpenGhost = null;
+  const bg = getComputedStyle(overlay).backgroundColor, tint = beanTint(card);
+  const SHRINK = 820, WAIT = 120;
+  // 1. the page inside fades away first (opacity + scale only; a blur on a full-screen page stutters)
+  inners.forEach((el) => el.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "scale(.97)" }], { duration: 260, easing: "ease-out", fill: "both" }));
   card.style.visibility = "";
   const target = beanClip(card, overlay);
-  const anim = overlay.animate([
-    { clipPath: BEAN_FULL, backgroundColor: bg, opacity: 1, offset: 0 },
-    { clipPath: target, backgroundColor: "#f7f7f4", opacity: 1, offset: .65, easing: "cubic-bezier(.4,0,.2,1)" },
-    { clipPath: target, backgroundColor: "#f7f7f4", opacity: 0, offset: 1 },
-  ], { duration: 1050, easing: "cubic-bezier(.22,.61,.36,1)", fill: "both", delay: 70 });
-  anim.onfinish = finish;
+  // 2. the view gathers back into its card, taking on the card's colour, as the card's picture flies home
+  const shrink = overlay.animate([{ clipPath: BEAN_FULL, backgroundColor: bg }, { clipPath: target, backgroundColor: tint }], { duration: SHRINK, easing: "cubic-bezier(.6,0,.25,1)", fill: "both", delay: WAIT });
+  ghost = beanGhost(card);
+  if (ghost) ghost.el.animate([
+    { transform: ghost.far, opacity: 0 },
+    { transform: ghost.mid, opacity: 1, offset: 0.3 },
+    { transform: "none", opacity: 1 },
+  ], { duration: SHRINK, delay: WAIT, easing: "cubic-bezier(.6,0,.25,1)", fill: "both" });
+  shrink.onfinish = () => {
+    // 3. it lands with a small bounce while handing over to the card underneath
+    const r = card.getBoundingClientRect();
+    overlay.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
+    const t = { duration: 560, easing: "cubic-bezier(.3,.7,.4,1)" };
+    overlay.animate([
+      { clipPath: target, backgroundColor: tint, opacity: 1, scale: "1" },
+      { clipPath: target, backgroundColor: tint, opacity: 0, scale: ".965", offset: .35 },
+      { clipPath: target, backgroundColor: tint, opacity: 0, scale: "1" },
+    ], { ...t, fill: "both" }).onfinish = finish;
+    if (ghost) { const g = ghost.el; g.getAnimations().forEach((a) => a.cancel()); g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: "forwards" }); }
+    shrink.cancel();
+    card.animate([{ scale: "1" }, { scale: ".955", offset: .35 }, { scale: "1.022", offset: .7 }, { scale: "1" }], t);
+  };
 }
 
 // ===== Gumloop-style home =====

@@ -238,3 +238,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* inside the Today's books walkthrough: skip the costly blur behind callouts */
+.is-fast .callouts::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgb(247 247 244 / 72%); }

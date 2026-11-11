@@ -38,7 +38,10 @@ const initialQuicktype = quicktype.innerHTML;
 // ---------- timing / cancellation ----------
 let runId = 0;
 class Cancelled extends Error {}
+const SPEED = /[?&]fast\b/.test(location.search) ? 0.8 : 1; // ?fast: the Today's books walkthrough plays it quicker
+if (SPEED < 1) document.documentElement.classList.add('is-fast');
 function sleep(ms) {
+  ms *= SPEED;
   const id = runId;
   return new Promise((resolve, reject) => setTimeout(() => (id === runId ? resolve() : reject(new Cancelled())), reduceMotion ? 0 : ms));
 }
@@ -193,7 +196,7 @@ function callout(mark) {
   // a little bigger than the phone is wide, never more than ~2x
   const big = Math.min((sRect.width * 1.12) / gw, 2.1);
   const at = (x, y, s) => `translate(${x}px, ${y}px) scale(${s})`;
-  const DURATION = 2300;
+  const DURATION = 2300 * Math.max(SPEED, 0.75);
 
   callouts.classList.add('dim');
   setTimeout(() => callouts.classList.remove('dim'), DURATION * .7);
@@ -460,4 +463,4 @@ async function play() {
 }
 
 $('#replay').addEventListener('click', play);
-play();
+if (!/[?&]hold\b/.test(location.search)) play(); // ?hold: the walkthrough starts it when its step begins

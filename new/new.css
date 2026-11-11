@@ -1041,3 +1041,19 @@ body.artifacts-ready > .wrap { opacity: 1; animation: stage-reveal .35s ease bot
 .ip__phone::before { display: none !important; }
 /* card screenshots */
 .work .row .card .shot { position: absolute; left: 50%; top: 46%; width: 88%; height: auto; max-height: 78%; transform: translate(-50%, -50%); object-fit: contain; border-radius: 10px; background: #fff; box-shadow: 0 6px 22px rgb(38 37 30 / 18%), 0 0 0 1px rgb(38 37 30 / 8%); pointer-events: none; }
+
+/* One screen, no vertical scroll (see fit.js): tighter spacing on shorter windows. */
+html.fits-screen, html.fits-screen body { overflow-y: hidden; }
+@media (min-width: 900px) and (max-height: 960px) {
+  .wrap.gl { padding-top: clamp(18px, 3.2vh, 52px); }
+  .gl__l .lc { margin-top: 12px; }
+}
+
+/* while a page is open as a card, the home page behind it holds still (smoother playback) */
+body:has(#frame:not([hidden])) .wrap *, body:has(#frame:not([hidden])) .wrap *::before, body:has(#frame:not([hidden])) .wrap *::after { animation-play-state: paused !important; }
+
+/* Today's books: just the phone on the card, no white panel behind it */
+.work .row .card .shot.shot--phone { width: auto; height: 80%; max-height: 80%; top: 47%; border-radius: 0; background: none; box-shadow: none; filter: drop-shadow(0 8px 18px rgb(38 37 30 / 22%)); }
+/* Today's books card: a warm stone-sage, between the cream page and the Profit and Loss card */
+.card[data-frame$="flow/"].sage { background: linear-gradient(135deg, #f2f2eb, #c3c9b4); }
+.card[data-frame$="flow/"] .artifact-front { background: linear-gradient(145deg, #f2f2eb, #c3c9b4); }

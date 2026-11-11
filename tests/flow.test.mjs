@@ -24,7 +24,7 @@ test("step 1 is a copy of the phone note without the QR panel", async () => {
 test("the original pages are not referenced as copies", async () => {
   const flow = await read("flow/flow.js");
   assert.match(flow, /'\.\/note\.html'/);
-  assert.match(flow, /\/bookkeeper-v2\/\?embed#sheet=/);
+  assert.match(flow, /const TABLES = \[/);
 });
 
 test("step 2 checks the same evening slip numbers as the books", async () => {
@@ -39,7 +39,16 @@ test("flow pages are part of the build", async () => {
 
 test("flow features the agent chat and the text-message demo", async () => {
   const flow = await read("flow/flow.js");
-  assert.match(flow, /\/new\/#agent/);
-  assert.match(flow, /\/messaging\//);
+  assert.match(flow, /\/new\/\?skip#agent/);
+  assert.match(flow, /\/messaging\/\?fast/);
   assert.match(flow, /data-demo="forecast"/);
+});
+
+test("home page shows the walkthrough as a card and can play it on its own", async () => {
+  const html = await read("new/index.html");
+  assert.match(html, /data-frame="\.\.\/flow\/"/);
+  assert.match(html, /<script src="\.\/demo\.js"><\/script>/);
+  const demo = await read("new/demo.js");
+  assert.match(demo, /flow-done/);
+  assert.match(await read("flow/flow.js"), /postMessage\(\{ bean: 'flow-done' \}/);
 });
